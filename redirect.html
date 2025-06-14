@@ -50,7 +50,6 @@
   </div>
 
   <div id="ad-container">
-    <!-- Adsterra Banner -->
     <script type="text/javascript" src="https://www.profitabledisplaynetwork.com/26783051b71018974cb6c152ccbc6221/invoke.js"></script>
     <div id="container-26783051"></div>
   </div>
@@ -67,12 +66,6 @@
       counter.textContent = seconds;
       if (seconds === 0) {
         clearInterval(interval);
-        if (localStorage.getItem("skipReady") === "yes") {
-          let points = parseInt(localStorage.getItem("points") || "0");
-          points += 2;
-          localStorage.setItem("points", points);
-          localStorage.removeItem("skipReady");
-        }
         window.location.href = "welcome.html";
       }
     }, 1000);
