@@ -82,6 +82,25 @@
     <p>حقوق النشر © LitePlay | للتواصل: contact@liteplay.com</p>
   </div>
 
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
+      authDomain: "litplay-b3177.firebaseapp.com",
+      projectId: "litplay-b3177",
+      storageBucket: "litplay-b3177.appspot.com",
+      messagingSenderId: "201526393824",
+      appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+  </script>
+
   <script>
     const form = document.getElementById("withdrawForm");
     const message = document.getElementById("message");
@@ -89,33 +108,69 @@
     form.addEventListener("submit", function(e) {
       e.preventDefault();
 
-      fetch("https://formcarry.com/s/Kjy5G2U2LaO", {
-        method: "POST",
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          email: form.email.value,
-          wallet: form.wallet.value,
-          amount: form.amount.value
-        })
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.code === 200) {
-          message.style.color = "lightgreen";
-          message.textContent = "✅ تم إرسال طلب السحب بنجاح. سيتم مراجعته خلال 24 ساعة.";
-          form.reset();
-        } else {
+      const email = form.email.value;
+      const wallet = form.wallet.value;
+      const amount = parseInt(form.amount.value);
+
+      auth.onAuthStateChanged(user => {
+        if (!user) {
           message.style.color = "red";
-          message.textContent = "❌ حدث خطأ أثناء الإرسال.";
+          message.textContent = "❌ يجب تسجيل الدخول أولاً.";
+          return;
         }
-      })
-      .catch(error => {
-        console.error(error);
-        message.style.color = "red";
-        message.textContent = "❌ حدث خطأ أثناء الاتصال بالخادم.";
+
+        const uid = user.uid;
+        const userRef = db.collection("users").doc(uid);
+
+        userRef.get().then(doc => {
+          if (!doc.exists) {
+            message.style.color = "red";
+            message.textContent = "❌ لم يتم العثور على بيانات المستخدم.";
+            return;
+          }
+
+          const currentPoints = doc.data().points || 0;
+
+          if (currentPoints < amount) {
+            message.style.color = "red";
+            message.textContent = "❌ لا تملك نقاط كافية للسحب.";
+            return;
+          }
+
+          // خصم النقاط
+          userRef.update({ points: currentPoints - amount });
+
+          // إرسال الطلب إلى Formcarry
+          fetch("https://formcarry.com/s/Kjy5G2U2LaO", {
+            method: "POST",
+            headers: {
+              "Accept": "application/json",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              email: email,
+              wallet: wallet,
+              amount: amount
+            })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.code === 200 || data.status === "success") {
+              message.style.color = "lightgreen";
+              message.textContent = "✅ تم إرسال طلب السحب بنجاح. سيتم مراجعته خلال 24 ساعة.";
+              form.reset();
+            } else {
+              message.style.color = "red";
+              message.textContent = "❌ حدث خطأ أثناء إرسال الطلب.";
+            }
+          })
+          .catch(error => {
+            console.error(error);
+            message.style.color = "red";
+            message.textContent = "❌ حدث خطأ أثناء الاتصال بالخادم.";
+          });
+
+        });
       });
     });
   </script>
