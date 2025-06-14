@@ -89,22 +89,7 @@
     <p>جميع الحقوق محفوظة © LitePlay</p>
   </div>
 
-  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js"></script>
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
-      authDomain: "litplay-b3177.firebaseapp.com",
-      projectId: "litplay-b3177",
-      storageBucket: "litplay-b3177.appspot.com",
-      messagingSenderId: "201526393824",
-      appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-
     function toggleMenu() {
       const menu = document.getElementById("menu");
       menu.style.display = menu.style.display === "block" ? "none" : "block";
@@ -112,25 +97,7 @@
 
     function startSkip() {
       window.open("https://tpi.li/fEg2UGifM", "_blank");
-
-      setTimeout(() => {
-        auth.onAuthStateChanged(user => {
-          if (user) {
-            const uid = user.uid;
-            const userRef = db.collection("users").doc(uid);
-            userRef.get().then(doc => {
-              const currentPoints = doc.exists ? (doc.data().points || 0) : 0;
-              const newPoints = currentPoints + 2;
-              userRef.set({ points: newPoints }, { merge: true }).then(() => {
-                window.location.href = "redirect.html";
-              });
-            });
-          } else {
-            alert("❌ يجب تسجيل الدخول أولاً.");
-            window.location.href = "index.html";
-          }
-        });
-      }, 15000);
+      window.location.href = "redirect.html";
     }
   </script>
 </body>
