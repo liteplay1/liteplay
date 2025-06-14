@@ -50,7 +50,6 @@
   </div>
 
   <div id="ad-container">
-    <!-- إعلان Adsterra -->
     <script type="text/javascript" src="https://www.profitabledisplaynetwork.com/26783051b71018974cb6c152ccbc6221/invoke.js"></script>
     <div id="container-26783051"></div>
   </div>
@@ -77,56 +76,65 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
+  </script>
 
-    // العد التنازلي
+  <!-- سكربت العد واحتساب النقاط -->
+  <script>
+    const counter = document.getElementById("counter");
     let seconds = 5;
-    let counter = document.getElementById("counter");
 
-    const goToWelcome = () => window.location.href = "welcome.html";
+    function goToWelcome() {
+      window.location.href = "welcome.html";
+    }
 
-    const addPointsToUser = async (user) => {
+    async function addPoints(user) {
       try {
         const userRef = db.collection("users").doc(user.uid);
         await db.runTransaction(async (tx) => {
           const doc = await tx.get(userRef);
-          const currentPoints = doc.exists ? doc.data().points || 0 : 0;
+          const currentPoints = doc.exists ? (doc.data().points || 0) : 0;
           tx.set(userRef, { points: currentPoints + 2 }, { merge: true });
         });
-      } catch (e) {
-        console.error("خطأ في تحديث النقاط:", e);
+      } catch (error) {
+        console.error("فشل تحديث النقاط:", error);
       } finally {
         goToWelcome();
       }
-    };
+    }
 
-    const handlePointsAndRedirect = () => {
-      const user = auth.currentUser;
-      if (user) {
-        addPointsToUser(user);
-      } else {
-        auth.onAuthStateChanged((u) => {
-          if (u) {
-            addPointsToUser(u);
-          } else {
-            // لم يتم تسجيل الدخول، توجيه مباشر
-            goToWelcome();
-          }
-        });
-      }
-    };
-
-    const startCountdown = () => {
+    function startCountdown() {
       const interval = setInterval(() => {
         seconds--;
         counter.textContent = seconds;
         if (seconds <= 0) {
           clearInterval(interval);
-          handlePointsAndRedirect();
+
+          const currentUser = auth.currentUser;
+          if (currentUser) {
+            addPoints(currentUser);
+          } else {
+            auth.onAuthStateChanged((user) => {
+              if (user) {
+                addPoints(user);
+              } else {
+                goToWelcome();
+              }
+            });
+
+            // احتياطي بعد 5 ثواني لو ما وصلنا المستخدم
+            setTimeout(() => {
+              goToWelcome();
+            }, 5000);
+          }
         }
       }, 1000);
-    };
+    }
 
-    window.onload = startCountdown;
+    // ابدأ العد بعد تحميل الصفحة
+    window.addEventListener("load", () => {
+      counter.textContent = seconds;
+      startCountdown();
+    });
   </script>
 </body>
 </html>
