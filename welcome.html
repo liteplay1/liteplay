@@ -137,15 +137,15 @@
   const auth = firebase.auth();
   const db = firebase.firestore();
 
-  auth.onAuthStateChanged(async user => {
+  window.addEventListener("load", async () => {
+    const user = auth.currentUser;
     if (user) {
       const uid = user.uid;
       const userRef = db.collection("users").doc(uid);
-
       try {
         const doc = await userRef.get();
         if (!doc.exists) {
-          await userRef.set({ points: 0 }); // إنشاء حساب جديد بنقاط 0
+          await userRef.set({ points: 0 });
           document.getElementById("userPoints").textContent = "0";
         } else {
           const points = doc.data().points || 0;
@@ -155,9 +155,24 @@
         console.error("حدث خطأ في جلب النقاط:", error);
         alert("⚠️ حدث خطأ أثناء تحميل النقاط. حاول مرة أخرى.");
       }
-
     } else {
-      window.location.href = "index.html";
+      // ننتظر قليلاً لإعطاء فرصة لـ Firebase لتحديد المستخدم
+      auth.onAuthStateChanged(async u => {
+        if (u) {
+          const uid = u.uid;
+          const userRef = db.collection("users").doc(uid);
+          try {
+            const doc = await userRef.get();
+            const points = doc.exists ? doc.data().points || 0 : 0;
+            if (!doc.exists) await userRef.set({ points: 0 });
+            document.getElementById("userPoints").textContent = points;
+          } catch (error) {
+            console.error("حدث خطأ:", error);
+          }
+        } else {
+          window.location.href = "index.html";
+        }
+      });
     }
   });
 
