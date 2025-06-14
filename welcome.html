@@ -102,7 +102,7 @@
 <button class="menu-btn" onclick="toggleMenu()">☰</button>
 
 <!-- عرض النقاط -->
-<div id="points">مرحبًا بك، <span id="userEmail">...</span></div>
+<div id="points">⭐ نقاطك: <span id="userPoints">0</span></div>
 
 <!-- القائمة الجانبية -->
 <div class="menu" id="menu">
@@ -139,6 +139,7 @@
 <!-- Firebase Scripts -->
 <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js"></script>
 
 <script>
   // إعداد Firebase
@@ -152,15 +153,36 @@
     measurementId: "G-C8XX64EKXY"
   };
 
+  // تفعيل Firebase
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
+  const db = firebase.firestore();
 
-  // تحقق من حالة تسجيل الدخول
-  auth.onAuthStateChanged(user => {
+  // عند تسجيل الدخول
+  auth.onAuthStateChanged(async user => {
     if (user) {
-      document.getElementById("userEmail").textContent = user.email;
+      const uid = user.uid;
+      const userRef = db.collection("users").doc(uid);
+
+      try {
+        const doc = await userRef.get();
+        let points = 0;
+
+        if (doc.exists) {
+          const data = doc.data();
+          points = data.points || 0;
+        } else {
+          // أول مرة يسجل المستخدم، نحطله نقاط = 0
+          await userRef.set({ points: 0 });
+        }
+
+        document.getElementById("userPoints").textContent = points;
+      } catch (error) {
+        console.error("فشل في جلب النقاط:", error);
+        alert("حدث خطأ أثناء جلب النقاط!");
+      }
     } else {
-      // لم يتم تسجيل الدخول - إعادة التوجيه
+      // إذا لم يكن مسجلاً، رجعه لصفحة تسجيل الدخول
       window.location.href = "index.html";
     }
   });
