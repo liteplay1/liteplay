@@ -1,96 +1,128 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>لوحة تحكم LitePlay</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>لوحة التحكم</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: Arial; direction: rtl; background: #f0f0f0; padding: 20px; }
-    h1 { color: #7e22ce; }
-    table { width: 100%; border-collapse: collapse; background: white; }
-    th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
-    button { padding: 6px 12px; margin: 4px; background-color: #7e22ce; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: #222;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    h2 {
+      color: #8bc34a;
+    }
+    .user-card {
+      background: #333;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 10px auto;
+      width: 90%;
+      text-align: right;
+    }
+    .user-card input, .user-card button {
+      margin: 5px 0;
+      padding: 8px;
+      font-size: 14px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .update-btn { background: #4caf50; color: #fff; }
+    .message-btn { background: #2196f3; color: #fff; }
+    .delete-btn { background: #f44336; color: #fff; }
   </style>
 </head>
 <body>
+  <h2>لوحة تحكم المدير</h2>
+  <div id="users-container">جاري التحميل...</div>
 
-<h1>لوحة تحكم LitePlay</h1>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js"></script>
 
-<div id="usersTableContainer">
-  <p>جاري تحميل المستخدمين...</p>
-</div>
+  <script>
+    // إعداد Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
+      authDomain: "litplay-b3177.firebaseapp.com",
+      projectId: "litplay-b3177",
+      storageBucket: "litplay-b3177.appspot.com",
+      messagingSenderId: "201526393824",
+      appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-<script src="https://unpkg.com/@supabase/supabase-js"></script>
-<script>
-  // ✅ بيانات مشروعك على Supabase
-  const supabaseUrl = 'https://tjucasaggrvtzjzbxmpm.supabase.co';
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqdWNhc2FnZ3J2dHpqemJ4bXBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk3NjAwMzksImV4cCI6MjA2NTMzNjAzOX0.V8uS4aXyMVU67EL7SLqdjz3TiL4wFIEK6n2SW6JRS9s';
-  const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    const container = document.getElementById('users-container');
+    const ADMIN_EMAIL = "lazherniga@gmail.com";
 
-  async function fetchUsers() {
-    const { data, error } = await supabase
-      .from('Liteplay')
-      .select('*')
-      .order('created_at', { ascending: false });
+    auth.onAuthStateChanged(user => {
+      if (!user || user.email !== ADMIN_EMAIL) {
+        document.body.innerHTML = "<h3>🚫 لا تملك صلاحية الوصول إلى هذه الصفحة.</h3>";
+        return;
+      }
 
-    if (error) {
-      document.getElementById('usersTableContainer').innerHTML = '❌ حدث خطأ في جلب البيانات.';
-      console.error(error);
-      return;
-    }
+      db.collection("users").get().then(snapshot => {
+        container.innerHTML = "";
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const uid = doc.id;
 
-    let html = '<table><tr><th>البريد</th><th>النقاط</th><th>رسالة</th><th>الحالة</th><th>إجراءات</th></tr>';
-    data.forEach(user => {
-      html += `<tr>
-        <td>${user.email}</td>
-        <td>${user.points}</td>
-        <td>${user.message || ''}</td>
-        <td>${user.status || 'نشط'}</td>
-        <td>
-          <button onclick="addPoints('${user.id}', 10)">🎁 نقاط</button>
-          <button onclick="banUser('${user.id}')">🚫 حظر</button>
-          <button onclick="sendMessage('${user.id}')">💬 رسالة</button>
-        </td>
-      </tr>`;
+          const card = document.createElement("div");
+          card.className = "user-card";
+          card.innerHTML = `
+            <b>📧 ${data.email}</b><br>
+            النقاط الحالية: ${data.points || 0}<br><br>
+            <input type="number" placeholder="عدد النقاط الجديد" id="points-${uid}">
+            <button class="update-btn" onclick="updatePoints('${uid}')">تحديث النقاط</button><br>
+            
+            <input type="text" placeholder="أدخل رسالة للمستخدم" id="msg-${uid}">
+            <button class="message-btn" onclick="sendMessage('${uid}')">إرسال رسالة</button><br>
+            
+            <button class="delete-btn" onclick="deleteUser('${uid}')">❌ حذف المستخدم</button>
+          `;
+          container.appendChild(card);
+        });
+      });
     });
-    html += '</table>';
 
-    document.getElementById('usersTableContainer').innerHTML = html;
-  }
+    function updatePoints(uid) {
+      const val = document.getElementById(`points-${uid}`).value;
+      if (!val) return alert("أدخل عدد النقاط");
 
-  async function addPoints(userId, amount) {
-    const { error } = await supabase
-      .rpc('increment_points', { uid: userId, amount });
-
-    if (error) alert('فشل في إرسال النقاط');
-    fetchUsers();
-  }
-
-  async function banUser(userId) {
-    const { error } = await supabase
-      .from('Liteplay')
-      .update({ status: 'محظور' })
-      .eq('id', userId);
-
-    if (error) alert('فشل في الحظر');
-    fetchUsers();
-  }
-
-  async function sendMessage(userId) {
-    const msg = prompt("اكتب الرسالة للمستخدم:");
-    if (msg) {
-      const { error } = await supabase
-        .from('Liteplay')
-        .update({ message: msg })
-        .eq('id', userId);
-
-      if (error) alert('فشل في إرسال الرسالة');
-      fetchUsers();
+      db.collection("users").doc(uid).update({
+        points: parseInt(val)
+      }).then(() => alert("✅ تم التحديث"));
     }
-  }
 
-  fetchUsers();
-</script>
+    function sendMessage(uid) {
+      const msg = document.getElementById(`msg-${uid}`).value;
+      if (!msg) return alert("أدخل الرسالة");
 
+      db.collection("users").doc(uid).update({
+        message: msg
+      }).then(() => alert("📩 تم إرسال الرسالة"));
+    }
+
+    function deleteUser(uid) {
+      if (confirm("هل أنت متأكد من حذف هذا المستخدم؟")) {
+        db.collection("users").doc(uid).delete()
+          .then(() => {
+            alert("✅ تم الحذف");
+            location.reload();
+          });
+      }
+    }
+  </script>
 </body>
 </html>
