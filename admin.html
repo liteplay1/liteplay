@@ -12,9 +12,9 @@
       padding: 20px;
       text-align: center;
     }
-    h2 {
-      color: #8bc34a;
-    }
+    h2 { color: #8bc34a; }
+    .hidden { display: none; }
+
     .user-card {
       background: #333;
       border-radius: 10px;
@@ -23,6 +23,7 @@
       width: 90%;
       text-align: right;
     }
+
     .user-card input, .user-card button {
       margin: 5px 0;
       padding: 8px;
@@ -30,42 +31,44 @@
       width: 100%;
       box-sizing: border-box;
     }
+
     button {
       border: none;
       border-radius: 5px;
       cursor: pointer;
     }
+
     .update-btn { background: #4caf50; color: #fff; }
     .message-btn { background: #2196f3; color: #fff; }
     .delete-btn { background: #f44336; color: #fff; }
-    #pin-form input {
+
+    #pin-container input {
       padding: 10px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: none;
-      width: 200px;
+      width: 60%;
       margin: 10px auto;
       display: block;
+      border-radius: 10px;
+      border: none;
     }
-    #pin-form button {
+
+    #pin-container button {
+      padding: 10px 20px;
       background-color: #8bc34a;
       color: white;
-      font-size: 16px;
-      padding: 10px 20px;
-      border-radius: 8px;
     }
   </style>
 </head>
 <body>
   <h2>لوحة تحكم المدير</h2>
-  <div id="pin-form">
-    <p>🔐 أدخل الكود السري للوصول:</p>
-    <input type="password" id="adminPin" placeholder="أدخل الكود هنا">
-    <button onclick="checkAdminCode()">دخول</button>
-    <p id="pin-msg" style="color: red;"></p>
+
+  <div id="pin-container">
+    <p>🔒 أدخل كود الدخول السري:</p>
+    <input type="password" id="pin" placeholder="رمز الدخول السري">
+    <button onclick="checkPIN()">دخول</button>
+    <p id="pin-error" style="color:red;"></p>
   </div>
 
-  <div id="users-container" style="display: none;">جاري التحميل...</div>
+  <div id="users-container" class="hidden">جاري التحميل...</div>
 
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js"></script>
@@ -83,28 +86,39 @@
       appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
     };
     firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // التحقق من الكود السري
-    function checkAdminCode() {
-      const enteredPin = document.getElementById("adminPin").value;
-      const msg = document.getElementById("pin-msg");
+    // التحقق من تسجيل الدخول قبل السماح بالتحقق من الكود
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        document.body.innerHTML = "<h3>🚫 يجب تسجيل الدخول أولاً للوصول إلى هذه الصفحة.</h3>";
+      }
+    });
 
+    function checkPIN() {
+      const pin = document.getElementById("pin").value;
+      const error = document.getElementById("pin-error");
+
+      if (!pin) {
+        error.textContent = "⚠️ يرجى إدخال الكود.";
+        return;
+      }
+
+      // التحقق من الكود داخل Firestore
       db.collection("adminAccess").doc("accessCode").get().then(doc => {
-        const realPin = doc.data().pin;
-        if (enteredPin === realPin) {
-          document.getElementById("pin-form").style.display = "none";
-          document.getElementById("users-container").style.display = "block";
-          loadUsers();
-        } else {
-          msg.textContent = "❌ الكود غير صحيح";
+        if (!doc.exists || doc.data().pin != pin) {
+          error.textContent = "❌ كود غير صحيح.";
+          return;
         }
-      }).catch(() => {
-        msg.textContent = "⚠️ فشل في الاتصال بـ Firebase";
+
+        // إذا الكود صحيح، عرض المستخدمين
+        document.getElementById("pin-container").style.display = "none";
+        document.getElementById("users-container").classList.remove("hidden");
+        loadUsers();
       });
     }
 
-    // تحميل المستخدمين
     function loadUsers() {
       const container = document.getElementById('users-container');
       db.collection("users").get().then(snapshot => {
