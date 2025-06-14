@@ -64,7 +64,6 @@
   <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js"></script>
 
   <script>
-    // إعداد Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
       authDomain: "litplay-b3177.firebaseapp.com",
@@ -76,65 +75,53 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
-  </script>
 
-  <!-- سكربت العد واحتساب النقاط -->
-  <script>
-    const counter = document.getElementById("counter");
     let seconds = 5;
+    const counter = document.getElementById("counter");
 
-    function goToWelcome() {
-      window.location.href = "welcome.html";
-    }
-
-    async function addPoints(user) {
-      try {
-        const userRef = db.collection("users").doc(user.uid);
-        await db.runTransaction(async (tx) => {
-          const doc = await tx.get(userRef);
-          const currentPoints = doc.exists ? (doc.data().points || 0) : 0;
-          tx.set(userRef, { points: currentPoints + 2 }, { merge: true });
-        });
-      } catch (error) {
-        console.error("فشل تحديث النقاط:", error);
-      } finally {
-        goToWelcome();
-      }
-    }
-
-    function startCountdown() {
+    const startCountdown = () => {
       const interval = setInterval(() => {
-        seconds--;
         counter.textContent = seconds;
-        if (seconds <= 0) {
+        seconds--;
+        if (seconds < 0) {
           clearInterval(interval);
 
-          const currentUser = auth.currentUser;
-          if (currentUser) {
-            addPoints(currentUser);
+          const redirectToWelcome = () => {
+            window.location.href = "welcome.html";
+          };
+
+          const addPoints = async (user) => {
+            try {
+              const userRef = db.collection("users").doc(user.uid);
+              await db.runTransaction(async (transaction) => {
+                const doc = await transaction.get(userRef);
+                const currentPoints = doc.exists ? (doc.data().points || 0) : 0;
+                transaction.set(userRef, { points: currentPoints + 2 }, { merge: true });
+              });
+            } catch (e) {
+              console.error("فشل في تحديث النقاط:", e);
+            } finally {
+              redirectToWelcome();
+            }
+          };
+
+          const user = auth.currentUser;
+          if (user) {
+            addPoints(user);
           } else {
-            auth.onAuthStateChanged((user) => {
-              if (user) {
-                addPoints(user);
+            auth.onAuthStateChanged((u) => {
+              if (u) {
+                addPoints(u);
               } else {
-                goToWelcome();
+                redirectToWelcome(); // إذا لم يكن مسجل الدخول
               }
             });
-
-            // احتياطي بعد 5 ثواني لو ما وصلنا المستخدم
-            setTimeout(() => {
-              goToWelcome();
-            }, 5000);
           }
         }
       }, 1000);
-    }
+    };
 
-    // ابدأ العد بعد تحميل الصفحة
-    window.addEventListener("load", () => {
-      counter.textContent = seconds;
-      startCountdown();
-    });
+    startCountdown();
   </script>
 </body>
 </html>
