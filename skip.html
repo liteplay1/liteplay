@@ -90,15 +90,54 @@
     <p>جميع الحقوق محفوظة © LitePlay</p>
   </div>
 
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js"></script>
   <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
+      authDomain: "litplay-b3177.firebaseapp.com",
+      projectId: "litplay-b3177",
+      storageBucket: "litplay-b3177.appspot.com",
+      messagingSenderId: "201526393824",
+      appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
     function toggleMenu() {
-      document.getElementById("menu").style.display =
-        document.getElementById("menu").style.display === "block" ? "none" : "block";
+      const menu = document.getElementById("menu");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
     }
 
     function startSkip() {
-      localStorage.setItem("skipReady", "yes");
+      // فتح الرابط المختصر
       window.open("https://tpi.li/fEg2UGifM", "_blank");
+
+      // ننتظر المستخدم يعود بعد 15 ثانية
+      setTimeout(() => {
+        auth.onAuthStateChanged(user => {
+          if (user) {
+            const uid = user.uid;
+            const userRef = db.collection("users").doc(uid);
+
+            userRef.get().then(doc => {
+              let currentPoints = doc.exists ? (doc.data().points || 0) : 0;
+              let newPoints = currentPoints + 2;
+
+              userRef.set({ points: newPoints }).then(() => {
+                console.log("تمت إضافة 2 نقطة.");
+                window.location.href = "welcome.html";
+              });
+            });
+          } else {
+            alert("يجب تسجيل الدخول لإضافة النقاط.");
+            window.location.href = "index.html";
+          }
+        });
+      }, 15000); // الانتظار 15 ثانية
     }
   </script>
 </body>
