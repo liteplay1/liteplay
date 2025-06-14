@@ -1,4 +1,3 @@
-<!-- redirect.html -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -59,17 +58,72 @@
     جميع الحقوق محفوظة © LitePlay 🚀 | تواصل معنا: contact@liteplay.com
   </div>
 
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js"></script>
+
   <script>
+    // إعداد Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
+      authDomain: "litplay-b3177.firebaseapp.com",
+      projectId: "litplay-b3177",
+      storageBucket: "litplay-b3177.appspot.com",
+      messagingSenderId: "201526393824",
+      appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
     let seconds = 5;
-    let counter = document.getElementById("counter");
-    let interval = setInterval(() => {
-      seconds--;
-      counter.textContent = seconds;
-      if (seconds === 0) {
-        clearInterval(interval);
-        window.location.href = "welcome.html";
-      }
-    }, 1000);
+    const counter = document.getElementById("counter");
+
+    const startCountdown = () => {
+      const interval = setInterval(async () => {
+        seconds--;
+        counter.textContent = seconds;
+
+        if (seconds === 0) {
+          clearInterval(interval);
+
+          const redirectToWelcome = () => {
+            window.location.href = "welcome.html";
+          };
+
+          const addPoints = async (user) => {
+            try {
+              const userRef = db.collection("users").doc(user.uid);
+              await db.runTransaction(async (transaction) => {
+                const doc = await transaction.get(userRef);
+                const currentPoints = doc.exists ? (doc.data().points || 0) : 0;
+                transaction.set(userRef, { points: currentPoints + 2 }, { merge: true }); // 👈 نضيف نقطتين
+              });
+            } catch (e) {
+              console.error("فشل في تحديث النقاط:", e);
+            } finally {
+              redirectToWelcome();
+            }
+          };
+
+          const user = auth.currentUser;
+          if (user) {
+            await addPoints(user);
+          } else {
+            auth.onAuthStateChanged(async (u) => {
+              if (u) {
+                await addPoints(u);
+              } else {
+                redirectToWelcome();
+              }
+            });
+          }
+        }
+      }, 1000);
+    };
+
+    startCountdown();
   </script>
 </body>
 </html>
