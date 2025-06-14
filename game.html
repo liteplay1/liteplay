@@ -60,7 +60,7 @@
     <!-- لعبة -->
     <iframe src="https://games.construct.net/1075/latest" allowfullscreen></iframe>
 
-    <!-- إعلان Banner من Adsterra -->
+    <!-- إعلان -->
     <div id="ad-container">
       <script type="text/javascript">
         atOptions = {
@@ -79,7 +79,23 @@
     🚀 LitePlay - جميع الحقوق محفوظة © 2025 | تواصل معنا: mhjobidina@gmail.com
   </div>
 
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js"></script>
   <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
+      authDomain: "litplay-b3177.firebaseapp.com",
+      projectId: "litplay-b3177",
+      storageBucket: "litplay-b3177.appspot.com",
+      messagingSenderId: "201526393824",
+      appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
     let timeLeft = 120;
     const timer = document.getElementById("timer");
 
@@ -89,10 +105,26 @@
 
       if (timeLeft === 0) {
         clearInterval(countdown);
-        let points = parseInt(localStorage.getItem("points") || "0");
-        points += 10;
-        localStorage.setItem("points", points);
-        window.location.href = "welcome.html";
+
+        auth.onAuthStateChanged(user => {
+          if (user) {
+            const uid = user.uid;
+            const userRef = db.collection("users").doc(uid);
+
+            userRef.get().then(doc => {
+              let currentPoints = doc.exists ? (doc.data().points || 0) : 0;
+              let newPoints = currentPoints + 10;
+
+              userRef.set({ points: newPoints }).then(() => {
+                console.log("تمت إضافة 10 نقاط.");
+                window.location.href = "welcome.html";
+              });
+            });
+          } else {
+            alert("يجب تسجيل الدخول لإضافة النقاط.");
+            window.location.href = "index.html";
+          }
+        });
       }
     }, 1000);
   </script>
