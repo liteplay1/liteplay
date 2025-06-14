@@ -50,6 +50,7 @@
   </div>
 
   <div id="ad-container">
+    <!-- إعلان Adsterra -->
     <script type="text/javascript" src="https://www.profitabledisplaynetwork.com/26783051b71018974cb6c152ccbc6221/invoke.js"></script>
     <div id="container-26783051"></div>
   </div>
@@ -64,6 +65,7 @@
   <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js"></script>
 
   <script>
+    // إعداد Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
       authDomain: "litplay-b3177.firebaseapp.com",
@@ -76,8 +78,42 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
+    // العد التنازلي
     let seconds = 5;
-    const counter = document.getElementById("counter");
+    let counter = document.getElementById("counter");
+
+    const goToWelcome = () => window.location.href = "welcome.html";
+
+    const addPointsToUser = async (user) => {
+      try {
+        const userRef = db.collection("users").doc(user.uid);
+        await db.runTransaction(async (tx) => {
+          const doc = await tx.get(userRef);
+          const currentPoints = doc.exists ? doc.data().points || 0 : 0;
+          tx.set(userRef, { points: currentPoints + 2 }, { merge: true });
+        });
+      } catch (e) {
+        console.error("خطأ في تحديث النقاط:", e);
+      } finally {
+        goToWelcome();
+      }
+    };
+
+    const handlePointsAndRedirect = () => {
+      const user = auth.currentUser;
+      if (user) {
+        addPointsToUser(user);
+      } else {
+        auth.onAuthStateChanged((u) => {
+          if (u) {
+            addPointsToUser(u);
+          } else {
+            // لم يتم تسجيل الدخول، توجيه مباشر
+            goToWelcome();
+          }
+        });
+      }
+    };
 
     const startCountdown = () => {
       const interval = setInterval(() => {
@@ -85,43 +121,12 @@
         counter.textContent = seconds;
         if (seconds <= 0) {
           clearInterval(interval);
-
-          const goToWelcome = () => window.location.href = "welcome.html";
-
-          const addPoints = async (user) => {
-            try {
-              const userRef = db.collection("users").doc(user.uid);
-              await db.runTransaction(async (tx) => {
-                const doc = await tx.get(userRef);
-                const currentPoints = doc.exists ? doc.data().points || 0 : 0;
-                tx.set(userRef, { points: currentPoints + 2 }, { merge: true });
-              });
-            } catch (e) {
-              console.error("فشل في إضافة النقاط:", e);
-            } finally {
-              goToWelcome();
-            }
-          };
-
-          const user = auth.currentUser;
-          if (user) {
-            addPoints(user);
-          } else {
-            auth.onAuthStateChanged((u) => {
-              if (u) {
-                addPoints(u);
-              } else {
-                goToWelcome();
-              }
-            });
-          }
+          handlePointsAndRedirect();
         }
       }, 1000);
     };
 
-    window.onload = () => {
-      startCountdown();
-    };
+    window.onload = startCountdown;
   </script>
 </body>
 </html>
