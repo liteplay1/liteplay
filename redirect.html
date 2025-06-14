@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>جارٍ التوجيه 🚀</title>
   <style>
     body {
@@ -31,12 +31,31 @@
       color: #d81b60;
       margin-top: 20px;
     }
+    .footer {
+      margin-top: auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.3);
+      font-size: 14px;
+      color: #444;
+    }
+    #ad-container {
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>⏳ لحظة من فضلك، يتم التحقق من التخطي...</h1>
     <p class="countdown" id="counter">5</p>
+  </div>
+
+  <div id="ad-container">
+    <script type="text/javascript" src="https://www.profitabledisplaynetwork.com/26783051b71018974cb6c152ccbc6221/invoke.js"></script>
+    <div id="container-26783051"></div>
+  </div>
+
+  <div class="footer">
+    جميع الحقوق محفوظة © LitePlay 🚀 | تواصل معنا: contact@liteplay.com
   </div>
 
   <!-- Firebase -->
@@ -58,16 +77,12 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    let counter = document.getElementById("counter");
+    const counterElement = document.getElementById("counter");
     let seconds = 5;
-
-    function redirectToWelcome() {
-      window.location.href = "welcome.html";
-    }
 
     function startCountdown(user) {
       const interval = setInterval(() => {
-        counter.textContent = seconds;
+        counterElement.textContent = seconds;
         seconds--;
         if (seconds < 0) {
           clearInterval(interval);
@@ -79,26 +94,19 @@
               const currentPoints = doc.exists ? doc.data().points || 0 : 0;
               transaction.set(userRef, { points: currentPoints + 2 }, { merge: true });
             }).finally(() => {
-              redirectToWelcome();
+              window.location.href = "welcome.html";
             });
           } else {
-            redirectToWelcome();
+            window.location.href = "welcome.html";
           }
         }
       }, 1000);
     }
 
-    // نبدأ مباشرة بعد تحميل الصفحة
+    // تأكد من بدأ العد سواء المستخدم متصل أو لا
     auth.onAuthStateChanged((user) => {
       startCountdown(user);
     });
-
-    // في حال onAuthStateChanged لم تُطلق خلال 3 ثوانٍ نبدأ العد anyway
-    setTimeout(() => {
-      if (!firebase.auth().currentUser) {
-        startCountdown(null);
-      }
-    }, 3000);
   </script>
 </body>
 </html>
