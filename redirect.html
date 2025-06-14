@@ -80,40 +80,39 @@
     let seconds = 5;
     const counter = document.getElementById("counter");
 
+    const redirectToWelcome = () => {
+      window.location.href = "welcome.html";
+    };
+
+    const addPointsAndRedirect = (user) => {
+      const userRef = db.collection("users").doc(user.uid);
+      db.runTransaction(async (transaction) => {
+        const doc = await transaction.get(userRef);
+        const currentPoints = doc.exists ? (doc.data().points || 0) : 0;
+        transaction.set(userRef, { points: currentPoints + 2 }, { merge: true });
+      }).then(() => {
+        console.log("✅ تمت إضافة نقطتين.");
+        redirectToWelcome();
+      }).catch((error) => {
+        console.error("❌ فشل تحديث النقاط:", error);
+        redirectToWelcome();
+      });
+    };
+
     const startCountdown = () => {
-      const interval = setInterval(async () => {
+      const interval = setInterval(() => {
         seconds--;
         counter.textContent = seconds;
-
-        if (seconds === 0) {
+        if (seconds <= 0) {
           clearInterval(interval);
-
-          const redirectToWelcome = () => {
-            window.location.href = "welcome.html";
-          };
-
-          const addPoints = async (user) => {
-            try {
-              const userRef = db.collection("users").doc(user.uid);
-              await db.runTransaction(async (transaction) => {
-                const doc = await transaction.get(userRef);
-                const currentPoints = doc.exists ? (doc.data().points || 0) : 0;
-                transaction.set(userRef, { points: currentPoints + 2 }, { merge: true }); // 👈 نضيف نقطتين
-              });
-            } catch (e) {
-              console.error("فشل في تحديث النقاط:", e);
-            } finally {
-              redirectToWelcome();
-            }
-          };
 
           const user = auth.currentUser;
           if (user) {
-            await addPoints(user);
+            addPointsAndRedirect(user);
           } else {
-            auth.onAuthStateChanged(async (u) => {
+            auth.onAuthStateChanged((u) => {
               if (u) {
-                await addPoints(u);
+                addPointsAndRedirect(u);
               } else {
                 redirectToWelcome();
               }
@@ -123,7 +122,8 @@
       }, 1000);
     };
 
-    startCountdown();
+    // نبدأ العد التنازلي بعد التأكد أن DOM جاهز
+    window.onload = startCountdown;
   </script>
 </body>
 </html>
