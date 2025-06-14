@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>سحب الأرباح</title>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(to bottom right, #a8e063, #56ab2f);
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 10px;
+    }
+    .info {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    form input, select {
+      display: block;
+      width: 80%;
+      margin: 10px auto;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+    }
+    button {
+      background: #388e3c;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .message {
+      margin-top: 15px;
+      font-size: 18px;
+    }
+    .footer {
+      margin-top: 30px;
+      font-size: 14px;
+    }
+    #ad-container {
+      margin: 30px auto;
+    }
+  </style>
+</head>
+<body>
+  <h2>🚀 سحب الأرباح</h2>
+  <p class="info">500 نقطة = 1$ ≈ 0.0080 LTC</p>
+  <form onsubmit="submitWithdraw(event)">
+    <input type="email" id="email" placeholder="📧 بريدك الإلكتروني" required>
+    <input type="text" id="wallet" placeholder="💰 عنوان محفظتك (Litecoin)" required>
+    <select id="amount">
+      <option value="500">500 نقطة</option>
+      <option value="600">600 نقطة</option>
+      <option value="1000">1000 نقطة</option>
+    </select>
+    <button type="submit">سحب الآن</button>
+    <p class="message" id="message"></p>
+  </form>
+
+  <div class="footer">
+    <div id="ad-container">
+      <!-- كود إعلان Adsterra Banner 300x250 -->
+      <script type="text/javascript">
+        atOptions = {
+          'key' : '0878059959a11c2129529d518a88a788',
+          'format' : 'iframe',
+          'height' : 250,
+          'width' : 300,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/0878059959a11c2129529d518a88a788/invoke.js"></script>
+    </div>
+    <p>حقوق النشر © LitePlay | للتواصل: contact@liteplay.com</p>
+  </div>
+
+  <script>
+    function submitWithdraw(e) {
+      e.preventDefault();
+      const selected = parseInt(document.getElementById("amount").value);
+      const points = parseInt(localStorage.getItem("points") || "0");
+      const message = document.getElementById("message");
+      if (points < selected) {
+        message.style.color = "red";
+        message.textContent = "❌ لا تملك عدد نقاط كافٍ للسحب.";
+        return;
+      }
+      localStorage.setItem("points", points - selected);
+      message.style.color = "lightgreen";
+      message.textContent = "✅ تم إرسال طلب السحب، سيتم مراجعته خلال 24 ساعة.";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>جارٍ التوجيه 🚀</title>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(to bottom right, #ff9a9e, #fad0c4);
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .container {
+      padding: 30px;
+    }
+    h1 {
+      font-size: 26px;
+      margin-bottom: 10px;
+      color: #6a1b9a;
+    }
+    .countdown {
+      font-size: 48px;
+      font-weight: bold;
+      color: #d81b60;
+      margin-top: 20px;
+    }
+    .footer {
+      margin-top: auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.3);
+      font-size: 14px;
+      color: #444;
+    }
+    #ad-container {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⏳ لحظة من فضلك، يتم التحقق من التخطي...</h1>
+    <p class="countdown" id="counter">5</p>
+  </div>
+
+  <div id="ad-container">
+    <!-- Adsterra Banner -->
+    <script type="text/javascript" src="https://www.profitabledisplaynetwork.com/26783051b71018974cb6c152ccbc6221/invoke.js"></script>
+    <div id="container-26783051"></div>
+  </div>
+
+  <div class="footer">
+    جميع الحقوق محفوظة © LitePlay 🚀 | تواصل معنا: contact@liteplay.com
+  </div>
+
+  <script>
+    let seconds = 5;
+    let counter = document.getElementById("counter");
+    let interval = setInterval(() => {
+      seconds--;
+      counter.textContent = seconds;
+      if (seconds === 0) {
+        clearInterval(interval);
+        if (localStorage.getItem("skipReady") === "yes") {
+          let points = parseInt(localStorage.getItem("points") || "0");
+          points += 2;
+          localStorage.setItem("points", points);
+          localStorage.removeItem("skipReady");
+        }
+        window.location.href = "welcome.html";
+      }
+    }, 1000);
+  </script>
+</body>
+</html>

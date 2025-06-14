@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة تحكم LitePlay</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial; direction: rtl; background: #f0f0f0; padding: 20px; }
+    h1 { color: #7e22ce; }
+    table { width: 100%; border-collapse: collapse; background: white; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
+    button { padding: 6px 12px; margin: 4px; background-color: #7e22ce; color: white; border: none; border-radius: 5px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<h1>لوحة تحكم LitePlay</h1>
+
+<div id="usersTableContainer">
+  <p>جاري تحميل المستخدمين...</p>
+</div>
+
+<script src="https://unpkg.com/@supabase/supabase-js"></script>
+<script>
+  // ✅ بيانات مشروعك على Supabase
+  const supabaseUrl = 'https://tjucasaggrvtzjzbxmpm.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqdWNhc2FnZ3J2dHpqemJ4bXBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk3NjAwMzksImV4cCI6MjA2NTMzNjAzOX0.V8uS4aXyMVU67EL7SLqdjz3TiL4wFIEK6n2SW6JRS9s';
+  const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+  async function fetchUsers() {
+    const { data, error } = await supabase
+      .from('Liteplay')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      document.getElementById('usersTableContainer').innerHTML = '❌ حدث خطأ في جلب البيانات.';
+      console.error(error);
+      return;
+    }
+
+    let html = '<table><tr><th>البريد</th><th>النقاط</th><th>رسالة</th><th>الحالة</th><th>إجراءات</th></tr>';
+    data.forEach(user => {
+      html += `<tr>
+        <td>${user.email}</td>
+        <td>${user.points}</td>
+        <td>${user.message || ''}</td>
+        <td>${user.status || 'نشط'}</td>
+        <td>
+          <button onclick="addPoints('${user.id}', 10)">🎁 نقاط</button>
+          <button onclick="banUser('${user.id}')">🚫 حظر</button>
+          <button onclick="sendMessage('${user.id}')">💬 رسالة</button>
+        </td>
+      </tr>`;
+    });
+    html += '</table>';
+
+    document.getElementById('usersTableContainer').innerHTML = html;
+  }
+
+  async function addPoints(userId, amount) {
+    const { error } = await supabase
+      .rpc('increment_points', { uid: userId, amount });
+
+    if (error) alert('فشل في إرسال النقاط');
+    fetchUsers();
+  }
+
+  async function banUser(userId) {
+    const { error } = await supabase
+      .from('Liteplay')
+      .update({ status: 'محظور' })
+      .eq('id', userId);
+
+    if (error) alert('فشل في الحظر');
+    fetchUsers();
+  }
+
+  async function sendMessage(userId) {
+    const msg = prompt("اكتب الرسالة للمستخدم:");
+    if (msg) {
+      const { error } = await supabase
+        .from('Liteplay')
+        .update({ message: msg })
+        .eq('id', userId);
+
+      if (error) alert('فشل في إرسال الرسالة');
+      fetchUsers();
+    }
+  }
+
+  fetchUsers();
+</script>
+
+</body>
+</html>

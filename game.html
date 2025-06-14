@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ابدأ اللعب 🎮</title>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(to bottom right, #a18cd1, #fbc2eb);
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 100vh;
+    }
+    .container {
+      padding: 20px;
+    }
+    h1 {
+      font-size: 28px;
+      color: #6a1b9a;
+      margin-bottom: 10px;
+    }
+    .countdown {
+      font-size: 40px;
+      font-weight: bold;
+      color: #d81b60;
+      margin: 15px 0;
+    }
+    iframe {
+      width: 90%;
+      height: 300px;
+      border: 4px solid #fff;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      background: #fff;
+    }
+    #ad-container {
+      margin: 30px 0;
+    }
+    .footer {
+      margin-top: auto;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.4);
+      font-size: 14px;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎯 استمتع باللعب!</h1>
+    <p>سيتم منحك نقاط بعد مرور دقيقتين من اللعب ⏱️</p>
+    <div class="countdown" id="timer">120</div>
+    
+    <!-- لعبة -->
+    <iframe src="https://games.construct.net/1075/latest" allowfullscreen></iframe>
+
+    <!-- إعلان Banner من Adsterra -->
+    <div id="ad-container">
+      <script type="text/javascript">
+        atOptions = {
+          'key' : '0878059959a11c2129529d518a88a788',
+          'format' : 'iframe',
+          'height' : 250,
+          'width' : 300,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/0878059959a11c2129529d518a88a788/invoke.js"></script>
+    </div>
+  </div>
+
+  <div class="footer">
+    🚀 LitePlay - جميع الحقوق محفوظة © 2025 | تواصل معنا: mhjobidina@gmail.com
+  </div>
+
+  <script>
+    let timeLeft = 120;
+    const timer = document.getElementById("timer");
+
+    const countdown = setInterval(() => {
+      timeLeft--;
+      timer.textContent = timeLeft;
+
+      if (timeLeft === 0) {
+        clearInterval(countdown);
+        let points = parseInt(localStorage.getItem("points") || "0");
+        points += 10;
+        localStorage.setItem("points", points);
+        window.location.href = "welcome.html";
+      }
+    }, 1000);
+  </script>
+</body>
+</html>

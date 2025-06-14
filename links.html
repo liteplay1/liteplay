@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>تخطي الروابط</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(to bottom right, #d0eaff, #e3f2fd);
+      color: #333;
+      text-align: center;
+    }
+
+    .menu {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+
+    .menu button {
+      font-size: 26px;
+      background: none;
+      border: none;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .menu-content {
+      display: none;
+      position: absolute;
+      top: 40px;
+      left: 10px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      padding: 10px;
+      z-index: 10;
+    }
+
+    .menu-content a {
+      display: block;
+      margin: 8px 0;
+      color: #333;
+      text-decoration: none;
+    }
+
+    .instruction {
+      margin-top: 80px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #0d47a1;
+      padding: 0 20px;
+    }
+
+    .skip-button {
+      margin: 40px auto;
+      padding: 15px 30px;
+      font-size: 18px;
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+
+    iframe {
+      display: block;
+      margin: 30px auto;
+    }
+
+    footer {
+      margin: 40px 10px 20px;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- القائمة -->
+  <div class="menu">
+    <button onclick="toggleMenu()">☰</button>
+    <div class="menu-content" id="menu">
+      <a href="welcome.html">الصفحة الرئيسية</a>
+      <a href="game.html">ابدأ اللعب</a>
+      <a href="withdraw.html">سحب الأرباح</a>
+    </div>
+  </div>
+
+  <!-- العنوان والتعليمات -->
+  <div class="instruction">
+    ✨ لتخطي الرابط والحصول على نقاط، فقط اضغط على الزر بالأسفل ثم انتظر العد التنازلي!
+  </div>
+
+  <!-- زر التخطي -->
+  <button class="skip-button" onclick="startSkip()">اضغط لتخطي</button>
+
+  <!-- إعلان -->
+  <iframe src="//www.highperformanceformat.com/0878059959a11c2129529d518a88a788/invoke.js"
+          width="300" height="250" frameborder="0" scrolling="no"></iframe>
+
+  <!-- الحقوق -->
+  <footer>
+    جميع الحقوق محفوظة © liteplay<br>
+    للتواصل: mhjobidina@gmail.com
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('menu');
+      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function startSkip() {
+      window.location.href = 'skip.html';
+    }
+  </script>
+
+</body>
+</html>
