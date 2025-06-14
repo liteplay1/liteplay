@@ -79,49 +79,45 @@
     let seconds = 5;
     const counter = document.getElementById("counter");
 
-    const startCountdown = () => {
+    const redirectToWelcome = () => {
+      window.location.href = "welcome.html";
+    };
+
+    const startCountdown = (callback) => {
       const interval = setInterval(() => {
         counter.textContent = seconds;
         seconds--;
         if (seconds < 0) {
           clearInterval(interval);
-
-          const redirectToWelcome = () => {
-            window.location.href = "welcome.html";
-          };
-
-          const addPoints = async (user) => {
-            try {
-              const userRef = db.collection("users").doc(user.uid);
-              await db.runTransaction(async (transaction) => {
-                const doc = await transaction.get(userRef);
-                const currentPoints = doc.exists ? (doc.data().points || 0) : 0;
-                transaction.set(userRef, { points: currentPoints + 2 }, { merge: true });
-              });
-            } catch (e) {
-              console.error("فشل في تحديث النقاط:", e);
-            } finally {
-              redirectToWelcome();
-            }
-          };
-
-          const user = auth.currentUser;
-          if (user) {
-            addPoints(user);
-          } else {
-            auth.onAuthStateChanged((u) => {
-              if (u) {
-                addPoints(u);
-              } else {
-                redirectToWelcome(); // إذا لم يكن مسجل الدخول
-              }
-            });
-          }
+          callback(); // نفذ الفعل المطلوب بعد انتهاء العد
         }
       }, 1000);
     };
 
-    startCountdown();
+    const handleUser = async (user) => {
+      try {
+        const userRef = db.collection("users").doc(user.uid);
+        await db.runTransaction(async (transaction) => {
+          const doc = await transaction.get(userRef);
+          const currentPoints = doc.exists ? (doc.data().points || 0) : 0;
+          transaction.set(userRef, { points: currentPoints + 2 }, { merge: true });
+        });
+      } catch (e) {
+        console.error("فشل في تحديث النقاط:", e);
+      } finally {
+        redirectToWelcome();
+      }
+    };
+
+    auth.onAuthStateChanged((user) => {
+      startCountdown(() => {
+        if (user) {
+          handleUser(user);
+        } else {
+          redirectToWelcome();
+        }
+      });
+    });
   </script>
 </body>
 </html>
