@@ -31,6 +31,11 @@
       color: #d81b60;
       margin-top: 20px;
     }
+    .points {
+      margin-top: 15px;
+      font-size: 18px;
+      color: #2e7d32;
+    }
     .footer {
       margin-top: auto;
       padding: 20px;
@@ -47,6 +52,7 @@
   <div class="container">
     <h1>⏳ لحظة من فضلك، يتم التحقق من التخطي...</h1>
     <p class="countdown" id="counter">5</p>
+    <p class="points" id="points">جارٍ تحميل النقاط...</p>
   </div>
 
   <div id="ad-container">
@@ -58,10 +64,47 @@
     جميع الحقوق محفوظة © LitePlay 🚀 | تواصل معنا: contact@liteplay.com
   </div>
 
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js"></script>
   <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
+      authDomain: "litplay-b3177.firebaseapp.com",
+      projectId: "litplay-b3177",
+      storageBucket: "litplay-b3177.appspot.com",
+      messagingSenderId: "201526393824",
+      appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
     let seconds = 5;
-    let counter = document.getElementById("counter");
-    let interval = setInterval(() => {
+    const counter = document.getElementById("counter");
+    const pointsDisplay = document.getElementById("points");
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        const uid = user.uid;
+        const userRef = db.collection("users").doc(uid);
+        userRef.get().then(doc => {
+          if (doc.exists) {
+            const points = doc.data().points || 0;
+            pointsDisplay.textContent = `✅ نقاطك الحالية: ${points}`;
+          } else {
+            pointsDisplay.textContent = "❌ لا يوجد بيانات حساب!";
+          }
+        }).catch(() => {
+          pointsDisplay.textContent = "⚠️ حدث خطأ في تحميل النقاط.";
+        });
+      } else {
+        pointsDisplay.textContent = "❌ لم يتم تسجيل الدخول.";
+      }
+    });
+
+    const interval = setInterval(() => {
       seconds--;
       counter.textContent = seconds;
       if (seconds === 0) {
