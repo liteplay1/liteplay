@@ -72,7 +72,7 @@
   </header>
 
   <div class="side-menu" id="menu">
-    <a href="welcome.html">الصفحة الرئيسية</a>
+    <a href="https://liteplay.vercel.app/welcome.html">الصفحة الرئيسية</a>
     <a href="withdraw.html">سحب الأرباح</a>
   </div>
 
@@ -121,7 +121,7 @@
               const currentPoints = doc.exists ? (doc.data().points || 0) : 0;
               const newPoints = currentPoints + 2;
               userRef.set({ points: newPoints }, { merge: true }).then(() => {
-                window.location.href = "redirect.html";
+                window.location.href = "https://liteplay.vercel.app/welcome.html";
               });
             });
           } else {
