@@ -1,3 +1,4 @@
+<!-- welcome.html -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -137,48 +138,27 @@
   const auth = firebase.auth();
   const db = firebase.firestore();
 
-  window.addEventListener("load", async () => {
-    const user = auth.currentUser;
+  auth.onAuthStateChanged(async user => {
     if (user) {
       const uid = user.uid;
       const userRef = db.collection("users").doc(uid);
       try {
         const doc = await userRef.get();
-        if (!doc.exists) {
-          await userRef.set({ points: 0 });
-          document.getElementById("userPoints").textContent = "0";
-        } else {
-          const points = doc.data().points || 0;
-          document.getElementById("userPoints").textContent = points;
-        }
-      } catch (error) {
-        console.error("حدث خطأ في جلب النقاط:", error);
-        alert("⚠️ حدث خطأ أثناء تحميل النقاط. حاول مرة أخرى.");
+        const points = doc.exists ? doc.data().points || 0 : 0;
+        if (!doc.exists) await userRef.set({ points: 0 });
+        document.getElementById("userPoints").textContent = points;
+      } catch (err) {
+        console.error("فشل في جلب النقاط:", err);
+        alert("⚠️ حدث خطأ أثناء تحميل النقاط.");
       }
     } else {
-      // ننتظر قليلاً لإعطاء فرصة لـ Firebase لتحديد المستخدم
-      auth.onAuthStateChanged(async u => {
-        if (u) {
-          const uid = u.uid;
-          const userRef = db.collection("users").doc(uid);
-          try {
-            const doc = await userRef.get();
-            const points = doc.exists ? doc.data().points || 0 : 0;
-            if (!doc.exists) await userRef.set({ points: 0 });
-            document.getElementById("userPoints").textContent = points;
-          } catch (error) {
-            console.error("حدث خطأ:", error);
-          }
-        } else {
-          window.location.href = "index.html";
-        }
-      });
+      window.location.href = "index.html"; // توجيه المستخدم غير المسجل
     }
   });
 
   function toggleMenu() {
     const menu = document.getElementById("menu");
-    menu.style.display = menu.style.display === "block" ? "none" : "block";
+    menu.style.display = (menu.style.display === "block") ? "none" : "block";
   }
 </script>
 </body>
