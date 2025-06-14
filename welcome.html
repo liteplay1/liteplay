@@ -13,7 +13,6 @@
       color: #333;
       text-align: center;
     }
-
     #points {
       position: fixed;
       top: 10px;
@@ -25,7 +24,6 @@
       font-weight: bold;
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
-
     .menu-btn {
       position: fixed;
       top: 10px;
@@ -37,7 +35,6 @@
       color: #6b2ca0;
       z-index: 1001;
     }
-
     .menu {
       display: none;
       position: fixed;
@@ -51,7 +48,6 @@
       padding: 20px;
       z-index: 1000;
     }
-
     .menu a {
       display: block;
       margin: 15px 0;
@@ -60,7 +56,6 @@
       text-decoration: none;
       border-bottom: 1px solid #eee;
     }
-
     .button {
       display: block;
       margin: 100px auto 20px;
@@ -74,22 +69,18 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       transition: background-color 0.3s;
     }
-
     .button:hover {
       background-color: #e355f7;
     }
-
     iframe {
       margin-top: 30px;
       border: none;
     }
-
     footer {
       margin-top: 40px;
       font-size: 14px;
       color: #777;
     }
-
     #ad {
       margin-top: 40px;
       text-align: center;
@@ -98,25 +89,18 @@
 </head>
 <body>
 
-<!-- زر القائمة الجانبية -->
 <button class="menu-btn" onclick="toggleMenu()">☰</button>
-
-<!-- عرض النقاط -->
 <div id="points">⭐ نقاطك: <span id="userPoints">0</span></div>
-
-<!-- القائمة الجانبية -->
 <div class="menu" id="menu">
   <a href="game.html">🎮 ابدأ اللعب</a>
   <a href="withdraw.html">💰 تلقي أرباحك</a>
   <a href="skip.html">⏭️ تخطي الروابط</a>
 </div>
 
-<!-- الأزرار الرئيسية -->
 <button class="button" onclick="window.location.href='game.html'">🎮 ابدأ اللعب</button>
 <button class="button" onclick="window.location.href='withdraw.html'">💰 تلقي أرباحك</button>
 <button class="button" onclick="window.location.href='skip.html'">⏭️ تخطي الروابط</button>
 
-<!-- مساحة الإعلان -->
 <div id="ad">
   <script type="text/javascript">
     atOptions = {
@@ -130,59 +114,47 @@
   <script type="text/javascript" src="//www.highperformanceformat.com/0878059959a11c2129529d518a88a788/invoke.js"></script>
 </div>
 
-<!-- الحقوق -->
 <footer>
   📩 للتواصل: mhjobidina@gmail.com<br>
   © 2025 LitePlay - موقع الألعاب والربح من Litecoin 🎮💸
 </footer>
 
-<!-- Firebase Scripts -->
 <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js"></script>
 
 <script>
-  // إعداد Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
     authDomain: "litplay-b3177.firebaseapp.com",
     projectId: "litplay-b3177",
-    storageBucket: "litplay-b3177.firebasestorage.app",
+    storageBucket: "litplay-b3177.appspot.com",
     messagingSenderId: "201526393824",
-    appId: "1:201526393824:web:c8ab6afa0bcca902be4985",
-    measurementId: "G-C8XX64EKXY"
+    appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
   };
-
-  // تفعيل Firebase
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
   const db = firebase.firestore();
 
-  // عند تسجيل الدخول
   auth.onAuthStateChanged(async user => {
     if (user) {
       const uid = user.uid;
       const userRef = db.collection("users").doc(uid);
-
       try {
         const doc = await userRef.get();
         let points = 0;
-
         if (doc.exists) {
           const data = doc.data();
           points = data.points || 0;
         } else {
-          // أول مرة يسجل المستخدم، نحطله نقاط = 0
           await userRef.set({ points: 0 });
         }
-
         document.getElementById("userPoints").textContent = points;
       } catch (error) {
         console.error("فشل في جلب النقاط:", error);
         alert("حدث خطأ أثناء جلب النقاط!");
       }
     } else {
-      // إذا لم يكن مسجلاً، رجعه لصفحة تسجيل الدخول
       window.location.href = "index.html";
     }
   });
@@ -192,6 +164,5 @@
     menu.style.display = (menu.style.display === "block") ? "none" : "block";
   }
 </script>
-
 </body>
 </html>
