@@ -58,15 +58,50 @@
     جميع الحقوق محفوظة © LitePlay 🚀 | تواصل معنا: contact@liteplay.com
   </div>
 
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js"></script>
+
   <script>
+    // تهيئة Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
+      authDomain: "litplay-b3177.firebaseapp.com",
+      projectId: "litplay-b3177",
+      storageBucket: "litplay-b3177.appspot.com",
+      messagingSenderId: "201526393824",
+      appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // عدّ تنازلي
     let seconds = 5;
-    let counter = document.getElementById("counter");
-    let interval = setInterval(() => {
+    const counter = document.getElementById("counter");
+
+    const interval = setInterval(() => {
       seconds--;
       counter.textContent = seconds;
+
       if (seconds === 0) {
         clearInterval(interval);
-        window.location.href = "welcome.html";
+
+        auth.onAuthStateChanged(async (user) => {
+          if (user) {
+            const uid = user.uid;
+            const userRef = db.collection("users").doc(uid);
+            try {
+              const doc = await userRef.get();
+              const currentPoints = doc.exists ? (doc.data().points || 0) : 0;
+              await userRef.set({ points: currentPoints + 2 }, { merge: true });
+            } catch (err) {
+              console.error("فشل في تحديث النقاط:", err);
+            }
+          }
+          window.location.href = "welcome.html";
+        });
       }
     }, 1000);
   </script>
