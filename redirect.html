@@ -64,7 +64,6 @@
   <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js"></script>
 
   <script>
-    // إعداد Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
       authDomain: "litplay-b3177.firebaseapp.com",
@@ -80,25 +79,6 @@
     let seconds = 5;
     const counter = document.getElementById("counter");
 
-    const redirectToWelcome = () => {
-      window.location.href = "welcome.html";
-    };
-
-    const addPointsAndRedirect = (user) => {
-      const userRef = db.collection("users").doc(user.uid);
-      db.runTransaction(async (transaction) => {
-        const doc = await transaction.get(userRef);
-        const currentPoints = doc.exists ? (doc.data().points || 0) : 0;
-        transaction.set(userRef, { points: currentPoints + 2 }, { merge: true });
-      }).then(() => {
-        console.log("✅ تمت إضافة نقطتين.");
-        redirectToWelcome();
-      }).catch((error) => {
-        console.error("❌ فشل تحديث النقاط:", error);
-        redirectToWelcome();
-      });
-    };
-
     const startCountdown = () => {
       const interval = setInterval(() => {
         seconds--;
@@ -106,15 +86,32 @@
         if (seconds <= 0) {
           clearInterval(interval);
 
+          const goToWelcome = () => window.location.href = "welcome.html";
+
+          const addPoints = async (user) => {
+            try {
+              const userRef = db.collection("users").doc(user.uid);
+              await db.runTransaction(async (tx) => {
+                const doc = await tx.get(userRef);
+                const currentPoints = doc.exists ? doc.data().points || 0 : 0;
+                tx.set(userRef, { points: currentPoints + 2 }, { merge: true });
+              });
+            } catch (e) {
+              console.error("فشل في إضافة النقاط:", e);
+            } finally {
+              goToWelcome();
+            }
+          };
+
           const user = auth.currentUser;
           if (user) {
-            addPointsAndRedirect(user);
+            addPoints(user);
           } else {
             auth.onAuthStateChanged((u) => {
               if (u) {
-                addPointsAndRedirect(u);
+                addPoints(u);
               } else {
-                redirectToWelcome();
+                goToWelcome();
               }
             });
           }
@@ -122,8 +119,9 @@
       }, 1000);
     };
 
-    // نبدأ العد التنازلي بعد التأكد أن DOM جاهز
-    window.onload = startCountdown;
+    window.onload = () => {
+      startCountdown();
+    };
   </script>
 </body>
 </html>
