@@ -38,11 +38,34 @@
     .update-btn { background: #4caf50; color: #fff; }
     .message-btn { background: #2196f3; color: #fff; }
     .delete-btn { background: #f44336; color: #fff; }
+    #pin-form input {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      width: 200px;
+      margin: 10px auto;
+      display: block;
+    }
+    #pin-form button {
+      background-color: #8bc34a;
+      color: white;
+      font-size: 16px;
+      padding: 10px 20px;
+      border-radius: 8px;
+    }
   </style>
 </head>
 <body>
   <h2>لوحة تحكم المدير</h2>
-  <div id="users-container">جاري التحميل...</div>
+  <div id="pin-form">
+    <p>🔐 أدخل الكود السري للوصول:</p>
+    <input type="password" id="adminPin" placeholder="أدخل الكود هنا">
+    <button onclick="checkAdminCode()">دخول</button>
+    <p id="pin-msg" style="color: red;"></p>
+  </div>
+
+  <div id="users-container" style="display: none;">جاري التحميل...</div>
 
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js"></script>
@@ -60,18 +83,30 @@
       appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
     };
     firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
     const db = firebase.firestore();
 
-    const container = document.getElementById('users-container');
-    const ADMIN_EMAIL = "lazherniga@gmail.com";
+    // التحقق من الكود السري
+    function checkAdminCode() {
+      const enteredPin = document.getElementById("adminPin").value;
+      const msg = document.getElementById("pin-msg");
 
-    auth.onAuthStateChanged(user => {
-      if (!user || user.email !== ADMIN_EMAIL) {
-        document.body.innerHTML = "<h3>🚫 لا تملك صلاحية الوصول إلى هذه الصفحة.</h3>";
-        return;
-      }
+      db.collection("adminAccess").doc("accessCode").get().then(doc => {
+        const realPin = doc.data().pin;
+        if (enteredPin === realPin) {
+          document.getElementById("pin-form").style.display = "none";
+          document.getElementById("users-container").style.display = "block";
+          loadUsers();
+        } else {
+          msg.textContent = "❌ الكود غير صحيح";
+        }
+      }).catch(() => {
+        msg.textContent = "⚠️ فشل في الاتصال بـ Firebase";
+      });
+    }
 
+    // تحميل المستخدمين
+    function loadUsers() {
+      const container = document.getElementById('users-container');
       db.collection("users").get().then(snapshot => {
         container.innerHTML = "";
         snapshot.forEach(doc => {
@@ -94,7 +129,7 @@
           container.appendChild(card);
         });
       });
-    });
+    }
 
     function updatePoints(uid) {
       const val = document.getElementById(`points-${uid}`).value;
