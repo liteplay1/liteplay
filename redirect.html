@@ -77,38 +77,47 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // بعد تحميل الصفحة
-    window.onload = () => {
-      const counterElement = document.getElementById("counter");
+    // عند تحميل الصفحة
+    window.onload = async () => {
+      const counter = document.getElementById("counter");
       let seconds = 5;
 
-      const startCountdown = (user) => {
-        const interval = setInterval(async () => {
-          counterElement.textContent = seconds;
-          seconds--;
+      const updateCounter = () => {
+        counter.textContent = seconds;
+        seconds--;
+        if (seconds < 0) return true;
+        return false;
+      };
 
-          if (seconds < 0) {
-            clearInterval(interval);
-
-            if (user) {
-              try {
-                const userRef = db.collection("users").doc(user.uid);
-                const doc = await userRef.get();
-                const currentPoints = doc.exists ? doc.data().points || 0 : 0;
-                await userRef.set({ points: currentPoints + 2 }, { merge: true });
-              } catch (err) {
-                console.error("فشل في تحديث النقاط:", err);
+      const waitAndRedirect = async (user) => {
+        const countdown = setInterval(async () => {
+          const done = updateCounter();
+          if (done) {
+            clearInterval(countdown);
+            try {
+              if (user) {
+                const ref = db.collection("users").doc(user.uid);
+                const snap = await ref.get();
+                const currentPoints = snap.exists ? snap.data().points || 0 : 0;
+                await ref.set({ points: currentPoints + 2 }, { merge: true });
               }
+            } catch (err) {
+              console.error("فشل في تحديث النقاط:", err);
             }
-
             window.location.href = "welcome.html";
           }
         }, 1000);
       };
 
-      auth.onAuthStateChanged((user) => {
-        startCountdown(user);
-      });
+      // تأكد أن المستخدم معروف ثم ابدأ العد
+      const user = auth.currentUser;
+      if (user) {
+        waitAndRedirect(user);
+      } else {
+        auth.onAuthStateChanged((user) => {
+          waitAndRedirect(user);
+        });
+      }
     };
   </script>
 </body>
