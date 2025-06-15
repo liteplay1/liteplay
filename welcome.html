@@ -147,32 +147,32 @@
 
   auth.onAuthStateChanged(async user => {
     if (user) {
-      const uid = user.uid;
       document.getElementById("userEmail").textContent = `👤 ${user.email}`;
-      const userRef = db.collection("users").doc(uid);
+      const userRef = db.collection("users").doc(user.uid);
 
       try {
-        const doc = await userRef.get();
-        if (!doc.exists) {
+        const docSnap = await userRef.get();
+        if (docSnap.exists) {
+          const data = docSnap.data();
+          const points = typeof data.points === "number" ? data.points : 0;
+          document.getElementById("userPoints").textContent = points;
+        } else {
           await userRef.set({ points: 0 });
           document.getElementById("userPoints").textContent = 0;
-        } else {
-          const points = doc.data().points || 0;
-          document.getElementById("userPoints").textContent = points;
         }
-      } catch (err) {
-        console.error("فشل في جلب النقاط:", err);
-        alert("⚠️ حدث خطأ أثناء تحميل النقاط.");
+      } catch (error) {
+        console.error("⚠️ خطأ في تحميل النقاط:", error);
+        alert("حدث خطأ أثناء تحميل بياناتك.");
       }
     } else {
-      // لم يتم تسجيل الدخول
+      // المستخدم غير مسجل دخول
       window.location.href = "index.html";
     }
   });
 
   function toggleMenu() {
     const menu = document.getElementById("menu");
-    menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
   }
 </script>
 </body>
