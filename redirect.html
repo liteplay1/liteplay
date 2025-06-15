@@ -1,3 +1,4 @@
+<!-- redirect.html -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -58,13 +59,12 @@
     جميع الحقوق محفوظة © LitePlay 🚀 | تواصل معنا: contact@liteplay.com
   </div>
 
-  <!-- Firebase (Compat - تعمل في المتصفح مباشرة) -->
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-firestore-compat.js"></script>
 
   <script>
-    // تهيئة Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
       authDomain: "litplay-b3177.firebaseapp.com",
@@ -77,7 +77,6 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // عند تحميل الصفحة
     window.onload = () => {
       const counter = document.getElementById("counter");
       let seconds = 5;
@@ -92,14 +91,19 @@
             try {
               if (user) {
                 const ref = db.collection("users").doc(user.uid);
-                const snap = await ref.get();
-                const currentPoints = snap.exists ? snap.data().points || 0 : 0;
-                await ref.set({ points: currentPoints + 2 }, { merge: true });
+                await ref.update({
+                  points: firebase.firestore.FieldValue.increment(2)
+                });
               }
+              // ✅ توجيه فقط بعد نجاح التحديث
+              setTimeout(() => {
+                window.location.href = "welcome.html";
+              }, 300);
             } catch (err) {
               console.error("فشل في تحديث النقاط:", err);
+              alert("⚠️ حدث خطأ أثناء تحديث النقاط.");
+              window.location.href = "welcome.html";
             }
-            window.location.href = "welcome.html";
           }
         }, 1000);
       };
