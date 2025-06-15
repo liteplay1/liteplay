@@ -64,6 +64,7 @@
   <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js"></script>
 
   <script>
+    // تهيئة Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
       authDomain: "litplay-b3177.firebaseapp.com",
@@ -72,41 +73,43 @@
       messagingSenderId: "201526393824",
       appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
     };
-
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    const counterElement = document.getElementById("counter");
-    let seconds = 5;
+    // بعد تحميل الصفحة
+    window.onload = () => {
+      const counterElement = document.getElementById("counter");
+      let seconds = 5;
 
-    function startCountdown(user) {
-      const interval = setInterval(() => {
-        counterElement.textContent = seconds;
-        seconds--;
-        if (seconds < 0) {
-          clearInterval(interval);
+      const startCountdown = (user) => {
+        const interval = setInterval(async () => {
+          counterElement.textContent = seconds;
+          seconds--;
 
-          if (user) {
-            const userRef = db.collection("users").doc(user.uid);
-            db.runTransaction(async (transaction) => {
-              const doc = await transaction.get(userRef);
-              const currentPoints = doc.exists ? doc.data().points || 0 : 0;
-              transaction.set(userRef, { points: currentPoints + 2 }, { merge: true });
-            }).finally(() => {
-              window.location.href = "welcome.html";
-            });
-          } else {
+          if (seconds < 0) {
+            clearInterval(interval);
+
+            if (user) {
+              try {
+                const userRef = db.collection("users").doc(user.uid);
+                const doc = await userRef.get();
+                const currentPoints = doc.exists ? doc.data().points || 0 : 0;
+                await userRef.set({ points: currentPoints + 2 }, { merge: true });
+              } catch (err) {
+                console.error("فشل في تحديث النقاط:", err);
+              }
+            }
+
             window.location.href = "welcome.html";
           }
-        }
-      }, 1000);
-    }
+        }, 1000);
+      };
 
-    // تأكد من بدأ العد سواء المستخدم متصل أو لا
-    auth.onAuthStateChanged((user) => {
-      startCountdown(user);
-    });
+      auth.onAuthStateChanged((user) => {
+        startCountdown(user);
+      });
+    };
   </script>
 </body>
 </html>
