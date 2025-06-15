@@ -143,6 +143,9 @@
       const uid = user.uid;
       const userRef = db.collection("users").doc(uid);
       try {
+        // 🕐 تأخير بسيط لضمان اكتمال التحديث
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
         const doc = await userRef.get();
         const points = doc.exists ? doc.data().points || 0 : 0;
         if (!doc.exists) await userRef.set({ points: 0 });
