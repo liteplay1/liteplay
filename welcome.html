@@ -25,6 +25,11 @@
       font-weight: bold;
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
+    #userEmail {
+      font-size: 16px;
+      color: #6b2ca0;
+      margin-top: 20px;
+    }
     .menu-btn {
       position: fixed;
       top: 10px;
@@ -91,7 +96,9 @@
 <body>
 
 <button class="menu-btn" onclick="toggleMenu()">☰</button>
-<div id="points">⭐ نقاطك: <span id="userPoints">0</span></div>
+<div id="points">⭐ نقاطك: <span id="userPoints">...</span></div>
+<div id="userEmail"></div>
+
 <div class="menu" id="menu">
   <a href="game.html">🎮 ابدأ اللعب</a>
   <a href="withdraw.html">💰 تلقي أرباحك</a>
@@ -141,21 +148,25 @@
   auth.onAuthStateChanged(async user => {
     if (user) {
       const uid = user.uid;
+      document.getElementById("userEmail").textContent = `👤 ${user.email}`;
       const userRef = db.collection("users").doc(uid);
-      try {
-        // 🕐 تأخير بسيط لضمان اكتمال التحديث
-        await new Promise(resolve => setTimeout(resolve, 1000));
 
+      try {
         const doc = await userRef.get();
-        const points = doc.exists ? doc.data().points || 0 : 0;
-        if (!doc.exists) await userRef.set({ points: 0 });
-        document.getElementById("userPoints").textContent = points;
+        if (!doc.exists) {
+          await userRef.set({ points: 0 });
+          document.getElementById("userPoints").textContent = 0;
+        } else {
+          const points = doc.data().points || 0;
+          document.getElementById("userPoints").textContent = points;
+        }
       } catch (err) {
         console.error("فشل في جلب النقاط:", err);
         alert("⚠️ حدث خطأ أثناء تحميل النقاط.");
       }
     } else {
-      window.location.href = "index.html"; // توجيه المستخدم غير المسجل
+      // لم يتم تسجيل الدخول
+      window.location.href = "index.html";
     }
   });
 
