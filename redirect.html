@@ -58,10 +58,10 @@
     جميع الحقوق محفوظة © LitePlay 🚀 | تواصل معنا: contact@liteplay.com
   </div>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js"></script>
+  <!-- Firebase (Compat - تعمل في المتصفح مباشرة) -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-firestore-compat.js"></script>
 
   <script>
     // تهيئة Firebase
@@ -78,22 +78,17 @@
     const db = firebase.firestore();
 
     // عند تحميل الصفحة
-    window.onload = async () => {
+    window.onload = () => {
       const counter = document.getElementById("counter");
       let seconds = 5;
 
-      const updateCounter = () => {
-        counter.textContent = seconds;
-        seconds--;
-        if (seconds < 0) return true;
-        return false;
-      };
+      const startCountdown = (user) => {
+        const interval = setInterval(async () => {
+          counter.textContent = seconds;
+          seconds--;
 
-      const waitAndRedirect = async (user) => {
-        const countdown = setInterval(async () => {
-          const done = updateCounter();
-          if (done) {
-            clearInterval(countdown);
+          if (seconds < 0) {
+            clearInterval(interval);
             try {
               if (user) {
                 const ref = db.collection("users").doc(user.uid);
@@ -109,15 +104,9 @@
         }, 1000);
       };
 
-      // تأكد أن المستخدم معروف ثم ابدأ العد
-      const user = auth.currentUser;
-      if (user) {
-        waitAndRedirect(user);
-      } else {
-        auth.onAuthStateChanged((user) => {
-          waitAndRedirect(user);
-        });
-      }
+      auth.onAuthStateChanged((user) => {
+        startCountdown(user);
+      });
     };
   </script>
 </body>
