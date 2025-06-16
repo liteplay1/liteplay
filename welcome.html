@@ -78,10 +78,6 @@
     .button:hover {
       background-color: #e355f7;
     }
-    iframe {
-      margin-top: 30px;
-      border: none;
-    }
     footer {
       margin-top: 40px;
       font-size: 14px;
@@ -127,10 +123,10 @@
   © 2025 LitePlay - موقع الألعاب والربح من Litecoin 🎮💸
 </footer>
 
-<!-- ✅ Firebase SDK compat versions -->
-<script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore-compat.js"></script>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js"></script>
 
 <script>
   const firebaseConfig = {
@@ -141,16 +137,20 @@
     messagingSenderId: "201526393824",
     appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
   };
-
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
   const db = firebase.firestore();
 
-  auth.onAuthStateChanged(async (user) => {
+  function toggleMenu() {
+    const menu = document.getElementById("menu");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+  }
+
+  auth.onAuthStateChanged(async user => {
     if (user) {
-      const uid = user.uid;
       document.getElementById("userEmail").textContent = `👤 ${user.email}`;
-      const userRef = db.collection("users").doc(uid);
+      const userRef = db.collection("users").doc(user.uid);
+
       try {
         const docSnap = await userRef.get();
         if (docSnap.exists) {
@@ -166,15 +166,9 @@
         alert("حدث خطأ أثناء تحميل بياناتك.");
       }
     } else {
-      window.location.href = "index.html"; // إعادة توجيه إذا لم يكن مسجل دخول
+      window.location.href = "index.html";
     }
   });
-
-  function toggleMenu() {
-    const menu = document.getElementById("menu");
-    menu.style.display = (menu.style.display === "block") ? "none" : "block";
-  }
 </script>
-
 </body>
 </html>
