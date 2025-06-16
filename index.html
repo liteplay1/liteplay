@@ -112,11 +112,14 @@
       }
 
       try {
-        await auth.createUserWithEmailAndPassword(email, password);
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        const user = userCredential.user;
 
-        // إضافة المستخدم إلى Firestore مع نقاط = 0
-        const user = auth.currentUser;
-        await db.collection("users").doc(user.uid).set({ points: 0 });
+        // إضافة المستخدم إلى Firestore
+        await db.collection("users").doc(user.uid).set({
+          email: user.email,
+          points: 0
+        });
 
         window.location.href = "welcome.html";
       } catch (error) {
