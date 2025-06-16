@@ -79,9 +79,10 @@
     <p>© 2025 جميع الحقوق محفوظة</p>
   </footer>
 
-  <!-- Firebase Scripts (compat version الأفضل للجوال) -->
+  <!-- Firebase Scripts -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
   <script>
     // إعداد Firebase
@@ -96,8 +97,9 @@
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
+    const db = firebase.firestore();
 
-    // زر إنشاء حساب
+    // زر إنشاء حساب جديد
     document.getElementById("signup-btn").addEventListener("click", async () => {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
@@ -111,6 +113,11 @@
 
       try {
         await auth.createUserWithEmailAndPassword(email, password);
+
+        // إضافة المستخدم إلى Firestore مع نقاط = 0
+        const user = auth.currentUser;
+        await db.collection("users").doc(user.uid).set({ points: 0 });
+
         window.location.href = "welcome.html";
       } catch (error) {
         console.log("Signup error:", error);
