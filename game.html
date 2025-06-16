@@ -79,65 +79,60 @@
     🚀 LitePlay - جميع الحقوق محفوظة © 2025 | تواصل معنا: mhjobidina@gmail.com
   </div>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js"></script>
+  <!-- Firebase (الإصدار 8.10.1 المتوافق مع HTML العادي) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const firebaseConfig = {
-        apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
-        authDomain: "litplay-b3177.firebaseapp.com",
-        projectId: "litplay-b3177",
-        storageBucket: "litplay-b3177.appspot.com",
-        messagingSenderId: "201526393824",
-        appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
-      };
+    // إعداد Firebase
+    var firebaseConfig = {
+      apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
+      authDomain: "litplay-b3177.firebaseapp.com",
+      projectId: "litplay-b3177",
+      storageBucket: "litplay-b3177.appspot.com",
+      messagingSenderId: "201526393824",
+      appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
+    };
+    firebase.initializeApp(firebaseConfig);
+    var auth = firebase.auth();
+    var db = firebase.firestore();
 
-      firebase.initializeApp(firebaseConfig);
-      const auth = firebase.auth();
-      const db = firebase.firestore();
-
+    // العد التنازلي
+    window.onload = function () {
       const timerElement = document.getElementById("timer");
       let timeLeft = 120;
 
-      auth.onAuthStateChanged(async (user) => {
-        if (!user) {
-          alert("⚠️ يجب تسجيل الدخول أولاً.");
-          console.warn("⚠️ المستخدم غير مسجل الدخول");
-          window.location.href = "index.html";
-          return;
-        }
+      const countdown = setInterval(() => {
+        timerElement.textContent = timeLeft;
+        timeLeft--;
 
-        console.log("✅ المستخدم مسجل الدخول:", user.email);
+        if (timeLeft < 0) {
+          clearInterval(countdown);
 
-        const countdown = setInterval(async () => {
-          timerElement.textContent = timeLeft;
-          timeLeft--;
+          auth.onAuthStateChanged(function (user) {
+            if (user) {
+              const uid = user.uid;
+              const userRef = db.collection("users").doc(uid);
 
-          if (timeLeft < 0) {
-            clearInterval(countdown);
-            console.log("⏱️ انتهى الوقت، جاري إضافة النقاط...");
+              userRef.get().then(function (doc) {
+                var currentPoints = doc.exists && doc.data().points ? doc.data().points : 0;
+                var newPoints = currentPoints + 3;
 
-            const uid = user.uid;
-            const userRef = db.collection("users").doc(uid);
-
-            try {
-              const doc = await userRef.get();
-              const currentPoints = doc.exists && doc.data().points ? doc.data().points : 0;
-              const newPoints = currentPoints + 3;
-
-              await userRef.set({ points: newPoints }, { merge: true });
-              console.log("✅ تمت إضافة 3 نقاط.");
-              window.location.href = "welcome.html";
-            } catch (error) {
-              console.error("❌ خطأ في إضافة النقاط:", error.message);
-              alert("حدث خطأ أثناء تحديث النقاط.");
+                userRef.set({ points: newPoints }, { merge: true }).then(function () {
+                  console.log("✅ تمت إضافة 3 نقاط.");
+                  window.location.href = "welcome.html";
+                }).catch(function (error) {
+                  alert("❌ خطأ أثناء حفظ النقاط: " + error.message);
+                });
+              });
+            } else {
+              alert("⚠️ يجب تسجيل الدخول أولاً.");
+              window.location.href = "index.html";
             }
-          }
-        }, 1000);
-      });
-    });
+          });
+        }
+      }, 1000);
+    };
   </script>
 </body>
 </html>
