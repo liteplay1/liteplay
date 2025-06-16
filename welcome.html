@@ -123,9 +123,9 @@
 </footer>
 
 <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
 <script>
   const firebaseConfig = {
@@ -146,24 +146,34 @@
     menu.style.display = menu.style.display === "block" ? "none" : "block";
   }
 
-  auth.onAuthStateChanged(async user => {
+  auth.onAuthStateChanged(async (user) => {
     if (user) {
       document.getElementById("userEmail").textContent = `👤 ${user.email}`;
       const userRef = db.collection("users").doc(user.uid);
 
-      // ✅ تحديث مباشر عند تغيّر النقاط
-      userRef.onSnapshot(async (doc) => {
-        if (doc.exists) {
-          const data = doc.data();
-          const points = typeof data.points === "number" ? data.points : 0;
-          document.getElementById("userPoints").textContent = points;
-        } else {
+      try {
+        const doc = await userRef.get();
+        if (!doc.exists) {
           await userRef.set({ points: 0 });
           document.getElementById("userPoints").textContent = 0;
+        } else {
+          const data = doc.data();
+          document.getElementById("userPoints").textContent = data.points ?? 0;
         }
-      });
+
+        // تحديث مباشر عند تغير النقاط
+        userRef.onSnapshot(docSnapshot => {
+          if (docSnapshot.exists) {
+            const data = docSnapshot.data();
+            document.getElementById("userPoints").textContent = data.points ?? 0;
+          }
+        });
+
+      } catch (e) {
+        console.error("Error fetching user data:", e);
+      }
+
     } else {
-      // إذا لم يكن المستخدم مسجلاً الدخول، يتم توجيهه لصفحة البداية
       window.location.href = "index.html";
     }
   });
