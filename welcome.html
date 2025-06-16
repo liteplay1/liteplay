@@ -1,4 +1,3 @@
-<!-- welcome.html -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -137,6 +136,7 @@
     messagingSenderId: "201526393824",
     appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
   };
+
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
   const db = firebase.firestore();
@@ -151,24 +151,23 @@
       document.getElementById("userEmail").textContent = `👤 ${user.email}`;
       const userRef = db.collection("users").doc(user.uid);
 
-      try {
-        const docSnap = await userRef.get();
-        if (docSnap.exists) {
-          const data = docSnap.data();
+      // ✅ تحديث مباشر عند تغيّر النقاط
+      userRef.onSnapshot(async (doc) => {
+        if (doc.exists) {
+          const data = doc.data();
           const points = typeof data.points === "number" ? data.points : 0;
           document.getElementById("userPoints").textContent = points;
         } else {
           await userRef.set({ points: 0 });
           document.getElementById("userPoints").textContent = 0;
         }
-      } catch (error) {
-        console.error("⚠️ خطأ في تحميل النقاط:", error);
-        alert("حدث خطأ أثناء تحميل بياناتك.");
-      }
+      });
     } else {
+      // إذا لم يكن المستخدم مسجلاً الدخول، يتم توجيهه لصفحة البداية
       window.location.href = "index.html";
     }
   });
 </script>
+
 </body>
 </html>
