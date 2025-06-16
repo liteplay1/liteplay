@@ -101,36 +101,42 @@
       const timerElement = document.getElementById("timer");
       let timeLeft = 120;
 
-      const countdown = setInterval(() => {
-        timerElement.textContent = timeLeft;
-        timeLeft--;
-
-        if (timeLeft < 0) {
-          clearInterval(countdown);
-
-          auth.onAuthStateChanged(async (user) => {
-            if (user) {
-              const uid = user.uid;
-              const userRef = db.collection("users").doc(uid);
-
-              try {
-                const doc = await userRef.get();
-                const currentPoints = doc.exists && doc.data().points ? doc.data().points : 0;
-                const newPoints = currentPoints + 3;
-
-                await userRef.set({ points: newPoints }, { merge: true });
-                console.log("✅ تمت إضافة 3 نقاط.");
-                window.location.href = "welcome.html";
-              } catch (error) {
-                alert("❌ حدث خطأ أثناء تحديث النقاط: " + error.message);
-              }
-            } else {
-              alert("⚠️ يجب تسجيل الدخول أولاً.");
-              window.location.href = "index.html";
-            }
-          });
+      auth.onAuthStateChanged(async (user) => {
+        if (!user) {
+          alert("⚠️ يجب تسجيل الدخول أولاً.");
+          console.warn("⚠️ المستخدم غير مسجل الدخول");
+          window.location.href = "index.html";
+          return;
         }
-      }, 1000);
+
+        console.log("✅ المستخدم مسجل الدخول:", user.email);
+
+        const countdown = setInterval(async () => {
+          timerElement.textContent = timeLeft;
+          timeLeft--;
+
+          if (timeLeft < 0) {
+            clearInterval(countdown);
+            console.log("⏱️ انتهى الوقت، جاري إضافة النقاط...");
+
+            const uid = user.uid;
+            const userRef = db.collection("users").doc(uid);
+
+            try {
+              const doc = await userRef.get();
+              const currentPoints = doc.exists && doc.data().points ? doc.data().points : 0;
+              const newPoints = currentPoints + 3;
+
+              await userRef.set({ points: newPoints }, { merge: true });
+              console.log("✅ تمت إضافة 3 نقاط.");
+              window.location.href = "welcome.html";
+            } catch (error) {
+              console.error("❌ خطأ في إضافة النقاط:", error.message);
+              alert("حدث خطأ أثناء تحديث النقاط.");
+            }
+          }
+        }, 1000);
+      });
     });
   </script>
 </body>
