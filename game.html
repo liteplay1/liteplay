@@ -56,8 +56,8 @@
     <h1>🎯 استمتع باللعب!</h1>
     <p>سيتم منحك نقاط بعد مرور دقيقتين من اللعب ⏱️</p>
     <div class="countdown" id="timer">120</div>
-    
-    <!-- لعبة -->
+
+    <!-- اللعبة -->
     <iframe src="https://games.construct.net/1075/latest" allowfullscreen></iframe>
 
     <!-- إعلان -->
@@ -92,43 +92,45 @@
       messagingSenderId: "201526393824",
       appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
     };
-
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    const timerEl = document.getElementById("timer");
-    let timeLeft = 120;
-    let countdown;
+    window.onload = function () {
+      const timerElement = document.getElementById("timer");
+      let timeLeft = 120;
 
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        countdown = setInterval(() => {
-          timerEl.textContent = timeLeft;
-          timeLeft--;
+      const countdown = setInterval(() => {
+        timerElement.textContent = timeLeft;
+        timeLeft--;
 
-          if (timeLeft < 0) {
-            clearInterval(countdown);
-            const uid = user.uid;
-            const userRef = db.collection("users").doc(uid);
+        if (timeLeft < 0) {
+          clearInterval(countdown);
 
-            userRef.get().then(doc => {
-              const currentPoints = doc.exists && doc.data().points ? doc.data().points : 0;
-              const newPoints = currentPoints + 3; // أضف 3 نقاط فقط
-              userRef.set({ points: newPoints }, { merge: true }).then(() => {
-                console.log("✅ تمت إضافة 3 نقاط للمستخدم.");
+          auth.onAuthStateChanged(async (user) => {
+            if (user) {
+              const uid = user.uid;
+              const userRef = db.collection("users").doc(uid);
+
+              try {
+                const doc = await userRef.get();
+                const currentPoints = doc.exists && doc.data().points ? doc.data().points : 0;
+                const newPoints = currentPoints + 3;
+
+                await userRef.set({ points: newPoints }, { merge: true });
+                console.log("✅ تمت إضافة 3 نقاط.");
                 window.location.href = "welcome.html";
-              }).catch(error => {
-                alert("❌ حدث خطأ أثناء حفظ النقاط: " + error.message);
-              });
-            });
-          }
-        }, 1000);
-      } else {
-        alert("❌ يجب تسجيل الدخول أولاً.");
-        window.location.href = "index.html";
-      }
-    });
+              } catch (error) {
+                alert("❌ حدث خطأ أثناء تحديث النقاط: " + error.message);
+              }
+            } else {
+              alert("⚠️ يجب تسجيل الدخول أولاً.");
+              window.location.href = "index.html";
+            }
+          });
+        }
+      }, 1000);
+    };
   </script>
 </body>
 </html>
