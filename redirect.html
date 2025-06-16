@@ -62,7 +62,6 @@
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
   <script>
     const firebaseConfig = {
@@ -76,34 +75,20 @@
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-    const db = firebase.firestore();
 
     const counter = document.getElementById("counter");
     let seconds = 5;
 
-    auth.onAuthStateChanged(async (user) => {
+    auth.onAuthStateChanged((user) => {
       if (user) {
-        const userRef = db.collection("users").doc(user.uid);
-
-        const interval = setInterval(async () => {
+        const interval = setInterval(() => {
           counter.textContent = seconds;
           seconds--;
-
           if (seconds < 0) {
             clearInterval(interval);
-            try {
-              await userRef.update({
-                points: firebase.firestore.FieldValue.increment(2)
-              });
-              window.location.href = "welcome.html";
-            } catch (err) {
-              console.error("فشل في تحديث النقاط:", err);
-              alert("⚠️ حدث خطأ أثناء تحديث النقاط.");
-              window.location.href = "welcome.html";
-            }
+            window.location.href = "welcome.html";
           }
         }, 1000);
-
       } else {
         alert("⚠️ لم يتم تسجيل الدخول، سيتم تحويلك لصفحة تسجيل الدخول.");
         window.location.href = "index.html";
