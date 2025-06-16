@@ -113,24 +113,28 @@
     }
 
     function startSkip() {
+      // افتح الرابط المختصر في نافذة جديدة
       window.open("https://tpi.li/fEg2UGifM", "_blank");
-      setTimeout(() => {
-        auth.onAuthStateChanged(user => {
-          if (user) {
-            const uid = user.uid;
-            const userRef = db.collection("users").doc(uid);
-            userRef.get().then(doc => {
-              const currentPoints = doc.exists ? (doc.data().points || 0) : 0;
-              const newPoints = currentPoints + 2;
-              userRef.set({ points: newPoints }, { merge: true }).then(() => {
-                window.location.href = "redirect.html";
-              });
-            });
-          } else {
-            alert("❌ يجب تسجيل الدخول أولاً.");
-            window.location.href = "index.html";
+
+      // بعد 15 ثانية، تحقق من تسجيل الدخول واحتسب النقاط
+      setTimeout(async () => {
+        const user = auth.currentUser;
+        if (user) {
+          const uid = user.uid;
+          const userRef = db.collection("users").doc(uid);
+          try {
+            const doc = await userRef.get();
+            const currentPoints = doc.exists ? (doc.data().points || 0) : 0;
+            const newPoints = currentPoints + 2;
+            await userRef.set({ points: newPoints }, { merge: true });
+            window.location.href = "redirect.html";
+          } catch (error) {
+            alert("حدث خطأ أثناء تحديث النقاط.");
           }
-        });
+        } else {
+          alert("❌ يجب تسجيل الدخول أولاً.");
+          window.location.href = "index.html";
+        }
       }, 15000);
     }
   </script>
