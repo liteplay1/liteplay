@@ -1,3 +1,4 @@
+<!-- welcome.html -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -147,34 +148,33 @@
   }
 
   auth.onAuthStateChanged(async (user) => {
-    if (user) {
-      document.getElementById("userEmail").textContent = `👤 ${user.email}`;
-      const userRef = db.collection("users").doc(user.uid);
+    if (!user) {
+      window.location.href = "index.html";
+      return;
+    }
 
-      try {
-        const doc = await userRef.get();
-        if (!doc.exists) {
-          await userRef.set({ points: 0 });
-          document.getElementById("userPoints").textContent = 0;
-        } else {
-          const data = doc.data();
-          document.getElementById("userPoints").textContent = data.points ?? 0;
-        }
+    const userRef = db.collection("users").doc(user.uid);
+    document.getElementById("userEmail").textContent = `👤 ${user.email}`;
 
-        // تحديث مباشر عند تغير النقاط
-        userRef.onSnapshot(docSnapshot => {
-          if (docSnapshot.exists) {
-            const data = docSnapshot.data();
-            document.getElementById("userPoints").textContent = data.points ?? 0;
-          }
-        });
-
-      } catch (e) {
-        console.error("Error fetching user data:", e);
+    try {
+      // جلب البيانات مباشرة بعد الدخول
+      const doc = await userRef.get();
+      if (doc.exists) {
+        const data = doc.data();
+        document.getElementById("userPoints").textContent = data.points ?? 0;
       }
 
-    } else {
-      window.location.href = "index.html";
+      // مراقبة التغييرات على النقاط وتحديثها لحظيًا
+      userRef.onSnapshot(snapshot => {
+        if (snapshot.exists) {
+          const newPoints = snapshot.data().points ?? 0;
+          document.getElementById("userPoints").textContent = newPoints;
+        }
+      });
+
+    } catch (error) {
+      console.error("فشل في جلب النقاط:", error);
+      document.getElementById("userPoints").textContent = "❌";
     }
   });
 </script>
