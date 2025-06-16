@@ -78,11 +78,13 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    window.onload = () => {
-      const counter = document.getElementById("counter");
-      let seconds = 5;
+    const counter = document.getElementById("counter");
+    let seconds = 5;
 
-      const startCountdown = (user) => {
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const userRef = db.collection("users").doc(user.uid);
+
         const interval = setInterval(async () => {
           counter.textContent = seconds;
           seconds--;
@@ -90,12 +92,9 @@
           if (seconds < 0) {
             clearInterval(interval);
             try {
-              if (user) {
-                const ref = db.collection("users").doc(user.uid);
-                await ref.update({
-                  points: firebase.firestore.FieldValue.increment(2)
-                });
-              }
+              await userRef.update({
+                points: firebase.firestore.FieldValue.increment(2)
+              });
               window.location.href = "welcome.html";
             } catch (err) {
               console.error("فشل في تحديث النقاط:", err);
@@ -104,18 +103,12 @@
             }
           }
         }, 1000);
-      };
 
-      auth.onAuthStateChanged((user) => {
-        if (user) {
-          startCountdown(user);
-        } else {
-          // إذا لم يكن هناك مستخدم مسجل دخول
-          alert("يرجى تسجيل الدخول أولاً.");
-          window.location.href = "index.html"; // صفحة الدخول
-        }
-      });
-    };
+      } else {
+        alert("⚠️ لم يتم تسجيل الدخول، سيتم تحويلك لصفحة تسجيل الدخول.");
+        window.location.href = "index.html";
+      }
+    });
   </script>
 </body>
 </html>
