@@ -60,9 +60,9 @@
   </div>
 
   <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
   <script>
     const firebaseConfig = {
@@ -73,31 +73,46 @@
       messagingSenderId: "201526393824",
       appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
     };
+
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
+    const db = firebase.firestore();
 
     window.onload = () => {
       const counter = document.getElementById("counter");
       let seconds = 5;
 
-      const startCountdown = () => {
-        const interval = setInterval(() => {
+      const startCountdown = (user) => {
+        const interval = setInterval(async () => {
           counter.textContent = seconds;
           seconds--;
 
           if (seconds < 0) {
             clearInterval(interval);
-            window.location.href = "welcome.html";
+            try {
+              if (user) {
+                const ref = db.collection("users").doc(user.uid);
+                await ref.update({
+                  points: firebase.firestore.FieldValue.increment(2)
+                });
+              }
+              window.location.href = "welcome.html";
+            } catch (err) {
+              console.error("فشل في تحديث النقاط:", err);
+              alert("⚠️ حدث خطأ أثناء تحديث النقاط.");
+              window.location.href = "welcome.html";
+            }
           }
         }, 1000);
       };
 
-      auth.onAuthStateChanged(user => {
+      auth.onAuthStateChanged((user) => {
         if (user) {
-          startCountdown();
+          startCountdown(user);
         } else {
-          alert("❌ يجب تسجيل الدخول.");
-          window.location.href = "index.html";
+          // إذا لم يكن هناك مستخدم مسجل دخول
+          alert("يرجى تسجيل الدخول أولاً.");
+          window.location.href = "index.html"; // صفحة الدخول
         }
       });
     };
