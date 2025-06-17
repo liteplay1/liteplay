@@ -72,6 +72,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
   <script>
+    // إعداد Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
       authDomain: "litplay-b3177.firebaseapp.com",
@@ -88,20 +89,18 @@
     const counter = document.getElementById("counter");
     let seconds = 5;
 
-    // تحقق إذا تم تخطي الرابط
-    if (localStorage.getItem("linkPassed") !== "true") {
+    // ✅ تحقق من SessionStorage (بدل LocalStorage)
+    if (sessionStorage.getItem("linkPassed") !== "true") {
       alert("🚫 يجب تخطي الإعلان أولاً.");
       window.location.href = "welcome.html";
     } else {
-      // تحقق من تسجيل الدخول
       auth.onAuthStateChanged(async (user) => {
         if (!user) {
-          alert("⚠️ لم يتم تسجيل الدخول، سيتم تحويلك لصفحة تسجيل الدخول.");
+          alert("⚠️ لم يتم تسجيل الدخول.");
           window.location.href = "index.html";
           return;
         }
 
-        // بدء العد التنازلي بعد التأكد من المستخدم
         const interval = setInterval(async () => {
           counter.textContent = seconds;
           seconds--;
@@ -109,10 +108,10 @@
           if (seconds < 0) {
             clearInterval(interval);
 
-            // إزالة العلامة حتى لا يتم استغلالها مرة ثانية
-            localStorage.removeItem("linkPassed");
+            // حذف العلامة بعد الاستخدام مرة واحدة
+            sessionStorage.removeItem("linkPassed");
 
-            // تحديث النقاط في Firestore
+            // إضافة النقاط
             const uid = user.uid;
             const userRef = db.collection("users").doc(uid);
             try {
@@ -121,10 +120,9 @@
               const newPoints = currentPoints + 2;
               await userRef.set({ points: newPoints }, { merge: true });
             } catch (error) {
-              console.error("❌ خطأ في حفظ النقاط:", error);
+              console.error("❌ خطأ في تحديث النقاط:", error);
             }
 
-            // توجيه المستخدم
             window.location.href = "welcome.html";
           }
         }, 1000);
