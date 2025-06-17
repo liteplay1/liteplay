@@ -60,7 +60,7 @@
     <!-- اللعبة -->
     <iframe src="https://games.construct.net/1075/latest" allowfullscreen></iframe>
 
-    <!-- إعلان الجديد -->
+    <!-- إعلان بانر إضافي -->
     <div id="ad-container">
       <script type="text/javascript">
         atOptions = {
@@ -79,12 +79,11 @@
     🚀 LitePlay - جميع الحقوق محفوظة © 2025 | تواصل معنا: mhjobidina@gmail.com
   </div>
 
-  <!-- Firebase (الإصدار 8.10.1 المتوافق مع HTML العادي) -->
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script>
-    // إعداد Firebase
     var firebaseConfig = {
       apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
       authDomain: "litplay-b3177.firebaseapp.com",
@@ -97,39 +96,48 @@
     var auth = firebase.auth();
     var db = firebase.firestore();
 
-    // العد التنازلي
     window.onload = function () {
       const timerElement = document.getElementById("timer");
       let timeLeft = 120;
 
+      // تحقق إن رجع من الإعلان
+      if (localStorage.getItem("gameCompleted") === "true") {
+        localStorage.removeItem("gameCompleted");
+
+        auth.onAuthStateChanged(function (user) {
+          if (user) {
+            const uid = user.uid;
+            const userRef = db.collection("users").doc(uid);
+
+            userRef.get().then(function (doc) {
+              var currentPoints = doc.exists && doc.data().points ? doc.data().points : 0;
+              var newPoints = currentPoints + 3;
+
+              userRef.set({ points: newPoints }, { merge: true }).then(function () {
+                console.log("✅ تمت إضافة 3 نقاط.");
+                window.location.href = "welcome.html";
+              }).catch(function (error) {
+                alert("❌ خطأ أثناء حفظ النقاط: " + error.message);
+              });
+            });
+          } else {
+            alert("⚠️ يجب تسجيل الدخول أولاً.");
+            window.location.href = "index.html";
+          }
+        });
+
+        return;
+      }
+
+      // العد التنازلي
       const countdown = setInterval(() => {
         timerElement.textContent = timeLeft;
         timeLeft--;
 
         if (timeLeft < 0) {
           clearInterval(countdown);
-
-          auth.onAuthStateChanged(function (user) {
-            if (user) {
-              const uid = user.uid;
-              const userRef = db.collection("users").doc(uid);
-
-              userRef.get().then(function (doc) {
-                var currentPoints = doc.exists && doc.data().points ? doc.data().points : 0;
-                var newPoints = currentPoints + 3;
-
-                userRef.set({ points: newPoints }, { merge: true }).then(function () {
-                  console.log("✅ تمت إضافة 3 نقاط.");
-                  window.location.href = "welcome.html";
-                }).catch(function (error) {
-                  alert("❌ خطأ أثناء حفظ النقاط: " + error.message);
-                });
-              });
-            } else {
-              alert("⚠️ يجب تسجيل الدخول أولاً.");
-              window.location.href = "index.html";
-            }
-          });
+          localStorage.setItem("gameCompleted", "true");
+          window.location.href = "https://www.profitableratecpm.com/duvs3dumf?key=dce63c3a8855602cf54b7ba3c34dc55c";
         }
       }, 1000);
     };
