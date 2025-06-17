@@ -44,21 +44,20 @@
     }
     #watchAdBtn {
       display: none;
-      background-color: #ff4081;
+      background: linear-gradient(to right, #ff6f91, #ff9671);
       color: white;
       border: none;
       padding: 15px 30px;
       font-size: 20px;
-      font-family: 'Cairo', cursive;
-      border-radius: 15px;
+      font-weight: bold;
+      border-radius: 12px;
       cursor: pointer;
-      margin-top: 20px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      transition: 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      transition: 0.3s;
     }
     #watchAdBtn:hover {
-      background-color: #e91e63;
       transform: scale(1.05);
+      background: linear-gradient(to right, #ff9671, #ff6f91);
     }
     .footer {
       margin-top: auto;
@@ -79,7 +78,7 @@
     <iframe src="https://games.construct.net/1075/latest" allowfullscreen></iframe>
 
     <!-- زر مشاهدة الإعلان -->
-    <button id="watchAdBtn">🎁 شاهد الإعلان وستُضاف النقاط مباشرة!</button>
+    <button id="watchAdBtn">🎁 شاهد الإعلان وسيتم إضافة النقاط مباشرة</button>
 
     <!-- إعلان بانر -->
     <div id="ad-container">
@@ -118,18 +117,19 @@
     var db = firebase.firestore();
 
     window.onload = function () {
-      // ✅ تحديث تلقائي إذا عاد من الإعلان
-      if (document.referrer.includes("profitableratecpm.com") && !sessionStorage.getItem("alreadyReloaded")) {
-        sessionStorage.setItem("alreadyReloaded", "true");
-        location.reload();
-        return;
-      }
-
       const timerElement = document.getElementById("timer");
       const watchAdBtn = document.getElementById("watchAdBtn");
       let timeLeft = 120;
 
-      // ✅ إذا عاد من الإعلان
+      // ✅ إذا عاد من صفحة الإعلان، نعيد تحميل الصفحة تلقائياً
+      if (document.referrer.includes("profitableratecpm.com")) {
+        setTimeout(() => {
+          location.reload();
+        }, 500);
+        return;
+      }
+
+      // ✅ إذا الإعلان تمت مشاهدته
       if (localStorage.getItem("adWatched") === "true") {
         localStorage.removeItem("adWatched");
 
@@ -158,22 +158,22 @@
         return;
       }
 
-      // ⏱️ بدء العد التنازلي
+      // ✅ بدء العد التنازلي
       const countdown = setInterval(() => {
         timerElement.textContent = timeLeft;
         timeLeft--;
 
         if (timeLeft < 0) {
           clearInterval(countdown);
-          watchAdBtn.style.display = "inline-block"; // عرض زر الإعلان
+          watchAdBtn.style.display = "inline-block";
         }
       }, 1000);
 
-      // 📺 عند الضغط على زر الإعلان
+      // ✅ عند الضغط على زر الإعلان
       watchAdBtn.onclick = function () {
         localStorage.setItem("adWatched", "true");
         window.open("https://www.profitableratecpm.com/duvs3dumf?key=dce63c3a8855602cf54b7ba3c34dc55c", "_blank");
-        alert("✅ تم فتح الإعلان. بعد الانتهاء، عد لهذه الصفحة ليتم احتساب النقاط تلقائيًا.");
+        alert("✅ تم فتح الإعلان. بعد الانتهاء، عد لهذه الصفحة ليتم احتساب النقاط.");
       };
     };
   </script>
