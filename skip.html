@@ -121,15 +121,33 @@
     }
 
     function startSkip() {
-      // فتح الرابط المختصر في نافذة جديدة
-      window.open("https://tpi.li/fEg2UGifM", "_blank");
-
-      // انتظار 15 ثانية، ثم تفعيل SessionStorage والتوجيه
-      setTimeout(() => {
-        sessionStorage.setItem("linkPassed", "true");
-        window.location.href = "redirect.html";
-      }, 15000);
+      // يوجه المستخدم إلى الرابط المختصر (shrinkearn)
+      window.location.href = "https://tpi.li/VJVfKcsHnn";
     }
+
+    // عند تحميل الصفحة: التحقق إذا رجع المستخدم من shrinkearn بعد تخطي الإعلان
+    window.onload = () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("done") === "1") {
+        auth.onAuthStateChanged((user) => {
+          if (user) {
+            const userRef = db.collection("users").doc(user.uid);
+            userRef.get().then((doc) => {
+              if (doc.exists) {
+                let currentPoints = doc.data().points || 0;
+                userRef.update({ points: currentPoints + 1 }).then(() => {
+                  sessionStorage.setItem("linkPassed", "true");
+                  window.location.href = "redirect.html";
+                });
+              }
+            });
+          } else {
+            alert("يرجى تسجيل الدخول أولاً.");
+            window.location.href = "index.html";
+          }
+        });
+      }
+    };
   </script>
 </body>
 </html>
