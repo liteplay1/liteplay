@@ -135,7 +135,7 @@
             userRef.get().then((doc) => {
               if (doc.exists) {
                 let currentPoints = doc.data().points || 0;
-                userRef.update({ points: currentPoints + 1 }).then(() => {
+                userRef.update({ points: currentPoints + 2 }).then(() => {
                   sessionStorage.setItem("linkPassed", "true");
                   window.location.href = "redirect.html";
                 });
