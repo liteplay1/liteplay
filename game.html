@@ -60,7 +60,7 @@
     <!-- اللعبة -->
     <iframe src="https://games.construct.net/1075/latest" allowfullscreen></iframe>
 
-    <!-- إعلان بانر إضافي -->
+    <!-- إعلان بانر -->
     <div id="ad-container">
       <script type="text/javascript">
         atOptions = {
@@ -100,7 +100,6 @@
       const timerElement = document.getElementById("timer");
       let timeLeft = 120;
 
-      // إذا رجع من نافذة الإعلان
       if (localStorage.getItem("gameCompleted") === "true") {
         localStorage.removeItem("gameCompleted");
 
@@ -129,20 +128,15 @@
         return;
       }
 
-      // بدء العد التنازلي
+      // عد تنازلي
       const countdown = setInterval(() => {
         timerElement.textContent = timeLeft;
         timeLeft--;
 
         if (timeLeft < 0) {
           clearInterval(countdown);
-          localStorage.setItem("gameCompleted", "true");
-
-          // فتح الإعلان في نافذة جديدة
-          const adWindow = window.open("https://www.profitableratecpm.com/duvs3dumf?key=dce63c3a8855602cf54b7ba3c34dc55c", "_blank");
-
-          // إشعار للمستخدم للعودة بعد مشاهدة الإعلان
-          alert("👀 سيتم فتح إعلان الآن. بعد مشاهدته، ارجع إلى صفحة اللعبة لإتمام العملية.");
+          // الانتقال إلى صفحة ad.html لفتح الإعلان
+          window.location.href = "ad.html";
         }
       }, 1000);
     };
