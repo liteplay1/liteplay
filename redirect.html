@@ -84,45 +84,28 @@
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-    const db = firebase.firestore();
 
     const counter = document.getElementById("counter");
     let seconds = 5;
 
-    // ✅ تحقق من SessionStorage (بدل LocalStorage)
     if (sessionStorage.getItem("linkPassed") !== "true") {
       alert("🚫 يجب تخطي الإعلان أولاً.");
       window.location.href = "welcome.html";
     } else {
-      auth.onAuthStateChanged(async (user) => {
+      auth.onAuthStateChanged((user) => {
         if (!user) {
           alert("⚠️ لم يتم تسجيل الدخول.");
           window.location.href = "index.html";
           return;
         }
 
-        const interval = setInterval(async () => {
+        const interval = setInterval(() => {
           counter.textContent = seconds;
           seconds--;
 
           if (seconds < 0) {
             clearInterval(interval);
-
-            // حذف العلامة بعد الاستخدام مرة واحدة
-            sessionStorage.removeItem("linkPassed");
-
-            // إضافة النقاط
-            const uid = user.uid;
-            const userRef = db.collection("users").doc(uid);
-            try {
-              const doc = await userRef.get();
-              const currentPoints = doc.exists && doc.data().points ? doc.data().points : 0;
-              const newPoints = currentPoints + 2;
-              await userRef.set({ points: newPoints }, { merge: true });
-            } catch (error) {
-              console.error("❌ خطأ في تحديث النقاط:", error);
-            }
-
+            sessionStorage.removeItem("linkPassed"); // إزالة العلامة بعد الاستخدام
             window.location.href = "welcome.html";
           }
         }, 1000);
