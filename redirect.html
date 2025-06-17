@@ -88,43 +88,48 @@
     const counter = document.getElementById("counter");
     let seconds = 5;
 
+    // تحقق إذا تم تخطي الرابط
     if (localStorage.getItem("linkPassed") !== "true") {
       alert("🚫 يجب تخطي الإعلان أولاً.");
       window.location.href = "welcome.html";
-    }
-
-    auth.onAuthStateChanged(async (user) => {
-      if (!user) {
-        alert("⚠️ لم يتم تسجيل الدخول، سيتم تحويلك لصفحة تسجيل الدخول.");
-        window.location.href = "index.html";
-        return;
-      }
-
-      const interval = setInterval(() => {
-        counter.textContent = seconds;
-        seconds--;
-        if (seconds < 0) {
-          clearInterval(interval);
-
-          // إزالة العلامة حتى لا يعيد استخدامها
-          localStorage.removeItem("linkPassed");
-
-          // إضافة النقاط
-          const uid = user.uid;
-          const userRef = db.collection("users").doc(uid);
-          try {
-            const doc = await userRef.get();
-            const currentPoints = doc.exists && doc.data().points ? doc.data().points : 0;
-            const newPoints = currentPoints + 2;
-            await userRef.set({ points: newPoints }, { merge: true });
-          } catch (error) {
-            console.error("خطأ في حفظ النقاط:", error);
-          }
-
-          window.location.href = "welcome.html";
+    } else {
+      // تحقق من تسجيل الدخول
+      auth.onAuthStateChanged(async (user) => {
+        if (!user) {
+          alert("⚠️ لم يتم تسجيل الدخول، سيتم تحويلك لصفحة تسجيل الدخول.");
+          window.location.href = "index.html";
+          return;
         }
-      }, 1000);
-    });
+
+        // بدء العد التنازلي بعد التأكد من المستخدم
+        const interval = setInterval(async () => {
+          counter.textContent = seconds;
+          seconds--;
+
+          if (seconds < 0) {
+            clearInterval(interval);
+
+            // إزالة العلامة حتى لا يتم استغلالها مرة ثانية
+            localStorage.removeItem("linkPassed");
+
+            // تحديث النقاط في Firestore
+            const uid = user.uid;
+            const userRef = db.collection("users").doc(uid);
+            try {
+              const doc = await userRef.get();
+              const currentPoints = doc.exists && doc.data().points ? doc.data().points : 0;
+              const newPoints = currentPoints + 2;
+              await userRef.set({ points: newPoints }, { merge: true });
+            } catch (error) {
+              console.error("❌ خطأ في حفظ النقاط:", error);
+            }
+
+            // توجيه المستخدم
+            window.location.href = "welcome.html";
+          }
+        }, 1000);
+      });
+    }
   </script>
 </body>
 </html>
