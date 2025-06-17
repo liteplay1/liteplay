@@ -1,3 +1,4 @@
+<!-- كود صفحة التسجيل المعدل بالكامل -->
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -60,7 +61,7 @@
   <button id="signup-btn">إنشاء حساب جديد</button>
   <div class="error" id="error"></div>
 
-  <!-- إعلان البنر -->
+  <!-- إعلان -->
   <div style="margin-top: 20px;">
     <script type="text/javascript">
       atOptions = {
@@ -85,7 +86,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
   <script>
-    // إعداد Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
       authDomain: "litplay-b3177.firebaseapp.com",
@@ -99,11 +99,12 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
+    const errorDiv = document.getElementById("error");
+
     // زر إنشاء حساب جديد
     document.getElementById("signup-btn").addEventListener("click", async () => {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
-      const errorDiv = document.getElementById("error");
       errorDiv.textContent = "";
 
       if (!email || !password) {
@@ -113,15 +114,23 @@
 
       try {
         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-        const user = userCredential.user;
 
-        // إضافة المستخدم إلى Firestore
-        await db.collection("users").doc(user.uid).set({
-          email: user.email,
-          points: 0
+        // ⚠️ ننتظر التأكد من تسجيل الدخول قبل محاولة الكتابة في Firestore
+        auth.onAuthStateChanged(async (user) => {
+          if (user) {
+            try {
+              await db.collection("users").doc(user.uid).set({
+                email: user.email,
+                points: 0
+              });
+              window.location.href = "welcome.html";
+            } catch (firestoreError) {
+              console.error("Firestore write error:", firestoreError);
+              errorDiv.textContent = "حدث خطأ في حفظ البيانات.";
+            }
+          }
         });
 
-        window.location.href = "welcome.html";
       } catch (error) {
         console.log("Signup error:", error);
         errorDiv.textContent = translateError(error.code);
@@ -132,7 +141,6 @@
     document.getElementById("login-btn").addEventListener("click", async () => {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
-      const errorDiv = document.getElementById("error");
       errorDiv.textContent = "";
 
       if (!email || !password) {
