@@ -100,7 +100,7 @@
       const timerElement = document.getElementById("timer");
       let timeLeft = 120;
 
-      // تحقق إن رجع من الإعلان
+      // إذا رجع من نافذة الإعلان
       if (localStorage.getItem("gameCompleted") === "true") {
         localStorage.removeItem("gameCompleted");
 
@@ -129,7 +129,7 @@
         return;
       }
 
-      // العد التنازلي
+      // بدء العد التنازلي
       const countdown = setInterval(() => {
         timerElement.textContent = timeLeft;
         timeLeft--;
@@ -137,7 +137,12 @@
         if (timeLeft < 0) {
           clearInterval(countdown);
           localStorage.setItem("gameCompleted", "true");
-          window.location.href = "https://www.profitableratecpm.com/duvs3dumf?key=dce63c3a8855602cf54b7ba3c34dc55c";
+
+          // فتح الإعلان في نافذة جديدة
+          const adWindow = window.open("https://www.profitableratecpm.com/duvs3dumf?key=dce63c3a8855602cf54b7ba3c34dc55c", "_blank");
+
+          // إشعار للمستخدم للعودة بعد مشاهدة الإعلان
+          alert("👀 سيتم فتح إعلان الآن. بعد مشاهدته، ارجع إلى صفحة اللعبة لإتمام العملية.");
         }
       }, 1000);
     };
