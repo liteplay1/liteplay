@@ -69,6 +69,7 @@
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
   <script>
     const firebaseConfig = {
@@ -82,25 +83,47 @@
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
+    const db = firebase.firestore();
 
     const counter = document.getElementById("counter");
     let seconds = 5;
 
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        const interval = setInterval(() => {
-          counter.textContent = seconds;
-          seconds--;
-          if (seconds < 0) {
-            clearInterval(interval);
-            window.location.href = "welcome.html";
-          }
-        }, 1000);
-      } else {
-        // المستخدم غير مسجل دخول
+    if (localStorage.getItem("linkPassed") !== "true") {
+      alert("🚫 يجب تخطي الإعلان أولاً.");
+      window.location.href = "welcome.html";
+    }
+
+    auth.onAuthStateChanged(async (user) => {
+      if (!user) {
         alert("⚠️ لم يتم تسجيل الدخول، سيتم تحويلك لصفحة تسجيل الدخول.");
         window.location.href = "index.html";
+        return;
       }
+
+      const interval = setInterval(() => {
+        counter.textContent = seconds;
+        seconds--;
+        if (seconds < 0) {
+          clearInterval(interval);
+
+          // إزالة العلامة حتى لا يعيد استخدامها
+          localStorage.removeItem("linkPassed");
+
+          // إضافة النقاط
+          const uid = user.uid;
+          const userRef = db.collection("users").doc(uid);
+          try {
+            const doc = await userRef.get();
+            const currentPoints = doc.exists && doc.data().points ? doc.data().points : 0;
+            const newPoints = currentPoints + 2;
+            await userRef.set({ points: newPoints }, { merge: true });
+          } catch (error) {
+            console.error("خطأ في حفظ النقاط:", error);
+          }
+
+          window.location.href = "welcome.html";
+        }
+      }, 1000);
     });
   </script>
 </body>
