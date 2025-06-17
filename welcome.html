@@ -108,14 +108,14 @@
 <div id="ad">
   <script type="text/javascript">
     atOptions = {
-      'key' : '0878059959a11c2129529d518a88a788',
+      'key' : '3ed243f3794f95d81e6b109db6a97221',
       'format' : 'iframe',
       'height' : 250,
       'width' : 300,
       'params' : {}
     };
   </script>
-  <script type="text/javascript" src="//www.highperformanceformat.com/0878059959a11c2129529d518a88a788/invoke.js"></script>
+  <script type="text/javascript" src="//www.highperformanceformat.com/3ed243f3794f95d81e6b109db6a97221/invoke.js"></script>
 </div>
 
 <footer>
@@ -157,17 +157,14 @@
     document.getElementById("userEmail").textContent = `👤 ${user.email}`;
 
     try {
-      // جلب البيانات أول مرة
       const doc = await userRef.get();
       if (doc.exists) {
         const data = doc.data();
         document.getElementById("userPoints").textContent = data.points ?? 0;
       } else {
-        // إذا لم توجد بيانات للمستخدم
         document.getElementById("userPoints").textContent = 0;
       }
 
-      // تحديث مباشر عند تغيّر النقاط
       userRef.onSnapshot(snapshot => {
         if (snapshot.exists) {
           const newPoints = snapshot.data().points ?? 0;
