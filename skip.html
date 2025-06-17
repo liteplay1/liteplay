@@ -121,12 +121,12 @@
     }
 
     function startSkip() {
-      // فتح الرابط المختصر
+      // فتح الرابط المختصر في نافذة جديدة
       window.open("https://tpi.li/fEg2UGifM", "_blank");
 
-      // انتظار 15 ثانية، ثم حفظ علامة المرور، ثم توجيه المستخدم
+      // انتظار 15 ثانية، ثم تفعيل SessionStorage والتوجيه
       setTimeout(() => {
-        localStorage.setItem("linkPassed", "true");
+        sessionStorage.setItem("linkPassed", "true");
         window.location.href = "redirect.html";
       }, 15000);
     }
