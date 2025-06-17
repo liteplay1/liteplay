@@ -121,11 +121,11 @@
     }
 
     function startSkip() {
-      // يوجه المستخدم إلى الرابط المختصر (shrinkearn)
-      window.location.href = "https://tpi.li/VJVfKcsHnn";
+      // توجه المستخدم إلى الرابط المختصر مع مؤشر الرجوع
+      window.location.href = "https://tpi.li/VJVfKcsHnn?done=1";
     }
 
-    // عند تحميل الصفحة: التحقق إذا رجع المستخدم من shrinkearn بعد تخطي الإعلان
+    // عند تحميل الصفحة، تحقق إن كان المستخدم عاد من الرابط المختصر
     window.onload = () => {
       const params = new URLSearchParams(window.location.search);
       if (params.get("done") === "1") {
