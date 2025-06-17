@@ -116,20 +116,7 @@
     var auth = firebase.auth();
     var db = firebase.firestore();
 
-    window.onload = function () {
-      const timerElement = document.getElementById("timer");
-      const watchAdBtn = document.getElementById("watchAdBtn");
-      let timeLeft = 120;
-
-      // ✅ إذا عاد من صفحة الإعلان، نعيد تحميل الصفحة تلقائياً
-      if (document.referrer.includes("profitableratecpm.com")) {
-        setTimeout(() => {
-          location.reload();
-        }, 500);
-        return;
-      }
-
-      // ✅ إذا الإعلان تمت مشاهدته
+    function checkAdAndReward() {
       if (localStorage.getItem("adWatched") === "true") {
         localStorage.removeItem("adWatched");
 
@@ -154,9 +141,13 @@
             window.location.href = "index.html";
           }
         });
-
-        return;
       }
+    }
+
+    window.onload = function () {
+      const timerElement = document.getElementById("timer");
+      const watchAdBtn = document.getElementById("watchAdBtn");
+      let timeLeft = 120;
 
       // ✅ بدء العد التنازلي
       const countdown = setInterval(() => {
@@ -175,7 +166,17 @@
         window.open("https://www.profitableratecpm.com/duvs3dumf?key=dce63c3a8855602cf54b7ba3c34dc55c", "_blank");
         alert("✅ تم فتح الإعلان. بعد الانتهاء، عد لهذه الصفحة ليتم احتساب النقاط.");
       };
+
+      // ✅ تحقق أولي عند التحميل
+      checkAdAndReward();
     };
+
+    // ✅ عند الرجوع للصفحة (من الإعلان)
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState === "visible") {
+        checkAdAndReward();
+      }
+    });
   </script>
 </body>
 </html>
