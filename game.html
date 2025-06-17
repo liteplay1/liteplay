@@ -84,6 +84,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script>
+    // إعداد Firebase
     var firebaseConfig = {
       apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
       authDomain: "litplay-b3177.firebaseapp.com",
@@ -100,8 +101,9 @@
       const timerElement = document.getElementById("timer");
       let timeLeft = 120;
 
-      if (localStorage.getItem("gameCompleted") === "true") {
-        localStorage.removeItem("gameCompleted");
+      // إذا عاد من الإعلان
+      if (localStorage.getItem("adWatched") === "true") {
+        localStorage.removeItem("adWatched");
 
         auth.onAuthStateChanged(function (user) {
           if (user) {
@@ -128,15 +130,19 @@
         return;
       }
 
-      // عد تنازلي
+      // بدء العد التنازلي
       const countdown = setInterval(() => {
         timerElement.textContent = timeLeft;
         timeLeft--;
 
         if (timeLeft < 0) {
           clearInterval(countdown);
-          // الانتقال إلى صفحة ad.html لفتح الإعلان
-          window.location.href = "ad.html";
+          localStorage.setItem("adWatched", "true");
+
+          // فتح الإعلان في نافذة جديدة تلقائيًا
+          window.open("https://www.profitableratecpm.com/duvs3dumf?key=dce63c3a8855602cf54b7ba3c34dc55c", "_blank");
+
+          alert("👁️‍🗨️ تم فتح الإعلان في نافذة جديدة. بعد الانتهاء منه، ارجع لهذه الصفحة.");
         }
       }, 1000);
     };
