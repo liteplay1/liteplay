@@ -42,6 +42,20 @@
     #ad-container {
       margin: 30px 0;
     }
+    #watchAdBtn {
+      display: none;
+      background-color: #6a1b9a;
+      color: white;
+      border: none;
+      padding: 15px 25px;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    #watchAdBtn:hover {
+      background-color: #4a116f;
+    }
     .footer {
       margin-top: auto;
       padding: 10px;
@@ -59,6 +73,9 @@
 
     <!-- اللعبة -->
     <iframe src="https://games.construct.net/1075/latest" allowfullscreen></iframe>
+
+    <!-- زر مشاهدة الإعلان -->
+    <button id="watchAdBtn">👁️ شاهد الإعلان الآن</button>
 
     <!-- إعلان بانر -->
     <div id="ad-container">
@@ -84,7 +101,6 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script>
-    // إعداد Firebase
     var firebaseConfig = {
       apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
       authDomain: "litplay-b3177.firebaseapp.com",
@@ -99,6 +115,7 @@
 
     window.onload = function () {
       const timerElement = document.getElementById("timer");
+      const watchAdBtn = document.getElementById("watchAdBtn");
       let timeLeft = 120;
 
       // إذا عاد من الإعلان
@@ -137,14 +154,16 @@
 
         if (timeLeft < 0) {
           clearInterval(countdown);
-          localStorage.setItem("adWatched", "true");
-
-          // فتح الإعلان في نافذة جديدة تلقائيًا
-          window.open("https://www.profitableratecpm.com/duvs3dumf?key=dce63c3a8855602cf54b7ba3c34dc55c", "_blank");
-
-          alert("👁️‍🗨️ تم فتح الإعلان في نافذة جديدة. بعد الانتهاء منه، ارجع لهذه الصفحة.");
+          watchAdBtn.style.display = "inline-block"; // إظهار زر الإعلان
         }
       }, 1000);
+
+      // عند الضغط على الزر
+      watchAdBtn.onclick = function () {
+        localStorage.setItem("adWatched", "true");
+        window.open("https://www.profitableratecpm.com/duvs3dumf?key=dce63c3a8855602cf54b7ba3c34dc55c", "_blank");
+        alert("✅ تم فتح الإعلان. بعد الانتهاء، عد لهذه الصفحة ليتم احتساب النقاط.");
+      };
     };
   </script>
 </body>
