@@ -1,4 +1,3 @@
-<!-- كود صفحة التسجيل المعدل بالكامل -->
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -61,18 +60,18 @@
   <button id="signup-btn">إنشاء حساب جديد</button>
   <div class="error" id="error"></div>
 
-  <!-- إعلان -->
+  <!-- إعلان Adsterra الجديد -->
   <div style="margin-top: 20px;">
     <script type="text/javascript">
       atOptions = {
-        'key' : '0878059959a11c2129529d518a88a788',
+        'key' : '3ed243f3794f95d81e6b109db6a97221',
         'format' : 'iframe',
         'height' : 250,
         'width' : 300,
         'params' : {}
       };
     </script>
-    <script type="text/javascript" src="//www.highperformanceformat.com/0878059959a11c2129529d518a88a788/invoke.js"></script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/3ed243f3794f95d81e6b109db6a97221/invoke.js"></script>
   </div>
 
   <footer>
@@ -115,7 +114,7 @@
       try {
         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
 
-        // ⚠️ ننتظر التأكد من تسجيل الدخول قبل محاولة الكتابة في Firestore
+        // ننتظر التأكد من تسجيل الدخول قبل محاولة الكتابة في Firestore
         auth.onAuthStateChanged(async (user) => {
           if (user) {
             try {
