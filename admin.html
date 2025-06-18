@@ -56,6 +56,27 @@
       background-color: #8bc34a;
       color: white;
     }
+
+    .top-controls {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .top-controls input {
+      padding: 10px;
+      width: 250px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    .top-controls button {
+      padding: 10px 15px;
+      background-color: #ff9800;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
@@ -68,15 +89,22 @@
     <p id="pin-error" style="color:red;"></p>
   </div>
 
-  <div id="users-container" class="hidden">جاري التحميل...</div>
+  <div class="hidden" id="admin-panel">
+    <div class="top-controls">
+      <input type="text" id="searchEmail" placeholder="🔍 ابحث عن مستخدم بالبريد الإلكتروني">
+      <button onclick="searchUser()">بحث</button>
+      <button onclick="showSuspicious()">عرض الحسابات المشبوهة</button>
+    </div>
 
-  <!-- ✅ Firebase SDK (نسخ متوافقة مع HTML عادي) -->
+    <div id="users-container">جاري التحميل...</div>
+  </div>
+
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore-compat.js"></script>
 
   <script>
-    // إعداد Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
       authDomain: "litplay-b3177.firebaseapp.com",
@@ -89,15 +117,13 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // ✅ التأكد من تسجيل الدخول
+    const ADMIN_PIN = "123456";
+
     auth.onAuthStateChanged(user => {
       if (!user) {
         document.body.innerHTML = "<h3>🚫 يجب تسجيل الدخول أولاً للوصول إلى لوحة التحكم.</h3>";
       }
     });
-
-    // ✅ كود الدخول السري (ثابت)
-    const ADMIN_PIN = "123456";
 
     function checkPIN() {
       const pin = document.getElementById("pin").value;
@@ -105,37 +131,37 @@
 
       if (pin === ADMIN_PIN) {
         document.getElementById("pin-container").style.display = "none";
-        document.getElementById("users-container").classList.remove("hidden");
+        document.getElementById("admin-panel").classList.remove("hidden");
         loadUsers();
       } else {
         error.textContent = "❌ كود غير صحيح.";
       }
     }
 
+    function createUserCard(uid, data) {
+      const card = document.createElement("div");
+      card.className = "user-card";
+      card.innerHTML = `
+        <b>📧 ${data.email || "بريد غير معروف"}</b><br>
+        النقاط الحالية: ${data.points || 0}<br><br>
+        <input type="number" placeholder="عدد النقاط الجديد" id="points-${uid}">
+        <button class="update-btn" onclick="updatePoints('${uid}')">تحديث النقاط</button><br>
+        <input type="text" placeholder="أدخل رسالة للمستخدم" id="msg-${uid}">
+        <button class="message-btn" onclick="sendMessage('${uid}')">إرسال رسالة</button><br>
+        <button class="delete-btn" onclick="deleteUser('${uid}')">❌ حذف المستخدم</button>
+      `;
+      return card;
+    }
+
     function loadUsers() {
       const container = document.getElementById('users-container');
       container.innerHTML = "⏳ جاري تحميل المستخدمين...";
-
       db.collection("users").get().then(snapshot => {
         container.innerHTML = "";
         snapshot.forEach(doc => {
           const data = doc.data();
           const uid = doc.id;
-
-          const card = document.createElement("div");
-          card.className = "user-card";
-          card.innerHTML = `
-            <b>📧 ${data.email || "بريد غير معروف"}</b><br>
-            النقاط الحالية: ${data.points || 0}<br><br>
-            <input type="number" placeholder="عدد النقاط الجديد" id="points-${uid}">
-            <button class="update-btn" onclick="updatePoints('${uid}')">تحديث النقاط</button><br>
-            
-            <input type="text" placeholder="أدخل رسالة للمستخدم" id="msg-${uid}">
-            <button class="message-btn" onclick="sendMessage('${uid}')">إرسال رسالة</button><br>
-            
-            <button class="delete-btn" onclick="deleteUser('${uid}')">❌ حذف المستخدم</button>
-          `;
-          container.appendChild(card);
+          container.appendChild(createUserCard(uid, data));
         });
       });
     }
@@ -143,7 +169,6 @@
     function updatePoints(uid) {
       const val = document.getElementById(`points-${uid}`).value;
       if (!val) return alert("أدخل عدد النقاط");
-
       db.collection("users").doc(uid).update({
         points: parseInt(val)
       }).then(() => alert("✅ تم تحديث النقاط"));
@@ -152,20 +177,50 @@
     function sendMessage(uid) {
       const msg = document.getElementById(`msg-${uid}`).value;
       if (!msg) return alert("أدخل الرسالة");
-
       db.collection("users").doc(uid).update({
-        message: msg
+        message: msg,
+        messageTimestamp: Date.now()
       }).then(() => alert("📩 تم إرسال الرسالة"));
     }
 
     function deleteUser(uid) {
       if (confirm("⚠️ هل أنت متأكد من حذف هذا المستخدم؟")) {
-        db.collection("users").doc(uid).delete()
-          .then(() => {
-            alert("✅ تم حذف المستخدم");
-            location.reload();
-          });
+        db.collection("users").doc(uid).delete().then(() => {
+          alert("✅ تم حذف المستخدم");
+          location.reload();
+        });
       }
+    }
+
+    function searchUser() {
+      const email = document.getElementById("searchEmail").value.toLowerCase();
+      const container = document.getElementById("users-container");
+      container.innerHTML = "🔍 جاري البحث...";
+      db.collection("users").where("email", "==", email).get().then(snapshot => {
+        container.innerHTML = "";
+        if (snapshot.empty) {
+          container.innerHTML = "❌ لا يوجد مستخدم بهذا البريد.";
+        } else {
+          snapshot.forEach(doc => {
+            container.appendChild(createUserCard(doc.id, doc.data()));
+          });
+        }
+      });
+    }
+
+    function showSuspicious() {
+      const container = document.getElementById("users-container");
+      container.innerHTML = "👀 جاري الفحص...";
+      db.collection("users").where("points", ">", 5000).get().then(snapshot => {
+        container.innerHTML = "";
+        if (snapshot.empty) {
+          container.innerHTML = "✅ لا توجد حسابات مشبوهة حالياً.";
+        } else {
+          snapshot.forEach(doc => {
+            container.appendChild(createUserCard(doc.id, doc.data()));
+          });
+        }
+      });
     }
   </script>
 </body>
