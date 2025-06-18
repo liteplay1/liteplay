@@ -87,6 +87,24 @@
       margin-top: 40px;
       text-align: center;
     }
+
+    /* ✅ الرسالة الكرتونية */
+    #adminMessage {
+      display: none;
+      position: fixed;
+      top: 80px;
+      left: 20px;
+      right: 20px;
+      background: #fff3cd;
+      color: #333;
+      border: 3px dashed #ff9800;
+      border-radius: 20px;
+      padding: 20px;
+      font-size: 18px;
+      font-family: 'Comic Sans MS', cursive;
+      z-index: 9999;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
   </style>
 </head>
 <body>
@@ -94,6 +112,9 @@
 <button class="menu-btn" onclick="toggleMenu()">☰</button>
 <div id="points">⭐ نقاطك: <span id="userPoints">...</span></div>
 <div id="userEmail"></div>
+
+<!-- ✅ الرسالة من المدير -->
+<div id="adminMessage">💬 <span id="adminMsgContent"></span></div>
 
 <div class="menu" id="menu">
   <a href="game.html">🎮 ابدأ اللعب</a>
@@ -165,10 +186,31 @@
         document.getElementById("userPoints").textContent = 0;
       }
 
+      // ✅ عرض الرسالة الإدارية بشكل كرتوني
       userRef.onSnapshot(snapshot => {
         if (snapshot.exists) {
           const newPoints = snapshot.data().points ?? 0;
           document.getElementById("userPoints").textContent = newPoints;
+
+          const data = snapshot.data();
+          if (data.message) {
+            const now = Date.now();
+            const msgTime = data.messageTimestamp || 0;
+
+            if (now - msgTime < 60 * 1000) {
+              const msgBox = document.getElementById("adminMessage");
+              document.getElementById("adminMsgContent").textContent = data.message;
+              msgBox.style.display = "block";
+
+              setTimeout(() => {
+                msgBox.style.display = "none";
+                userRef.update({
+                  message: firebase.firestore.FieldValue.delete(),
+                  messageTimestamp: firebase.firestore.FieldValue.delete()
+                });
+              }, 5000);
+            }
+          }
         }
       });
 
