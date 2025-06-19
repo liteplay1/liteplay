@@ -64,59 +64,60 @@
     }
     .button {
       display: block;
-      margin: 100px auto 20px;
-      padding: 15px 30px;
-      font-size: 20px;
+      margin: 30px auto;
+      padding: 14px 28px;
+      font-size: 18px;
       background-color: #f478ff;
       color: #fff;
       border: none;
       border-radius: 30px;
       cursor: pointer;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      transition: background-color 0.3s;
+      transition: transform 0.2s ease, background-color 0.3s;
     }
     .button:hover {
       background-color: #e355f7;
+      transform: scale(1.05);
+    }
+    #ad {
+      margin-top: 40px;
+      text-align: center;
     }
     #social {
-      margin: 40px auto 20px;
+      margin: 20px auto 0;
       display: flex;
       justify-content: center;
-      gap: 20px;
+      gap: 10px;
+      flex-wrap: wrap;
     }
     .social-link {
       display: flex;
       align-items: center;
       background-color: #fff;
-      border: 2px dashed #6b2ca0;
-      border-radius: 30px;
-      padding: 8px 16px;
+      border: 2px dashed #b86eff;
+      border-radius: 20px;
+      padding: 6px 12px;
       text-decoration: none;
       color: #6b2ca0;
       font-weight: bold;
-      font-size: 16px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-      transition: 0.3s ease;
+      font-size: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, background-color 0.3s;
     }
     .social-link:hover {
-      background-color: #f0e4ff;
+      background-color: #f5e3ff;
+      transform: scale(1.1);
     }
     .social-link img {
-      width: 24px;
-      height: 24px;
-      margin-left: 8px;
+      width: 20px;
+      height: 20px;
+      margin-left: 6px;
     }
     footer {
       margin-top: 30px;
       font-size: 14px;
       color: #777;
     }
-    #ad {
-      margin-top: 40px;
-      text-align: center;
-    }
-
-    /* ✅ الرسالة الكرتونية */
     #adminMessage {
       display: none;
       position: fixed;
@@ -156,17 +157,6 @@
 <button class="button" onclick="window.location.href='withdraw.html'">💰 تلقي أرباحك</button>
 <button class="button" onclick="window.location.href='skip.html'">⏭️ تخطي الروابط</button>
 
-<div id="social">
-  <a class="social-link" href="https://www.tiktok.com/@liteplay" target="_blank">
-    <img src="https://img.icons8.com/ios-filled/50/000000/tiktok.png" alt="TikTok" />
-    TikTok LitePlay
-  </a>
-  <a class="social-link" href="https://t.me/mclazhero" target="_blank">
-    <img src="https://img.icons8.com/ios-filled/50/000000/telegram-app.png" alt="Telegram" />
-    Telegram LitePlay
-  </a>
-</div>
-
 <div id="ad">
   <script type="text/javascript">
     atOptions = {
@@ -178,6 +168,18 @@
     };
   </script>
   <script type="text/javascript" src="//www.highperformanceformat.com/3ed243f3794f95d81e6b109db6a97221/invoke.js"></script>
+</div>
+
+<!-- ✅ روابط TikTok و Telegram -->
+<div id="social">
+  <a class="social-link" href="https://www.tiktok.com/@liteplay" target="_blank">
+    <img src="https://img.icons8.com/fluency/48/tiktok.png" alt="TikTok" />
+    TikTok LitePlay
+  </a>
+  <a class="social-link" href="https://t.me/mclazhero" target="_blank">
+    <img src="https://img.icons8.com/color/48/telegram-app--v1.png" alt="Telegram" />
+    Telegram LitePlay
+  </a>
 </div>
 
 <footer>
