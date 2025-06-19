@@ -78,8 +78,36 @@
     .button:hover {
       background-color: #e355f7;
     }
+    #social {
+      margin: 40px auto 20px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .social-link {
+      display: flex;
+      align-items: center;
+      background-color: #fff;
+      border: 2px dashed #6b2ca0;
+      border-radius: 30px;
+      padding: 8px 16px;
+      text-decoration: none;
+      color: #6b2ca0;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: 0.3s ease;
+    }
+    .social-link:hover {
+      background-color: #f0e4ff;
+    }
+    .social-link img {
+      width: 24px;
+      height: 24px;
+      margin-left: 8px;
+    }
     footer {
-      margin-top: 40px;
+      margin-top: 30px;
       font-size: 14px;
       color: #777;
     }
@@ -120,11 +148,24 @@
   <a href="game.html">🎮 ابدأ اللعب</a>
   <a href="withdraw.html">💰 تلقي أرباحك</a>
   <a href="skip.html">⏭️ تخطي الروابط</a>
+  <a href="https://www.tiktok.com/@liteplay" target="_blank">🎵 TikTok LitePlay</a>
+  <a href="https://t.me/mclazhero" target="_blank">📢 Telegram LitePlay</a>
 </div>
 
 <button class="button" onclick="window.location.href='game.html'">🎮 ابدأ اللعب</button>
 <button class="button" onclick="window.location.href='withdraw.html'">💰 تلقي أرباحك</button>
 <button class="button" onclick="window.location.href='skip.html'">⏭️ تخطي الروابط</button>
+
+<div id="social">
+  <a class="social-link" href="https://www.tiktok.com/@liteplay" target="_blank">
+    <img src="https://img.icons8.com/ios-filled/50/000000/tiktok.png" alt="TikTok" />
+    TikTok LitePlay
+  </a>
+  <a class="social-link" href="https://t.me/mclazhero" target="_blank">
+    <img src="https://img.icons8.com/ios-filled/50/000000/telegram-app.png" alt="Telegram" />
+    Telegram LitePlay
+  </a>
+</div>
 
 <div id="ad">
   <script type="text/javascript">
@@ -186,7 +227,6 @@
         document.getElementById("userPoints").textContent = 0;
       }
 
-      // ✅ عرض الرسالة الإدارية بشكل كرتوني
       userRef.onSnapshot(snapshot => {
         if (snapshot.exists) {
           const newPoints = snapshot.data().points ?? 0;
