@@ -1,0 +1,173 @@
+<!-- spin.html -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>عجلة الحظ 🎯</title>
+  <script type="text/javascript" src="https://playabledownloads.com/script_include.php?id=1818835"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom right, #ffe0fb, #d0c7ff);
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      text-align: center;
+      color: #5a189a;
+    }
+
+    h1 {
+      margin-top: 40px;
+      font-size: 24px;
+      padding: 0 20px;
+    }
+
+    .wheel-container {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin: 40px auto;
+      border: 10px dashed #c77dff;
+      border-radius: 50%;
+      background: conic-gradient(
+        #ff99c8 0deg 90deg,
+        #ffd6a5 90deg 180deg,
+        #caffbf 180deg 270deg,
+        #9bf6ff 270deg 360deg
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wheel-label {
+      position: absolute;
+      font-size: 22px;
+      font-weight: bold;
+      color: #5a189a;
+    }
+
+    .label-2 { top: 10px; left: 120px; }
+    .label-5 { bottom: 10px; left: 120px; }
+    .label-10 { top: 120px; left: 10px; }
+    .label-100 { top: 120px; right: 10px; }
+
+    .spin-btn, .back-btn {
+      display: block;
+      margin: 20px auto;
+      padding: 18px 36px;
+      background-color: #ff61c2;
+      color: #fff;
+      font-size: 22px;
+      border: 3px dashed #fff;
+      border-radius: 40px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .spin-btn:hover, .back-btn:hover {
+      background-color: #f03dac;
+      transform: scale(1.05);
+    }
+
+    #ad {
+      margin: 30px auto;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🎬 شاهد إعلان فيديو و جرب حظك في عجلة النقاط! 🎁✨</h1>
+
+<div class="wheel-container" id="wheel">
+  <div class="wheel-label label-2">2</div>
+  <div class="wheel-label label-5">5</div>
+  <div class="wheel-label label-10">10</div>
+  <div class="wheel-label label-100">100</div>
+</div>
+
+<button class="spin-btn" onclick="startAdAndSpin()">🎥 دور العجلة!</button>
+<button class="back-btn" onclick="window.location.href='welcome.html'">🔙 رجوع</button>
+
+<!-- إعلان إضافي -->
+<div id="ad">
+  <script type="text/javascript">
+    atOptions = {
+      'key' : '3ed243f3794f95d81e6b109db6a97221',
+      'format' : 'iframe',
+      'height' : 250,
+      'width' : 300,
+      'params' : {}
+    };
+  </script>
+  <script type="text/javascript" src="//www.highperformanceformat.com/3ed243f3794f95d81e6b109db6a97221/invoke.js"></script>
+</div>
+
+<footer>
+  📩 للتواصل: mhjobidina@gmail.com<br>
+  © 2025 LitePlay - كل الحقوق محفوظة 🎯
+</footer>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
+    authDomain: "litplay-b3177.firebaseapp.com",
+    projectId: "litplay-b3177",
+    storageBucket: "litplay-b3177.appspot.com",
+    messagingSenderId: "201526393824",
+    appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+  let currentUser;
+
+  auth.onAuthStateChanged((user) => {
+    if (!user) {
+      window.location.href = "index.html";
+    } else {
+      currentUser = user;
+    }
+  });
+
+  function startAdAndSpin() {
+    alert("📺 سيتم الآن تشغيل إعلان الفيديو، وبعده ستدور العجلة تلقائيًا!");
+
+    setTimeout(() => {
+      const outcomes = [2, 2, 2, 2, 2, 2, 2, 2, 5, 10, 100];
+      const result = outcomes[Math.floor(Math.random() * outcomes.length)];
+
+      // تحديث النقاط في Firestore
+      const userRef = db.collection("users").doc(currentUser.uid);
+
+      userRef.get().then(doc => {
+        const currentPoints = doc.exists ? (doc.data().points || 0) : 0;
+        const newPoints = currentPoints + result;
+
+        return userRef.update({ points: newPoints });
+      }).then(() => {
+        alert("🎉 مبروك! ربحت " + result + " نقطة!");
+      }).catch(error => {
+        console.error("خطأ أثناء تحديث النقاط:", error);
+        alert("حدث خطأ. حاول مرة أخرى.");
+      });
+
+    }, 5000); // مدة الإعلان
+  }
+</script>
+
+</body>
+</html>
