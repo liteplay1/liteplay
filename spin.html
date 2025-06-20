@@ -1,78 +1,78 @@
-<!-- spin.html -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>عجلة الحظ 🎯</title>
-  <script type="text/javascript" src="https://playabledownloads.com/script_include.php?id=1818835"></script>
   <style>
     body {
       margin: 0;
       padding: 0;
-      background: linear-gradient(to bottom right, #ffe0fb, #d0c7ff);
-      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(to bottom right, #ffd6fa, #d6c3ff);
+      font-family: 'Comic Sans MS', cursive;
       text-align: center;
       color: #5a189a;
     }
 
     h1 {
-      margin-top: 40px;
+      margin: 30px 20px 10px;
       font-size: 24px;
-      padding: 0 20px;
     }
 
-    .wheel-container {
+    .wheel-box {
       position: relative;
+      margin: 30px auto;
       width: 300px;
       height: 300px;
-      margin: 40px auto;
-      border: 10px dashed #c77dff;
+    }
+
+    .wheel {
+      width: 100%;
+      height: 100%;
       border-radius: 50%;
-      background: conic-gradient(
-        #ff99c8 0deg 90deg,
-        #ffd6a5 90deg 180deg,
-        #caffbf 180deg 270deg,
-        #9bf6ff 270deg 360deg
-      );
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border: 10px dashed #c77dff;
+      background: conic-gradient(#ff99c8 0deg 90deg, #ffd6a5 90deg 180deg, #caffbf 180deg 270deg, #9bf6ff 270deg 360deg);
+      transition: transform 4s ease-out;
     }
 
-    .wheel-label {
+    .pointer {
+      width: 0;
+      height: 0;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 30px solid #ff61c2;
       position: absolute;
-      font-size: 22px;
-      font-weight: bold;
-      color: #5a189a;
+      top: -35px;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
-    .label-2 { top: 10px; left: 120px; }
-    .label-5 { bottom: 10px; left: 120px; }
-    .label-10 { top: 120px; left: 10px; }
-    .label-100 { top: 120px; right: 10px; }
-
-    .spin-btn, .back-btn {
-      display: block;
+    .spin-btn {
       margin: 20px auto;
-      padding: 18px 36px;
+      padding: 16px 34px;
       background-color: #ff61c2;
       color: #fff;
       font-size: 22px;
       border: 3px dashed #fff;
-      border-radius: 40px;
+      border-radius: 50px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       cursor: pointer;
       transition: 0.3s;
+      font-family: 'Comic Sans MS', cursive;
     }
 
-    .spin-btn:hover, .back-btn:hover {
+    .spin-btn:hover {
       background-color: #f03dac;
       transform: scale(1.05);
     }
 
+    .back-btn {
+      margin-top: 10px;
+      background-color: #999;
+    }
+
     #ad {
-      margin: 30px auto;
+      margin: 40px auto;
     }
 
     footer {
@@ -84,19 +84,20 @@
 </head>
 <body>
 
-<h1>🎬 شاهد إعلان فيديو و جرب حظك في عجلة النقاط! 🎁✨</h1>
+<h1>🎬 شاهد إعلان الفيديو ثم اضغط "دور العجلة!" 🎁✨</h1>
 
-<div class="wheel-container" id="wheel">
-  <div class="wheel-label label-2">2</div>
-  <div class="wheel-label label-5">5</div>
-  <div class="wheel-label label-10">10</div>
-  <div class="wheel-label label-100">100</div>
+<div class="wheel-box">
+  <div class="pointer"></div>
+  <div class="wheel" id="wheel"></div>
 </div>
 
-<button class="spin-btn" onclick="startAdAndSpin()">🎥 دور العجلة!</button>
-<button class="back-btn" onclick="window.location.href='welcome.html'">🔙 رجوع</button>
+<button class="spin-btn" onclick="startSpin()">🎥 دور العجلة!</button>
+<button class="spin-btn back-btn" onclick="window.location.href='welcome.html'">🔙 رجوع</button>
 
-<!-- إعلان إضافي -->
+<!-- إعلان فيديو CPAGrip -->
+<script type="text/javascript" src="https://playabledownloads.com/script_include.php?id=1818835"></script>
+
+<!-- إعلان ثاني -->
 <div id="ad">
   <script type="text/javascript">
     atOptions = {
@@ -107,7 +108,7 @@
       'params' : {}
     };
   </script>
-  <script type="text/javascript" src="//www.highperformanceformat.com/3ed243f3794f95d81e6b109db6a97221/invoke.js"></script>
+  <script src="//www.highperformanceformat.com/3ed243f3794f95d81e6b109db6a97221/invoke.js"></script>
 </div>
 
 <footer>
@@ -115,7 +116,7 @@
   © 2025 LitePlay - كل الحقوق محفوظة 🎯
 </footer>
 
-<!-- Firebase SDK -->
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
@@ -143,29 +144,29 @@
     }
   });
 
-  function startAdAndSpin() {
-    alert("📺 سيتم الآن تشغيل إعلان الفيديو، وبعده ستدور العجلة تلقائيًا!");
+  function startSpin() {
+    const wheel = document.getElementById("wheel");
+
+    // دوران العجلة
+    const degrees = 3600 + Math.floor(Math.random() * 360);
+    wheel.style.transform = `rotate(${degrees}deg)`;
+
+    // النقاط حسب الاحتمالات
+    const outcomes = [2, 2, 2, 2, 2, 2, 2, 2, 5, 10, 100];
+    const result = outcomes[Math.floor(Math.random() * outcomes.length)];
 
     setTimeout(() => {
-      const outcomes = [2, 2, 2, 2, 2, 2, 2, 2, 5, 10, 100];
-      const result = outcomes[Math.floor(Math.random() * outcomes.length)];
-
-      // تحديث النقاط في Firestore
+      // حفظ النقاط
       const userRef = db.collection("users").doc(currentUser.uid);
-
       userRef.get().then(doc => {
         const currentPoints = doc.exists ? (doc.data().points || 0) : 0;
-        const newPoints = currentPoints + result;
-
-        return userRef.update({ points: newPoints });
+        return userRef.update({ points: currentPoints + result });
       }).then(() => {
         alert("🎉 مبروك! ربحت " + result + " نقطة!");
-      }).catch(error => {
-        console.error("خطأ أثناء تحديث النقاط:", error);
-        alert("حدث خطأ. حاول مرة أخرى.");
+      }).catch(err => {
+        console.error("فشل في تحديث النقاط", err);
       });
-
-    }, 5000); // مدة الإعلان
+    }, 4000); // بعد انتهاء الدوران
   }
 </script>
 
