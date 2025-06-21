@@ -1,37 +1,31 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>عجلة الحظ 🎯</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
+      margin:0;
+      padding:0;
       background: linear-gradient(to bottom right, #ffcef5, #cbaaff);
-      font-family: 'Comic Sans MS', cursive;
-      text-align: center;
-      color: #5a189a;
+      font-family:'Comic Sans MS', cursive;
+      text-align:center;
+      color:#5a189a;
     }
-
     h1 {
-      margin-top: 30px;
-      font-size: 24px;
-      padding: 0 20px;
+      margin-top:30px;
+      font-size:24px;
     }
-
     .wheel-box {
-      position: relative;
-      margin: 30px auto;
-      width: 280px;
-      height: 280px;
+      position:relative;
+      margin:30px auto;
+      width:280px; height:280px;
     }
-
     .wheel {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      border: 8px solid #fff;
+      width:100%; height:100%;
+      border-radius:50%;
+      border:8px solid #fff;
       background: conic-gradient(
         #ffb3c1 0deg 45deg,
         #ffc09f 45deg 90deg,
@@ -42,75 +36,53 @@
         #baffc9 270deg 315deg,
         #a0c4ff 315deg 360deg
       );
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      box-shadow:0 0 15px rgba(0,0,0,0.3);
       transition: transform 5s ease-out;
     }
-
     .pointer {
-      width: 0;
-      height: 0;
-      border-left: 20px solid transparent;
-      border-right: 20px solid transparent;
-      border-bottom: 30px solid #ff6ec7;
-      position: absolute;
-      top: -35px;
-      left: 50%;
-      transform: translateX(-50%);
+      width:0;height:0;
+      border-left:20px solid transparent;
+      border-right:20px solid transparent;
+      border-bottom:30px solid #ff6ec7;
+      position:absolute;
+      top:-35px;
+      left:50%;
+      transform:translateX(-50%);
     }
-
     .spin-btn {
-      margin: 20px auto;
-      padding: 18px 40px;
-      font-size: 22px;
-      background-color: #ff6ec7;
-      color: #fff;
-      border: 3px dashed #fff;
-      border-radius: 50px;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-      cursor: pointer;
-      transition: 0.3s;
-      font-family: 'Comic Sans MS', cursive;
+      margin:20px auto;
+      padding:18px 40px;
+      font-size:22px;
+      background-color:#ff6ec7;
+      color:#fff;
+      border:3px dashed #fff;
+      border-radius:50px;
+      cursor:pointer;
+      transition:transform .3s, background-color .3s;
+      font-family:'Comic Sans MS', cursive;
     }
-
-    .spin-btn:hover {
-      background-color: #f24dbf;
-    }
-
-    .back-btn {
-      background-color: #888;
-    }
-
+    .spin-btn:hover {background-color:#f24dbf;transform:scale(1.05);}
+    .back-btn {background-color:#888;}
     #message {
-      background: #d4edda;
-      color: #155724;
-      padding: 15px;
-      border-radius: 10px;
-      width: 80%;
-      margin: 20px auto;
-      display: none;
-      font-weight: bold;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      background:#d4edda;
+      color:#155724;
+      padding:15px;
+      margin:20px auto;
+      width:80%;
+      border-radius:10px;
+      display:none;
+      font-weight:bold;
+      box-shadow:0 4px 8px rgba(0,0,0,0.2);
     }
-
-    iframe#adframe {
-      width: 100%;
-      max-width: 340px;
-      height: 250px;
-      border: none;
-      margin: 20px auto;
-      display: block;
-    }
-
     footer {
-      margin-top: 30px;
-      font-size: 14px;
-      color: #666;
+      margin-top:30px;
+      font-size:14px;
+      color:#666;
     }
   </style>
 </head>
 <body>
-
-<h1>📽️ شاهد الإعلان لتفعيل عجلة الحظ! 🎁</h1>
+<h1>📽️ اضغط "شاهد الإعلان" ثم “دور العجلة!”</h1>
 
 <div class="wheel-box">
   <div class="pointer"></div>
@@ -119,83 +91,91 @@
 
 <div id="message"></div>
 
+<button class="spin-btn" id="watchAdBtn">▶️ شاهد الإعلان</button>
 <button class="spin-btn" id="spinBtn" disabled>🎯 دور العجلة!</button>
-<button class="spin-btn back-btn" onclick="window.location.href='welcome.html'">🔙 رجوع</button>
-
-<!-- إعلان الفيديو المحمي -->
-<iframe id="adframe" src="https://playabledownloads.com/video_lockers?id=1818835" onload="enableSpinAfterAd()"></iframe>
+<button class="spin-btn back-btn" onclick="location.href='welcome.html'">🔙 رجوع</button>
 
 <footer>
   📩 للتواصل: mhjobidina@gmail.com<br>
   © 2025 LitePlay - كل الحقوق محفوظة 🎯
 </footer>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
 <script>
+  // ---------- إعداد Firebase ----------
   const firebaseConfig = {
-    apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
-    authDomain: "litplay-b3177.firebaseapp.com",
-    projectId: "litplay-b3177",
-    storageBucket: "litplay-b3177.appspot.com",
-    messagingSenderId: "201526393824",
-    appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
+    apiKey:"AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
+    authDomain:"litplay-b3177.firebaseapp.com",
+    projectId:"litplay-b3177",
+    storageBucket:"litplay-b3177.appspot.com",
+    messagingSenderId:"201526393824",
+    appId:"1:201526393824:web:c8ab6afa0bcca902be4985"
   };
-
   firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-  let currentUser;
+  const auth = firebase.auth(), db = firebase.firestore();
+  let currentUser = null;
 
-  auth.onAuthStateChanged((user) => {
-    if (!user) {
-      window.location.href = "index.html";
-    } else {
-      currentUser = user;
-    }
+  auth.onAuthStateChanged(u => {
+    if (!u) return location.href="index.html";
+    currentUser=u;
   });
 
-  const spinBtn = document.getElementById("spinBtn");
+  // ---------- عناصر الصفحة ----------
   const wheel = document.getElementById("wheel");
-  const message = document.getElementById("message");
+  const watchAdBtn = document.getElementById("watchAdBtn");
+  const spinBtn = document.getElementById("spinBtn");
+  const msg = document.getElementById("message");
+  let hasWatched = false;
 
-  function enableSpinAfterAd() {
-    setTimeout(() => {
-      spinBtn.disabled = false;
-    }, 25000); // وقت تقريبي لانتهاء إعلان الفيديو
-  }
+  // ---------- خطوة مشاهدة الإعلان ----------
+  watchAdBtn.onclick = () => {
+    const w = window.open(
+      "https://playabledownloads.com/video_lockers?id=1818835",
+      "videoAd","width=480,height=640"
+    );
+    const checker = setInterval(() => {
+      if (w.closed) {
+        clearInterval(checker);
+        hasWatched=true;
+        watchAdBtn.style.display="none";
+        spinBtn.disabled=false;
+        alert("✅ تم مشاهدة الإعلان! الآن يمكنك تدوير العجلة.");
+      }
+    },1000);
+  };
 
-  spinBtn.onclick = function () {
-    spinBtn.disabled = true;
+  // ---------- دوران العجلة ----------
+  spinBtn.onclick = () => {
+    if (!hasWatched) return alert("👀 شاهد الإعلان أولاً!");
+    spinBtn.disabled=true;
 
-    const outcomes = [2, 2, 2, 2, 2, 2, 2, 2, 5, 10, 100];
-    const result = outcomes[Math.floor(Math.random() * outcomes.length)];
+    const outcomes = [2,2,2,2,2,2,2,2,5,10,100];
+    const prize = outcomes[Math.floor(Math.random()*outcomes.length)];
+    const rotation = 3600 + Math.floor(Math.random()*360);
 
-    const rotation = 3600 + Math.floor(Math.random() * 360);
     wheel.style.transform = `rotate(${rotation}deg)`;
 
     setTimeout(() => {
-      const userRef = db.collection("users").doc(currentUser.uid);
-      userRef.get().then(doc => {
-        const currentPoints = doc.exists ? (doc.data().points || 0) : 0;
-        return userRef.update({ points: currentPoints + result });
+      db.collection("users").doc(currentUser.uid).get().then(d => {
+        const cur = d.data()?.points||0;
+        return db.collection("users").doc(currentUser.uid).update({points:cur+prize});
       }).then(() => {
-        message.innerText = `⭐️ مبروك! لقد تم إضافة ${result} نقطة إلى حسابك!`;
-        message.style.display = "block";
-        setTimeout(() => {
-          message.style.display = "none";
-          spinBtn.disabled = false;
-        }, 5000);
+        msg.innerText=`⭐️ مبروك! أُضيفت لك ${prize} نقطة`;
+        msg.style.display="block";
+        setTimeout(() => msg.style.display="none",5000);
+        watchAdBtn.style.display="inline-block";
+        hasWatched=false;
+        spinBtn.disabled=true;
       }).catch(err => {
-        alert("حدث خطأ في تحديث النقاط. أعد المحاولة.");
-        spinBtn.disabled = false;
+        alert("حدث خطأ. حاول مرة أخرى.");
+        console.error(err);
+        spinBtn.disabled=false;
       });
-    }, 5000); // بعد دوران العجلة
+    },5200);
   };
 </script>
-
 </body>
 </html>
