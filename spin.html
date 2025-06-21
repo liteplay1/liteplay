@@ -1,4 +1,3 @@
-<!-- spin.html -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -60,7 +59,7 @@
     }
 
     .spin-btn {
-      margin: 30px auto;
+      margin: 20px auto;
       padding: 18px 40px;
       font-size: 22px;
       background-color: #ff6ec7;
@@ -79,15 +78,31 @@
 
     .back-btn {
       background-color: #888;
-      margin-top: 10px;
     }
 
-    #ad {
-      margin: 40px auto;
+    #message {
+      background: #d4edda;
+      color: #155724;
+      padding: 15px;
+      border-radius: 10px;
+      width: 80%;
+      margin: 20px auto;
+      display: none;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    iframe#adframe {
+      width: 100%;
+      max-width: 340px;
+      height: 250px;
+      border: none;
+      margin: 20px auto;
+      display: block;
     }
 
     footer {
-      margin-top: 40px;
+      margin-top: 30px;
       font-size: 14px;
       color: #666;
     }
@@ -95,30 +110,20 @@
 </head>
 <body>
 
-<h1>📽️ شاهد إعلان الفيديو ثم اضغط <strong>دور العجلة!</strong> 🎁✨</h1>
+<h1>📽️ شاهد الإعلان لتفعيل عجلة الحظ! 🎁</h1>
 
 <div class="wheel-box">
   <div class="pointer"></div>
   <div class="wheel" id="wheel"></div>
 </div>
 
-<button class="spin-btn" id="watchAdBtn">🎥 شاهد الإعلان</button>
-<button class="spin-btn" id="spinBtn" style="display: none;">🎯 دور العجلة!</button>
+<div id="message"></div>
+
+<button class="spin-btn" id="spinBtn" disabled>🎯 دور العجلة!</button>
 <button class="spin-btn back-btn" onclick="window.location.href='welcome.html'">🔙 رجوع</button>
 
-<!-- إعلان إضافي -->
-<div id="ad">
-  <script type="text/javascript">
-    atOptions = {
-      'key' : '3ed243f3794f95d81e6b109db6a97221',
-      'format' : 'iframe',
-      'height' : 250,
-      'width' : 300,
-      'params' : {}
-    };
-  </script>
-  <script src="//www.highperformanceformat.com/3ed243f3794f95d81e6b109db6a97221/invoke.js"></script>
-</div>
+<!-- إعلان الفيديو المحمي -->
+<iframe id="adframe" src="https://playabledownloads.com/video_lockers?id=1818835" onload="enableSpinAfterAd()"></iframe>
 
 <footer>
   📩 للتواصل: mhjobidina@gmail.com<br>
@@ -153,42 +158,24 @@
     }
   });
 
-  const wheel = document.getElementById("wheel");
   const spinBtn = document.getElementById("spinBtn");
-  const watchAdBtn = document.getElementById("watchAdBtn");
+  const wheel = document.getElementById("wheel");
+  const message = document.getElementById("message");
 
-  // ⚠️ رابط إعلان الفيديو (يمكن تغييره لصفحة video locker حقيقية إن وُجد)
-  const adWindowURL = "https://playabledownloads.com/video_lockers?id=1818835";
-
-  let hasWatchedAd = false;
-
-  watchAdBtn.onclick = function () {
-    const adWin = window.open(adWindowURL, "AdWindow", "width=500,height=600");
-
-    const adChecker = setInterval(() => {
-      if (adWin.closed) {
-        clearInterval(adChecker);
-        hasWatchedAd = true;
-        watchAdBtn.style.display = "none";
-        spinBtn.style.display = "inline-block";
-        alert("✅ تم مشاهدة الإعلان! يمكنك الآن تدوير العجلة.");
-      }
-    }, 1000);
-  };
+  function enableSpinAfterAd() {
+    setTimeout(() => {
+      spinBtn.disabled = false;
+    }, 25000); // وقت تقريبي لانتهاء إعلان الفيديو
+  }
 
   spinBtn.onclick = function () {
-    if (!hasWatchedAd) {
-      alert("👀 يجب مشاهدة الإعلان أولاً!");
-      return;
-    }
-
     spinBtn.disabled = true;
 
     const outcomes = [2, 2, 2, 2, 2, 2, 2, 2, 5, 10, 100];
     const result = outcomes[Math.floor(Math.random() * outcomes.length)];
 
-    const randomRotation = 3600 + Math.floor(Math.random() * 360);
-    wheel.style.transform = `rotate(${randomRotation}deg)`;
+    const rotation = 3600 + Math.floor(Math.random() * 360);
+    wheel.style.transform = `rotate(${rotation}deg)`;
 
     setTimeout(() => {
       const userRef = db.collection("users").doc(currentUser.uid);
@@ -196,16 +183,17 @@
         const currentPoints = doc.exists ? (doc.data().points || 0) : 0;
         return userRef.update({ points: currentPoints + result });
       }).then(() => {
-        alert("🎉 مبروك! ربحت " + result + " نقطة!");
-        hasWatchedAd = false;
-        watchAdBtn.style.display = "inline-block";
-        spinBtn.style.display = "none";
-        spinBtn.disabled = false;
+        message.innerText = `⭐️ مبروك! لقد تم إضافة ${result} نقطة إلى حسابك!`;
+        message.style.display = "block";
+        setTimeout(() => {
+          message.style.display = "none";
+          spinBtn.disabled = false;
+        }, 5000);
       }).catch(err => {
-        console.error("فشل في تحديث النقاط", err);
+        alert("حدث خطأ في تحديث النقاط. أعد المحاولة.");
         spinBtn.disabled = false;
       });
-    }, 5000); // بعد انتهاء الدوران
+    }, 5000); // بعد دوران العجلة
   };
 </script>
 
