@@ -1,3 +1,4 @@
+<!-- spin.html -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -8,31 +9,42 @@
     body {
       margin: 0;
       padding: 0;
-      background: linear-gradient(to bottom right, #ffd6fa, #d6c3ff);
+      background: linear-gradient(to bottom right, #ffcef5, #cbaaff);
       font-family: 'Comic Sans MS', cursive;
       text-align: center;
       color: #5a189a;
     }
 
     h1 {
-      margin: 30px 20px 10px;
+      margin-top: 30px;
       font-size: 24px;
+      padding: 0 20px;
     }
 
     .wheel-box {
       position: relative;
       margin: 30px auto;
-      width: 300px;
-      height: 300px;
+      width: 280px;
+      height: 280px;
     }
 
     .wheel {
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      border: 10px dashed #c77dff;
-      background: conic-gradient(#ff99c8 0deg 90deg, #ffd6a5 90deg 180deg, #caffbf 180deg 270deg, #9bf6ff 270deg 360deg);
-      transition: transform 4s ease-out;
+      border: 8px solid #fff;
+      background: conic-gradient(
+        #ffb3c1 0deg 45deg,
+        #ffc09f 45deg 90deg,
+        #baffc9 90deg 135deg,
+        #a0c4ff 135deg 180deg,
+        #ffb3c1 180deg 225deg,
+        #ffc09f 225deg 270deg,
+        #baffc9 270deg 315deg,
+        #a0c4ff 315deg 360deg
+      );
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      transition: transform 5s ease-out;
     }
 
     .pointer {
@@ -40,7 +52,7 @@
       height: 0;
       border-left: 20px solid transparent;
       border-right: 20px solid transparent;
-      border-bottom: 30px solid #ff61c2;
+      border-bottom: 30px solid #ff6ec7;
       position: absolute;
       top: -35px;
       left: 50%;
@@ -48,27 +60,26 @@
     }
 
     .spin-btn {
-      margin: 20px auto;
-      padding: 16px 34px;
-      background-color: #ff61c2;
-      color: #fff;
+      margin: 30px auto;
+      padding: 18px 40px;
       font-size: 22px;
+      background-color: #ff6ec7;
+      color: #fff;
       border: 3px dashed #fff;
       border-radius: 50px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
       cursor: pointer;
       transition: 0.3s;
       font-family: 'Comic Sans MS', cursive;
     }
 
     .spin-btn:hover {
-      background-color: #f03dac;
-      transform: scale(1.05);
+      background-color: #f24dbf;
     }
 
     .back-btn {
+      background-color: #888;
       margin-top: 10px;
-      background-color: #999;
     }
 
     #ad {
@@ -84,20 +95,18 @@
 </head>
 <body>
 
-<h1>🎬 شاهد إعلان الفيديو ثم اضغط "دور العجلة!" 🎁✨</h1>
+<h1>📽️ شاهد إعلان الفيديو ثم اضغط <strong>دور العجلة!</strong> 🎁✨</h1>
 
 <div class="wheel-box">
   <div class="pointer"></div>
   <div class="wheel" id="wheel"></div>
 </div>
 
-<button class="spin-btn" onclick="startSpin()">🎥 دور العجلة!</button>
+<button class="spin-btn" id="watchAdBtn">🎥 شاهد الإعلان</button>
+<button class="spin-btn" id="spinBtn" style="display: none;">🎯 دور العجلة!</button>
 <button class="spin-btn back-btn" onclick="window.location.href='welcome.html'">🔙 رجوع</button>
 
-<!-- إعلان فيديو CPAGrip -->
-<script type="text/javascript" src="https://playabledownloads.com/script_include.php?id=1818835"></script>
-
-<!-- إعلان ثاني -->
+<!-- إعلان إضافي -->
 <div id="ad">
   <script type="text/javascript">
     atOptions = {
@@ -144,30 +153,60 @@
     }
   });
 
-  function startSpin() {
-    const wheel = document.getElementById("wheel");
+  const wheel = document.getElementById("wheel");
+  const spinBtn = document.getElementById("spinBtn");
+  const watchAdBtn = document.getElementById("watchAdBtn");
 
-    // دوران العجلة
-    const degrees = 3600 + Math.floor(Math.random() * 360);
-    wheel.style.transform = `rotate(${degrees}deg)`;
+  // ⚠️ رابط إعلان الفيديو (يمكن تغييره لصفحة video locker حقيقية إن وُجد)
+  const adWindowURL = "https://playabledownloads.com/video_lockers?id=1818835";
 
-    // النقاط حسب الاحتمالات
+  let hasWatchedAd = false;
+
+  watchAdBtn.onclick = function () {
+    const adWin = window.open(adWindowURL, "AdWindow", "width=500,height=600");
+
+    const adChecker = setInterval(() => {
+      if (adWin.closed) {
+        clearInterval(adChecker);
+        hasWatchedAd = true;
+        watchAdBtn.style.display = "none";
+        spinBtn.style.display = "inline-block";
+        alert("✅ تم مشاهدة الإعلان! يمكنك الآن تدوير العجلة.");
+      }
+    }, 1000);
+  };
+
+  spinBtn.onclick = function () {
+    if (!hasWatchedAd) {
+      alert("👀 يجب مشاهدة الإعلان أولاً!");
+      return;
+    }
+
+    spinBtn.disabled = true;
+
     const outcomes = [2, 2, 2, 2, 2, 2, 2, 2, 5, 10, 100];
     const result = outcomes[Math.floor(Math.random() * outcomes.length)];
 
+    const randomRotation = 3600 + Math.floor(Math.random() * 360);
+    wheel.style.transform = `rotate(${randomRotation}deg)`;
+
     setTimeout(() => {
-      // حفظ النقاط
       const userRef = db.collection("users").doc(currentUser.uid);
       userRef.get().then(doc => {
         const currentPoints = doc.exists ? (doc.data().points || 0) : 0;
         return userRef.update({ points: currentPoints + result });
       }).then(() => {
         alert("🎉 مبروك! ربحت " + result + " نقطة!");
+        hasWatchedAd = false;
+        watchAdBtn.style.display = "inline-block";
+        spinBtn.style.display = "none";
+        spinBtn.disabled = false;
       }).catch(err => {
         console.error("فشل في تحديث النقاط", err);
+        spinBtn.disabled = false;
       });
-    }, 4000); // بعد انتهاء الدوران
-  }
+    }, 5000); // بعد انتهاء الدوران
+  };
 </script>
 
 </body>
