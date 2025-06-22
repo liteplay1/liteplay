@@ -6,82 +6,163 @@
   <title>🎯 عجلة الحظ</title>
   <style>
     body {
-      margin:0; padding:0;
-      background: linear-gradient(to bottom right, #ffcef5, #cbaaff);
-      font-family:'Comic Sans MS', cursive;
-      text-align:center;
-      color:#5a189a;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom right, #ffe4f2, #c8d1ff);
+      font-family: 'Comic Sans MS', cursive;
+      text-align: center;
+      color: #5a189a;
     }
-    h1 { margin-top:30px; font-size:24px; }
+
+    .menu-btn {
+      font-size: 30px;
+      background: none;
+      border: none;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      cursor: pointer;
+      color: #5a189a;
+    }
+
+    .menu {
+      display: none;
+      position: absolute;
+      top: 50px;
+      left: 10px;
+      background: white;
+      border: 2px dashed #ccc;
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .menu a {
+      display: block;
+      margin: 10px 0;
+      color: #5a189a;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    h1 {
+      margin-top: 40px;
+      font-size: 24px;
+    }
+
     .wheel-box {
-      position:relative;
-      margin:30px auto;
-      width:280px; height:280px;
+      position: relative;
+      margin: 30px auto;
+      width: 280px;
+      height: 280px;
     }
+
     .wheel {
-      width:100%; height:100%;
-      border-radius:50%;
-      border:8px solid #fff;
-      background: conic-gradient(
-        #ffb3c1 0deg 45deg, #ffc09f 45deg 90deg,
-        #baffc9 90deg 135deg, #a0c4ff 135deg 180deg,
-        #ffb3c1 180deg 225deg, #ffc09f 225deg 270deg,
-        #baffc9 270deg 315deg, #a0c4ff 315deg 360deg
-      );
-      box-shadow:0 0 15px rgba(0,0,0,0.3);
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 8px solid #fff;
+      background: conic-gradient(#ffb3c1 0deg 90deg, #ffc09f 90deg 180deg, #baffc9 180deg 270deg, #a0c4ff 270deg 360deg);
       transition: transform 5s ease-out;
+      position: relative;
     }
+
+    .wheel span {
+      position: absolute;
+      font-weight: bold;
+      font-size: 18px;
+      transform-origin: center;
+    }
+
+    .wheel span:nth-child(1) { transform: rotate(45deg) translate(110px); }
+    .wheel span:nth-child(2) { transform: rotate(135deg) translate(110px); }
+    .wheel span:nth-child(3) { transform: rotate(225deg) translate(110px); }
+    .wheel span:nth-child(4) { transform: rotate(315deg) translate(110px); }
+
     .pointer {
-      width:0;height:0;
-      border-left:20px solid transparent;
-      border-right:20px solid transparent;
-      border-bottom:30px solid #ff6ec7;
-      position:absolute; top:-35px; left:50%;
-      transform:translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 30px solid #ff6ec7;
+      position: absolute;
+      top: -35px;
+      left: 50%;
+      transform: translateX(-50%);
     }
+
     .spin-btn {
-      margin:20px auto;
-      padding:18px 40px;
-      font-size:22px;
-      background-color:#ff6ec7;
-      color:#fff;
-      border:3px dashed #fff;
-      border-radius:50px;
-      cursor:pointer;
-      font-family:'Comic Sans MS', cursive;
+      margin: 20px auto;
+      padding: 18px 40px;
+      font-size: 22px;
+      background-color: #ff6ec7;
+      color: #fff;
+      border: 3px dashed #fff;
+      border-radius: 50px;
+      cursor: pointer;
     }
-    .back-btn { background:#888; }
+
     #message {
-      background:#d4edda;
-      color:#155724;
-      padding:15px;
-      margin:20px auto;
-      width:80%;
-      border-radius:10px;
-      display:none;
-      font-weight:bold;
+      background: #d4edda;
+      color: #155724;
+      padding: 15px;
+      margin: 20px auto;
+      width: 80%;
+      border-radius: 10px;
+      display: none;
+      font-weight: bold;
     }
+
     #countdown {
-      font-size:22px;
-      margin-top:10px;
-      display:none;
+      font-size: 22px;
+      margin-top: 10px;
+      display: none;
     }
-    footer { margin-top:30px; font-size:14px; color:#666; }
+
+    footer {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #666;
+    }
   </style>
 </head>
 <body>
+
+<button class="menu-btn" onclick="toggleMenu()">☰</button>
+<div class="menu" id="sideMenu">
+  <a href="welcome.html">🏠 القائمة الرئيسية</a>
+  <a href="withdraw.html">💰 سحب الأرباح</a>
+</div>
+
 <h1>📽️ شاهد الإعلان وانتظر العد التنازلي!</h1>
 
 <div class="wheel-box">
   <div class="pointer"></div>
-  <div class="wheel" id="wheel"></div>
+  <div class="wheel" id="wheel">
+    <span>2</span>
+    <span>5</span>
+    <span>10</span>
+    <span>100</span>
+  </div>
 </div>
 
 <div id="message"></div>
 <div id="countdown">⏳ انتظر 15 ثانية...</div>
 
 <button class="spin-btn" id="watchAdBtn">▶️ شاهد الإعلان</button>
-<button class="spin-btn back-btn" onclick="location.href='welcome.html'">🔙 رجوع</button>
+
+<!-- 🔻 إعلان Banner -->
+<div style="margin: 20px auto;">
+  <script type="text/javascript">
+    atOptions = {
+      'key': '3ed243f3794f95d81e6b109db6a97221',
+      'format': 'iframe',
+      'height': 250,
+      'width': 300,
+      'params': {}
+    };
+  </script>
+  <script type="text/javascript" src="//www.highperformanceformat.com/3ed243f3794f95d81e6b109db6a97221/invoke.js"></script>
+</div>
 
 <footer>
   📩 للتواصل: mhjobidina@gmail.com<br>
@@ -95,20 +176,20 @@
 
 <script>
   const firebaseConfig = {
-    apiKey:"AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
-    authDomain:"litplay-b3177.firebaseapp.com",
-    projectId:"litplay-b3177",
-    storageBucket:"litplay-b3177.appspot.com",
-    messagingSenderId:"201526393824",
-    appId:"1:201526393824:web:c8ab6afa0bcca902be4985"
+    apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
+    authDomain: "litplay-b3177.firebaseapp.com",
+    projectId: "litplay-b3177",
+    storageBucket: "litplay-b3177.appspot.com",
+    messagingSenderId: "201526393824",
+    appId: "1:201526393824:web:c8ab6afa0bcca902be4985"
   };
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth(), db = firebase.firestore();
   let currentUser = null;
 
   auth.onAuthStateChanged(u => {
-    if (!u) return location.href="index.html";
-    currentUser=u;
+    if (!u) location.href = "index.html";
+    currentUser = u;
   });
 
   const wheel = document.getElementById("wheel");
@@ -116,52 +197,51 @@
   const countdownDiv = document.getElementById("countdown");
   const msg = document.getElementById("message");
 
-  watchAdBtn.onclick = () => {
-    // ✅ إعلان Adsterra - popunder
-    window.open("https://pl26985946.profitableratecpm.com/4f/72/23/4f7223fdcb6a4e69af88b33020832516.js");
+  function toggleMenu() {
+    const menu = document.getElementById("sideMenu");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+  }
 
-    // ✅ social bar
+  watchAdBtn.onclick = () => {
+    window.open("https://pl26985946.profitableratecpm.com/4f/72/23/4f7223fdcb6a4e69af88b33020832516.js");
     const script = document.createElement("script");
     script.src = "//pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js";
     document.body.appendChild(script);
 
     watchAdBtn.style.display = "none";
     countdownDiv.style.display = "block";
-    
     let counter = 15;
-    countdownDiv.textContent = `⏳ انتظر ${counter} ثانية...`;
-
-    const timer = setInterval(() => {
+    countdownDiv.innerText = `⏳ انتظر ${counter} ثانية...`;
+    const interval = setInterval(() => {
       counter--;
-      countdownDiv.textContent = `⏳ انتظر ${counter} ثانية...`;
+      countdownDiv.innerText = `⏳ انتظر ${counter} ثانية...`;
       if (counter === 0) {
-        clearInterval(timer);
+        clearInterval(interval);
         countdownDiv.style.display = "none";
-        startSpin();
+        spin();
       }
     }, 1000);
   };
 
-  function startSpin() {
-    const outcomes = [2,2,2,2,2,2,2,2,2,2,5,10,100];
-    const prize = outcomes[Math.floor(Math.random() * outcomes.length)];
+  function spin() {
+    const prizes = [2, 2, 2, 2, 5, 5, 10, 100];
+    const prize = prizes[Math.floor(Math.random() * prizes.length)];
     const rotation = 3600 + Math.floor(Math.random() * 360);
-
     wheel.style.transform = `rotate(${rotation}deg)`;
 
     setTimeout(() => {
-      db.collection("users").doc(currentUser.uid).get().then(d => {
-        const cur = d.data()?.points || 0;
-        return db.collection("users").doc(currentUser.uid).update({ points: cur + prize });
+      db.collection("users").doc(currentUser.uid).get().then(doc => {
+        const old = doc.data()?.points || 0;
+        return db.collection("users").doc(currentUser.uid).update({
+          points: old + prize
+        });
       }).then(() => {
         msg.innerText = `⭐️ مبروك! أُضيفت لك ${prize} نقطة`;
         msg.style.display = "block";
-        setTimeout(() => msg.style.display = "none", 5000);
-        watchAdBtn.style.display = "inline-block";
-      }).catch(err => {
-        alert("حدث خطأ. حاول مرة أخرى.");
-        console.error(err);
-        watchAdBtn.style.display = "inline-block";
+        setTimeout(() => {
+          msg.style.display = "none";
+          watchAdBtn.style.display = "inline-block";
+        }, 5000);
       });
     }, 5200);
   }
