@@ -61,7 +61,12 @@
       height: 100%;
       border-radius: 50%;
       border: 8px solid #fff;
-      background: conic-gradient(#ffb3c1 0deg 90deg, #ffc09f 90deg 180deg, #baffc9 180deg 270deg, #a0c4ff 270deg 360deg);
+      background: conic-gradient(
+        #ffb3c1 0deg 45deg, #ffc09f 45deg 90deg,
+        #baffc9 90deg 135deg, #a0c4ff 135deg 180deg,
+        #ffb3c1 180deg 225deg, #ffc09f 225deg 270deg,
+        #baffc9 270deg 315deg, #a0c4ff 315deg 360deg
+      );
       transition: transform 5s ease-out;
       position: relative;
     }
@@ -73,10 +78,14 @@
       transform-origin: center;
     }
 
-    .wheel span:nth-child(1) { transform: rotate(45deg) translate(110px); }
-    .wheel span:nth-child(2) { transform: rotate(135deg) translate(110px); }
-    .wheel span:nth-child(3) { transform: rotate(225deg) translate(110px); }
-    .wheel span:nth-child(4) { transform: rotate(315deg) translate(110px); }
+    .wheel span:nth-child(1) { transform: rotate(22.5deg) translate(110px); }
+    .wheel span:nth-child(2) { transform: rotate(67.5deg) translate(110px); }
+    .wheel span:nth-child(3) { transform: rotate(112.5deg) translate(110px); }
+    .wheel span:nth-child(4) { transform: rotate(157.5deg) translate(110px); }
+    .wheel span:nth-child(5) { transform: rotate(202.5deg) translate(110px); }
+    .wheel span:nth-child(6) { transform: rotate(247.5deg) translate(110px); }
+    .wheel span:nth-child(7) { transform: rotate(292.5deg) translate(110px); }
+    .wheel span:nth-child(8) { transform: rotate(337.5deg) translate(110px); }
 
     .pointer {
       width: 0;
@@ -139,8 +148,12 @@
   <div class="pointer"></div>
   <div class="wheel" id="wheel">
     <span>2</span>
+    <span>2</span>
+    <span>5</span>
     <span>5</span>
     <span>10</span>
+    <span>10</span>
+    <span>100</span>
     <span>100</span>
   </div>
 </div>
@@ -224,7 +237,7 @@
   };
 
   function spin() {
-    const prizes = [2, 2, 2, 2, 5, 5, 10, 100];
+    const prizes = [2, 2, 5, 5, 10, 10, 100, 100];
     const prize = prizes[Math.floor(Math.random() * prizes.length)];
     const rotation = 3600 + Math.floor(Math.random() * 360);
     wheel.style.transform = `rotate(${rotation}deg)`;
