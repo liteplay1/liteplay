@@ -1,23 +1,23 @@
+<!-- ابدأ من هنا -->
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>🎯 عجلة الحظ</title>
   <style>
-    body{margin:0;padding:0;background:linear-gradient(to bottom right,#ffe4f2,#c8d1ff);font-family:'Comic Sans MS',cursive;text-align:center;color:#5a189a}
-    .menu-btn{font-size:30px;background:none;border:none;position:absolute;top:10px;left:10px;cursor:pointer;color:#5a189a}
-    .menu{display:none;position:absolute;top:50px;left:10px;background:#fff;border:2px dashed #ccc;border-radius:10px;padding:10px}
-    .menu a{display:block;margin:10px 0;color:#5a189a;font-weight:bold;text-decoration:none}
-    h1{margin-top:40px;font-size:24px}
-    .wheel-box{position:relative;margin:30px auto;width:280px;height:280px}
-    .wheel{width:100%;height:100%;border-radius:50%;border:8px solid #fff;
-      background: conic-gradient(#ffb3c1 0deg 45deg, #ffc09f 45deg 90deg,
-        #baffc9 90deg 135deg, #a0c4ff 135deg 180deg,
-        #ffb3c1 180deg 225deg, #ffc09f 225deg 270deg,
-        #baffc9 270deg 315deg, #a0c4ff 315deg 360deg);
-      transition: transform 5s cubic-bezier(0.33,1,0.68,1);position:relative;
+    body { margin:0; padding:0; background:linear-gradient(to bottom right,#ffe4f2,#c8d1ff);
+      font-family:'Comic Sans MS',cursive; text-align:center; color:#5a189a }
+    .menu-btn{ position:absolute; top:10px; left:10px; font-size:30px; background:none; border:none; color:#5a189a; cursor:pointer }
+    .menu{ display:none; position:absolute; top:50px; left:10px; background:#fff; border:2px dashed #ccc; border-radius:10px; padding:10px }
+    .menu a{ display:block; margin:10px 0; color:#5a189a; font-weight:bold; text-decoration:none }
+    .wheel-box{ position:relative; margin:30px auto; width:280px; height:280px }
+    .wheel{ width:100%; height:100%; border-radius:50%; border:8px solid #fff;
+      background:conic-gradient(#ffb3c1 0deg 45deg, #ffc09f 45deg 90deg, #baffc9 90deg 135deg, #a0c4ff 135deg 180deg,
+      #ffb3c1 180deg 225deg, #ffc09f 225deg 270deg, #baffc9 270deg 315deg, #a0c4ff 315deg 360deg);
+      transition: transform 5s cubic-bezier(0.33, 1, 0.68, 1); position:relative;
     }
-    .wheel span{position:absolute;left:50%;top:50%;transform-origin:center;font-weight:bold;font-size:18px;color:#000}
+    .wheel span{ position:absolute; left:50%; top:50%; transform-origin:center; font-weight:bold; font-size:18px; color:#000 }
     .wheel span:nth-child(1){transform:rotate(22.5deg) translate(0,-120px) rotate(-22.5deg);}
     .wheel span:nth-child(2){transform:rotate(67.5deg) translate(0,-120px) rotate(-67.5deg);}
     .wheel span:nth-child(3){transform:rotate(112.5deg) translate(0,-120px) rotate(-112.5deg);}
@@ -26,9 +26,12 @@
     .wheel span:nth-child(6){transform:rotate(247.5deg) translate(0,-120px) rotate(-247.5deg);}
     .wheel span:nth-child(7){transform:rotate(292.5deg) translate(0,-120px) rotate(-292.5deg);}
     .wheel span:nth-child(8){transform:rotate(337.5deg) translate(0,-120px) rotate(-337.5deg);}
-    .pointer{width:0;height:0;border-left:20px solid transparent;border-right:20px solid transparent;border-bottom:30px solid #ff6ec7;position:absolute;top:-35px;left:50%;transform:translateX(-50%)}
-    .spin-btn{margin:20px auto;padding:18px 40px;font-size:22px;background-color:#ff6ec7;color:#fff;border:3px dashed #fff;border-radius:50px;cursor:pointer}
-    #message{background:#d4edda;color:#155724;padding:15px;margin:20px auto;width:80%;border-radius:10px;display:none;font-weight:bold}
+    .pointer{width:0;height:0;border-left:20px solid transparent;border-right:20px solid transparent;
+      border-bottom:30px solid #ff6ec7;position:absolute;top:-35px;left:50%;transform:translateX(-50%)}
+    .spin-btn{margin:20px auto;padding:18px 40px;font-size:22px;background-color:#ff6ec7;color:#fff;
+      border:3px dashed #fff;border-radius:50px;cursor:pointer}
+    #message{background:#d4edda;color:#155724;padding:15px;margin:20px auto;width:80%;border-radius:10px;
+      display:none;font-weight:bold}
     #countdown{font-size:22px;margin-top:10px;display:none}
     footer{margin-top:20px;font-size:14px;color:#666}
   </style>
@@ -42,6 +45,7 @@
 </div>
 
 <h1>📽️ شاهد الإعلان وانتظر العد التنازلي!</h1>
+
 <div class="wheel-box">
   <div class="pointer"></div>
   <div class="wheel" id="wheel">
@@ -54,6 +58,7 @@
 
 <button class="spin-btn" id="watchAdBtn">▶️ شاهد الإعلان</button>
 
+<!-- Ad Banner -->
 <div style="margin:20px auto;">
   <script>atOptions={'key':'3ed243f3794f95d81e6b109db6a97221','format':'iframe','height':250,'width':300,'params':{}};</script>
   <script src="//www.highperformanceformat.com/3ed243f3794f95d81e6b109db6a97221/invoke.js"></script>
@@ -61,6 +66,7 @@
 
 <footer>📩 mhjobidina@gmail.com © 2025 LitePlay</footer>
 
+<!-- Firebase + إعلانات -->
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
@@ -68,106 +74,117 @@
 <script src="//pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js"></script>
 
 <script>
-  firebase.initializeApp({
-    apiKey:"AIzaSyCx91…",authDomain:"litplay-b3177.firebaseapp.com",
-    projectId:"litplay-b3177"
-  });
-  const auth=firebase.auth(), db=firebase.firestore();
-  let currentUser=null, tries=0, resetTime=0;
+firebase.initializeApp({
+  apiKey:"AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
+  authDomain:"litplay-b3177.firebaseapp.com",
+  projectId:"litplay-b3177"
+});
 
-  auth.onAuthStateChanged(async u=>{
-    if(!u) return location.href="index.html";
-    currentUser=u;
-    const doc=await db.collection("spins").doc(u.uid).get();
-    const data = doc.exists ? doc.data() : {};
-    const now=Date.now();
-    if(data.reset && now>data.reset) tries=0;
-    else tries = data.tries||0;
-    resetTime = data.reset||0;
-    updateUI();
-  });
+const auth = firebase.auth(), db = firebase.firestore();
+let currentUser = null, tries = 0, resetTime = 0;
+const wheel = document.getElementById("wheel");
+const btn = document.getElementById("watchAdBtn");
+const cnt = document.getElementById("countdown");
+const msg = document.getElementById("message");
 
-  const wheel=document.getElementById("wheel");
-  const btn=document.getElementById("watchAdBtn");
-  const cnt=document.getElementById("countdown");
-  const msg=document.getElementById("message");
+const prizes = [2,2,5,5,10,10,100,100];
+const angles = [0,45,90,135,180,225,270,315];
 
-  const prizes=[2,2,5,5,10,10,100,100];
-  const angles=[0,45,90,135,180,225,270,315];
+auth.onAuthStateChanged(async user => {
+  if (!user) return location.href = "index.html";
+  currentUser = user;
+  const docRef = db.collection("spins").doc(user.uid);
+  const doc = await docRef.get();
+  const now = Date.now();
 
-  btn.addEventListener("click", async ()=>{
-    if(tries>=5){
-      msg.innerText="✅ انتهت محاولات اليوم، حاول بعد 24 ساعة";
-      msg.style.display="block";
-      return;
-    }
-    window.open("https://www.profitableratecpm.com/duvs3dumf?key=dce…","_blank");
-    window.open("//pl26985946.profitableratecpm.com/...","_blank");
-    const scr=document.createElement("script");
-    scr.src="//pl26985968.profitableratecpm.com/…";
-    document.body.appendChild(scr);
-    startCountdown();
-  });
-
-  function startCountdown(){
-    btn.style.display="none";
-    let sec=15;
-    cnt.style.display="block";
-    cnt.innerText=`⏳ انتظر ${sec} ثانية...`;
-    const t = setInterval(()=> {
-      sec--; cnt.innerText=`⏳ انتظر ${sec} ثانية...`;
-      if(sec<=0){
-        clearInterval(t);
-        cnt.style.display="none";
-        spinWheel();
-      }
-    },1000);
-  }
-
-  async function spinWheel(){
-    const weighted=[...Array(97).fill(2),...Array(97).fill(5),10,100];
-    const prize=weighted[Math.floor(Math.random()*weighted.length)];
-    const idxs=prizes.map((v,i)=>v===prize?i:-1).filter(i=>i>=0);
-    const idx=idxs[Math.floor(Math.random()*idxs.length)];
-    const angle=angles[idx];
-    wheel.style.transform = `rotate(${360*5 + angle + (Math.random()*30-15)}deg)`;
-
-    setTimeout(async ()=>{
-      await db.runTransaction(async tx=>{
-        const ref= db.collection("spins").doc(currentUser.uid);
-        tx.set(ref,{
-          tries: firebase.firestore.FieldValue.increment(1),
-          reset: resetTime||Date.now()+86400000
-        },{merge:true});
-        const userRef=db.collection("users").doc(currentUser.uid);
-        tx.update(userRef,{points: firebase.firestore.FieldValue.increment(prize)});
-      });
-      tries++;
-      msg.innerText=`⭐️ مبروك! حصلت على ${prize} نقطة`;
-      msg.style.display="block";
-      setTimeout(()=>{ msg.style.display="none"; btn.style.display="inline-block"; },5000);
-      updateUI();
-    },5200);
-  }
-
-  function updateUI(){
-    if(tries>=5){
-      const remaining=Math.max(0,resetTime-Date.now());
-      const h=Math.floor(remaining/3600000), m=Math.floor(remaining/60000)%60, s=Math.floor(remaining/1000)%60;
-      btn.style.display="none";
-      cnt.style.display="block";
-      cnt.innerText=`⏳ حاول مرة أخرى بعد ${h}h ${m}m ${s}s`;
-      setTimeout(updateUI,1000);
+  if (!doc.exists) {
+    await docRef.set({ tries: 0, reset: now + 86400000 });
+    tries = 0; resetTime = now + 86400000;
+  } else {
+    const data = doc.data();
+    if (data.reset < now) {
+      await docRef.set({ tries: 0, reset: now + 86400000 });
+      tries = 0; resetTime = now + 86400000;
     } else {
-      btn.style.display="inline-block";
-      cnt.style.display="none";
+      tries = data.tries || 0;
+      resetTime = data.reset;
     }
   }
+  updateUI();
+});
 
-  function toggleMenu(){
-    const m=document.getElementById("sideMenu");
-    m.style.display = m.style.display==="block"?"none":"block";
+btn.onclick = () => {
+  if (tries >= 5) return;
+  // فتح الإعلانات
+  window.open("https://www.profitableratecpm.com/duvs3dumf?key=dce63c3a8855602cf54b7ba3c34dc55c", "_blank");
+  window.open("//pl26985946.profitableratecpm.com/4f/72/23/4f7223fdcb6a4e69af88b33020832516.js", "_blank");
+  const scr = document.createElement("script");
+  scr.src = "//pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js";
+  document.body.appendChild(scr);
+  startCountdown();
+};
+
+function startCountdown(){
+  btn.style.display = "none";
+  let sec = 15;
+  cnt.style.display = "block";
+  cnt.innerText = `⏳ انتظر ${sec} ثانية...`;
+  const t = setInterval(() => {
+    sec--;
+    cnt.innerText = `⏳ انتظر ${sec} ثانية...`;
+    if (sec <= 0) {
+      clearInterval(t);
+      cnt.style.display = "none";
+      spinWheel();
+    }
+  }, 1000);
+}
+
+function spinWheel(){
+  const weighted = [...Array(97).fill(2), ...Array(97).fill(5), 10, 100];
+  const prize = weighted[Math.floor(Math.random() * weighted.length)];
+  const indexOptions = prizes.map((val, i) => val === prize ? i : -1).filter(i => i >= 0);
+  const finalIndex = indexOptions[Math.floor(Math.random() * indexOptions.length)];
+  const finalAngle = angles[finalIndex];
+  const rotateDeg = 360 * 5 + finalAngle;
+  wheel.style.transform = `rotate(${rotateDeg}deg)`;
+
+  setTimeout(async () => {
+    await db.collection("users").doc(currentUser.uid).update({
+      points: firebase.firestore.FieldValue.increment(prize)
+    });
+    await db.collection("spins").doc(currentUser.uid).update({
+      tries: firebase.firestore.FieldValue.increment(1)
+    });
+    tries++;
+    msg.innerText = `⭐️ مبروك! حصلت على ${prize} نقطة`;
+    msg.style.display = "block";
+    setTimeout(() => {
+      msg.style.display = "none";
+      btn.style.display = "inline-block";
+      updateUI();
+    }, 5000);
+  }, 5200);
+}
+
+function updateUI(){
+  if (tries >= 5) {
+    const remain = Math.max(0, resetTime - Date.now());
+    const h = Math.floor(remain / 3600000), m = Math.floor(remain / 60000) % 60, s = Math.floor(remain / 1000) % 60;
+    cnt.innerText = `⏳ حاول بعد ${h}h ${m}m ${s}s`;
+    btn.style.display = "none";
+    cnt.style.display = "block";
+    setTimeout(updateUI, 1000);
+  } else {
+    btn.style.display = "inline-block";
+    cnt.style.display = "none";
   }
+}
+
+function toggleMenu(){
+  const m = document.getElementById("sideMenu");
+  m.style.display = m.style.display === "block" ? "none" : "block";
+}
 </script>
 </body>
 </html>
