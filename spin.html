@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>🎯 عجلة الحظ</title>
   <style>
@@ -97,10 +97,9 @@
       border-right: 20px solid transparent;
       border-bottom: 30px solid #ff6ec7;
       position: absolute;
-      top: -30px;
+      top: -35px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 10;
     }
 
     .spin-btn {
@@ -191,6 +190,10 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
+<!-- 📌 إعلانات Popunder و SocialBar -->
+<script type='text/javascript' src='//pl26985946.profitableratecpm.com/4f/72/23/4f7223fdcb6a4e69af88b33020832516.js'></script>
+<script type='text/javascript' src='//pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js'></script>
+
 <script>
   const firebaseConfig = {
     apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
@@ -214,7 +217,8 @@
   const countdownDiv = document.getElementById("countdown");
   const msg = document.getElementById("message");
 
-  const prizeValues = [2, 2, 5, 5, 10, 10, 100, 100];
+  const prizes = [2, 2, 5, 5, 10, 10, 100, 100];
+  const prizeAngles = [0, 45, 90, 135, 180, 225, 270, 315]; // درجات كل جائزة
 
   function toggleMenu() {
     const menu = document.getElementById("sideMenu");
@@ -222,17 +226,13 @@
   }
 
   watchAdBtn.onclick = () => {
-    // إظهار إعلان popunder
-    const popunderScript = document.createElement("script");
-    popunderScript.src = "//pl26985946.profitableratecpm.com/4f/72/23/4f7223fdcb6a4e69af88b33020832516.js";
-    document.body.appendChild(popunderScript);
+    // 🟣 فتح الإعلانات
+    window.open("https://pl26985946.profitableratecpm.com/4f/72/23/4f7223fdcb6a4e69af88b33020832516.js");
+    const adScript = document.createElement("script");
+    adScript.src = "//pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js";
+    document.body.appendChild(adScript);
 
-    // إظهار إعلان SocialBar_1
-    const socialbarScript = document.createElement("script");
-    socialbarScript.src = "//pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js";
-    document.body.appendChild(socialbarScript);
-
-    // بدء العد التنازلي
+    // 🔵 بدء العد التنازلي
     watchAdBtn.style.display = "none";
     countdownDiv.style.display = "block";
     let counter = 15;
@@ -243,29 +243,24 @@
       if (counter === 0) {
         clearInterval(interval);
         countdownDiv.style.display = "none";
-        spin();
+        spinWheel();
       }
     }, 1000);
   };
 
-  function spin() {
-    // توزيع احتمالي للفوز: 97% للفئات الصغيرة
-    const weightedIndex = (() => {
-      const rand = Math.random() * 100;
-      if (rand < 50) return 0;      // 2
-      if (rand < 80) return 2;      // 5
-      if (rand < 93) return 4;      // 10
-      return 6;                     // 100
-    })();
+  function spinWheel() {
+    // ✅ نسبة 97% للفوز بـ 2 أو 5 نقاط
+    const weightedPrizes = [
+      2, 2, 2, 2, 2, 2, 5, 5, 5, 10, 10, 100
+    ];
+    const prize = weightedPrizes[Math.floor(Math.random() * weightedPrizes.length)];
 
-    const sectorAngle = 360 / prizeValues.length;
-    const targetAngle = weightedIndex * sectorAngle + sectorAngle / 2;
-    const fullRotation = 360 * 5; // عدد الدورات
-    const finalRotation = fullRotation + (360 - targetAngle); // ليقف عند السهم
+    const index = prizes.indexOf(prize);
+    const baseAngle = prizeAngles[index];
+    const fullSpins = 5 * 360;
+    const rotation = fullSpins + baseAngle + Math.floor(Math.random() * 30) - 15;
 
-    wheel.style.transform = `rotate(${finalRotation}deg)`;
-
-    const prize = prizeValues[weightedIndex];
+    wheel.style.transform = `rotate(${rotation}deg)`;
 
     setTimeout(() => {
       db.collection("users").doc(currentUser.uid).get().then(doc => {
