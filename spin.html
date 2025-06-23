@@ -1,3 +1,4 @@
+<!-- ✅ الكود كامل بالتصحيحات -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -218,21 +219,16 @@
   const msg = document.getElementById("message");
 
   const prizes = [2, 2, 5, 5, 10, 10, 100, 100];
-  const prizeAngles = [0, 45, 90, 135, 180, 225, 270, 315]; // زاوية كل جائزة
-
-  function toggleMenu() {
-    const menu = document.getElementById("sideMenu");
-    menu.style.display = menu.style.display === "block" ? "none" : "block";
-  }
+  const prizeAngles = [0, 45, 90, 135, 180, 225, 270, 315];
 
   watchAdBtn.onclick = () => {
-    // فتح الإعلانات
-    window.open("https://pl26985946.profitableratecpm.com/4f/72/23/4f7223fdcb6a4e69af88b33020832516.js");
+    // الإعلانات
+    window.open("https://pl26985946.profitableratecpm.com/4f/72/23/4f7223fdcb6a4e69af88b33020832516.js", "_blank");
     const adScript = document.createElement("script");
     adScript.src = "//pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js";
     document.body.appendChild(adScript);
 
-    // بدء العد التنازلي
+    // العد التنازلي
     watchAdBtn.style.display = "none";
     countdownDiv.style.display = "block";
     let counter = 15;
@@ -249,29 +245,25 @@
   };
 
   function spinWheel() {
-    // ترجيح 97% للفوز بـ 2 أو 5
-    const weightedPrizes = [
-      2, 2, 2, 2, 2, 2, 5, 5, 5, 10, 10, 100
-    ];
-    const selectedPrize = weightedPrizes[Math.floor(Math.random() * weightedPrizes.length)];
+    const weightedPrizes = [2,2,2,2,2,2,5,5,5,10,10,100];
+    const prize = weightedPrizes[Math.floor(Math.random() * weightedPrizes.length)];
 
-    // تحديد الزاوية حسب الجائزة
-    const indices = [];
-    prizes.forEach((val, idx) => { if (val === selectedPrize) indices.push(idx); });
-    const selectedIndex = indices[Math.floor(Math.random() * indices.length)];
-    const baseAngle = prizeAngles[selectedIndex];
-    const rotation = 360 * 5 + baseAngle + Math.floor(Math.random() * 30) - 15;
+    const matchingIndexes = [];
+    prizes.forEach((val, idx) => { if (val === prize) matchingIndexes.push(idx); });
+    const finalIndex = matchingIndexes[Math.floor(Math.random() * matchingIndexes.length)];
 
-    wheel.style.transform = `rotate(${rotation}deg)`;
+    const angle = prizeAngles[finalIndex];
+    const fullRotation = 360 * 5 + angle + Math.floor(Math.random() * 20) - 10;
+    wheel.style.transform = `rotate(${fullRotation}deg)`;
 
     setTimeout(() => {
       db.collection("users").doc(currentUser.uid).get().then(doc => {
         const old = doc.data()?.points || 0;
         return db.collection("users").doc(currentUser.uid).update({
-          points: old + selectedPrize
+          points: old + prize
         });
       }).then(() => {
-        msg.innerText = `⭐️ مبروك! أُضيفت لك ${selectedPrize} نقطة`;
+        msg.innerText = `⭐️ مبروك! أُضيفت لك ${prize} نقطة`;
         msg.style.display = "block";
         setTimeout(() => {
           msg.style.display = "none";
@@ -279,6 +271,11 @@
         }, 5000);
       });
     }, 5200);
+  }
+
+  function toggleMenu() {
+    const menu = document.getElementById("sideMenu");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
   }
 </script>
 </body>
