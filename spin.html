@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>🎯 عجلة الحظ</title>
   <style>
-    body{margin:0;padding:0;background:linear-gradient(to bottom right,#ffe4f2,#c8d1ff);font-family:'Comic Sans MS',cursive;text-align:center;color:#5a189a}
+    body{margin:0;padding:0;background:linear-gradient(to bottom right,#ffe4f2,#c8d1ff);
+      font-family:'Comic Sans MS',cursive;text-align:center;color:#5a189a}
     .menu-btn{position:absolute;top:10px;left:10px;font-size:30px;background:none;border:none;color:#5a189a;cursor:pointer}
     .menu{display:none;position:absolute;top:50px;left:10px;background:#fff;border:2px dashed #ccc;border-radius:10px;padding:10px}
     .menu a{display:block;margin:10px 0;color:#5a189a;font-weight:bold;text-decoration:none}
@@ -25,7 +27,7 @@
     .pointer{width:0;height:0;border-left:20px solid transparent;border-right:20px solid transparent;
       border-bottom:30px solid #ff6ec7;position:absolute;top:-35px;left:50%;transform:translateX(-50%)}
     .spin-btn{margin:20px auto;padding:18px 40px;font-size:22px;background-color:#ff6ec7;color:#fff;
-      border:3px dashed #fff;border-radius:50px;cursor:pointer;display:inline-block}
+      border:3px dashed #fff;border-radius:50px;cursor:pointer}
     #message{background:#d4edda;color:#155724;padding:15px;margin:20px auto;width:80%;border-radius:10px;
       display:none;font-weight:bold}
     #countdown{font-size:22px;margin-top:10px;display:none}
@@ -68,26 +70,25 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
-<!-- إعلانات -->
-<script src='//pl26985946.profitableratecpm.com/4f/72/23/4f7223fdcb6a4e69af88b33020832516.js'></script>
-<script src='//pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js'></script>
-
 <script>
 firebase.initializeApp({
-  apiKey:"AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
-  authDomain:"litplay-b3177.firebaseapp.com",
-  projectId:"litplay-b3177"
+  apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
+  authDomain: "litplay-b3177.firebaseapp.com",
+  projectId: "litplay-b3177"
 });
 
-const auth = firebase.auth(), db = firebase.firestore();
+const auth = firebase.auth();
+const db = firebase.firestore();
+
 const wheel = document.getElementById("wheel");
 const btn = document.getElementById("watchAdBtn");
 const cnt = document.getElementById("countdown");
 const msg = document.getElementById("message");
 
-let currentUser = null, tries = 0, resetTime = 0;
 const prizes = [2,2,5,5,10,10,100,100];
 const angles = [0,45,90,135,180,225,270,315];
+
+let currentUser = null, tries = 0, resetTime = 0;
 
 auth.onAuthStateChanged(async user => {
   if (!user) return location.href = "index.html";
@@ -95,22 +96,26 @@ auth.onAuthStateChanged(async user => {
   const docRef = db.collection("spins").doc(user.uid);
   const now = Date.now();
   const doc = await docRef.get();
-  if (!doc.exists || (doc.data().reset < now)) {
+
+  if (!doc.exists || doc.data().reset < now) {
     await docRef.set({ tries: 0, reset: now + 86400000 });
-    tries = 0; resetTime = now + 86400000;
+    tries = 0;
+    resetTime = now + 86400000;
   } else {
     tries = doc.data().tries;
     resetTime = doc.data().reset;
   }
+
   updateUI();
 });
 
 btn.onclick = () => {
   if (tries >= 5) return;
-  // إعلانات
+  // فتح الإعلانات
   window.open("https://www.profitableratecpm.com/duvs3dumf?key=dce63c3a8855602cf54b7ba3c34dc55c", "_blank");
+  window.open("https://pl26985946.profitableratecpm.com/4f/72/23/4f7223fdcb6a4e69af88b33020832516.js", "_blank");
   const scr = document.createElement("script");
-  scr.src = "//pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js";
+  scr.src = "https://pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js";
   document.body.appendChild(scr);
   startCountdown();
 };
@@ -152,8 +157,8 @@ function spinWheel(){
     msg.style.display = "block";
     setTimeout(() => {
       msg.style.display = "none";
-      updateUI(); // التحقق من المحاولات
-    }, 5000);
+      updateUI();
+    }, 4000);
   }, 5200);
 }
 
