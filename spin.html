@@ -13,6 +13,7 @@
       text-align: center;
       color: #5a189a;
     }
+
     .menu-btn {
       font-size: 30px;
       background: none;
@@ -23,6 +24,7 @@
       cursor: pointer;
       color: #5a189a;
     }
+
     .menu {
       display: none;
       position: absolute;
@@ -33,6 +35,7 @@
       border-radius: 10px;
       padding: 10px;
     }
+
     .menu a {
       display: block;
       margin: 10px 0;
@@ -40,16 +43,19 @@
       font-weight: bold;
       text-decoration: none;
     }
+
     h1 {
       margin-top: 40px;
       font-size: 24px;
     }
+
     .wheel-box {
       position: relative;
       margin: 30px auto;
       width: 280px;
       height: 280px;
     }
+
     .wheel {
       width: 100%;
       height: 100%;
@@ -64,6 +70,7 @@
       transition: transform 5s ease-out;
       position: relative;
     }
+
     .wheel span {
       position: absolute;
       left: 50%;
@@ -73,6 +80,7 @@
       font-size: 18px;
       color: #000;
     }
+
     .wheel span:nth-child(1) { transform: rotate(22.5deg) translate(0, -120px) rotate(-22.5deg); }
     .wheel span:nth-child(2) { transform: rotate(67.5deg) translate(0, -120px) rotate(-67.5deg); }
     .wheel span:nth-child(3) { transform: rotate(112.5deg) translate(0, -120px) rotate(-112.5deg); }
@@ -81,6 +89,7 @@
     .wheel span:nth-child(6) { transform: rotate(247.5deg) translate(0, -120px) rotate(-247.5deg); }
     .wheel span:nth-child(7) { transform: rotate(292.5deg) translate(0, -120px) rotate(-292.5deg); }
     .wheel span:nth-child(8) { transform: rotate(337.5deg) translate(0, -120px) rotate(-337.5deg); }
+
     .pointer {
       width: 0;
       height: 0;
@@ -92,6 +101,7 @@
       left: 50%;
       transform: translateX(-50%);
     }
+
     .spin-btn {
       margin: 20px auto;
       padding: 18px 40px;
@@ -102,6 +112,7 @@
       border-radius: 50px;
       cursor: pointer;
     }
+
     #message {
       background: #d4edda;
       color: #155724;
@@ -112,11 +123,13 @@
       display: none;
       font-weight: bold;
     }
+
     #countdown {
       font-size: 22px;
       margin-top: 10px;
       display: none;
     }
+
     footer {
       margin-top: 20px;
       font-size: 14px;
@@ -177,7 +190,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
-<!-- إعلانات Popunder و SocialBar -->
+<!-- Popunder و SocialBar -->
 <script type='text/javascript' src='//pl26985946.profitableratecpm.com/4f/72/23/4f7223fdcb6a4e69af88b33020832516.js'></script>
 <script type='text/javascript' src='//pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js'></script>
 
@@ -194,9 +207,9 @@
   const auth = firebase.auth(), db = firebase.firestore();
   let currentUser = null;
 
-  auth.onAuthStateChanged(user => {
-    if (!user) location.href = "index.html";
-    currentUser = user;
+  auth.onAuthStateChanged(u => {
+    if (!u) location.href = "index.html";
+    currentUser = u;
   });
 
   const wheel = document.getElementById("wheel");
@@ -205,39 +218,42 @@
   const msg = document.getElementById("message");
 
   const prizes = [2, 2, 5, 5, 10, 10, 100, 100];
-  const angles = [0, 45, 90, 135, 180, 225, 270, 315];
+  const prizeAngles = [0, 45, 90, 135, 180, 225, 270, 315];
 
   watchAdBtn.onclick = () => {
-    // فتح الإعلانات
+    // الإعلانات
     window.open("https://pl26985946.profitableratecpm.com/4f/72/23/4f7223fdcb6a4e69af88b33020832516.js", "_blank");
-    const script = document.createElement("script");
-    script.src = "//pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js";
-    document.body.appendChild(script);
+    const adScript = document.createElement("script");
+    adScript.src = "//pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js";
+    document.body.appendChild(adScript);
 
     // بدء العد التنازلي
-    watchAdBtn.style.display = "none";
-    countdownDiv.style.display = "block";
-    let seconds = 15;
-    countdownDiv.innerText = `⏳ انتظر ${seconds} ثانية...`;
-    const timer = setInterval(() => {
-      seconds--;
-      countdownDiv.innerText = `⏳ انتظر ${seconds} ثانية...`;
-      if (seconds === 0) {
-        clearInterval(timer);
-        countdownDiv.style.display = "none";
-        spin();
-      }
-    }, 1000);
+    startCountdown();
   };
 
-  function spin() {
-    const weighted = [2,2,2,2,2,2,5,5,5,10,10,100];
-    const prize = weighted[Math.floor(Math.random() * weighted.length)];
+  function startCountdown() {
+    watchAdBtn.style.display = "none";
+    countdownDiv.style.display = "block";
+    let counter = 15;
+    countdownDiv.innerText = `⏳ انتظر ${counter} ثانية...`;
+    const interval = setInterval(() => {
+      counter--;
+      countdownDiv.innerText = `⏳ انتظر ${counter} ثانية...`;
+      if (counter <= 0) {
+        clearInterval(interval);
+        countdownDiv.style.display = "none";
+        spinWheel();
+      }
+    }, 1000);
+  }
+
+  function spinWheel() {
+    const weightedPrizes = [2,2,2,2,2,2,5,5,5,10,10,100];
+    const prize = weightedPrizes[Math.floor(Math.random() * weightedPrizes.length)];
     const indexes = prizes.map((v, i) => v === prize ? i : -1).filter(i => i !== -1);
     const selected = indexes[Math.floor(Math.random() * indexes.length)];
-    const angle = angles[selected];
+    const angle = prizeAngles[selected];
     const totalRotation = 360 * 5 + angle + (Math.random() * 30 - 15);
-
     wheel.style.transform = `rotate(${totalRotation}deg)`;
 
     setTimeout(() => {
@@ -260,6 +276,5 @@
     menu.style.display = menu.style.display === "block" ? "none" : "block";
   }
 </script>
-
 </body>
 </html>
