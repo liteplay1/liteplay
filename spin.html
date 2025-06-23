@@ -73,19 +73,22 @@
 
     .wheel span {
       position: absolute;
+      left: 50%;
+      top: 50%;
+      transform-origin: center;
       font-weight: bold;
       font-size: 18px;
-      transform-origin: center;
+      color: #000;
     }
 
-    .wheel span:nth-child(1) { transform: rotate(22.5deg) translate(110px); }
-    .wheel span:nth-child(2) { transform: rotate(67.5deg) translate(110px); }
-    .wheel span:nth-child(3) { transform: rotate(112.5deg) translate(110px); }
-    .wheel span:nth-child(4) { transform: rotate(157.5deg) translate(110px); }
-    .wheel span:nth-child(5) { transform: rotate(202.5deg) translate(110px); }
-    .wheel span:nth-child(6) { transform: rotate(247.5deg) translate(110px); }
-    .wheel span:nth-child(7) { transform: rotate(292.5deg) translate(110px); }
-    .wheel span:nth-child(8) { transform: rotate(337.5deg) translate(110px); }
+    .wheel span:nth-child(1) { transform: rotate(22.5deg) translate(0, -120px) rotate(-22.5deg); }
+    .wheel span:nth-child(2) { transform: rotate(67.5deg) translate(0, -120px) rotate(-67.5deg); }
+    .wheel span:nth-child(3) { transform: rotate(112.5deg) translate(0, -120px) rotate(-112.5deg); }
+    .wheel span:nth-child(4) { transform: rotate(157.5deg) translate(0, -120px) rotate(-157.5deg); }
+    .wheel span:nth-child(5) { transform: rotate(202.5deg) translate(0, -120px) rotate(-202.5deg); }
+    .wheel span:nth-child(6) { transform: rotate(247.5deg) translate(0, -120px) rotate(-247.5deg); }
+    .wheel span:nth-child(7) { transform: rotate(292.5deg) translate(0, -120px) rotate(-292.5deg); }
+    .wheel span:nth-child(8) { transform: rotate(337.5deg) translate(0, -120px) rotate(-337.5deg); }
 
     .pointer {
       width: 0;
