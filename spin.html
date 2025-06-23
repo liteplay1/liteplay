@@ -70,7 +70,9 @@
 
 <!-- Banner -->
 <div style="margin:20px auto;">
-  <script>atOptions={'key':'3ed243f3794f95d81e6b109db6a97221','format':'iframe','height':250,'width':300,'params':{}};</script>
+  <script>
+    atOptions={'key':'3ed243f3794f95d81e6b109db6a97221','format':'iframe','height':250,'width':300,'params':{}};
+  </script>
   <script src="//www.highperformanceformat.com/3ed243f3794f95d81e6b109db6a97221/invoke.js"></script>
 </div>
 
@@ -78,12 +80,14 @@
   📩 mhjobidina@gmail.com © 2025 LitePlay
 </footer>
 
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
-<script type='text/javascript' src='//pl26985946.profitableratecpm.com/4f/72/23/4f7223fdcb6a4e69af88b33020832516.js'></script>
-<script type='text/javascript' src='//pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js'></script>
+<!-- Popunder و SocialBar -->
+<script src='//pl26985946.profitableratecpm.com/4f/72/23/4f7223fdcb6a4e69af88b33020832516.js'></script>
+<script src='//pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js'></script>
 
 <script>
   const firebaseConfig = {
@@ -108,9 +112,11 @@
   const angles = [0,45,90,135,180,225,270,315];
 
   watchAdBtn.onclick = () => {
-    window.open("//pl26985946.profitableratecpm.com/4f/72/23/4f7223fdcb6a4e69af88b33020832516.js","_blank");
+    // فتح كل الإعلانات
+    window.open("https://www.profitableratecpm.com/duvs3dumf?key=dce63c3a8855602cf54b7ba3c34dc55c", "_blank");
+    window.open("//pl26985946.profitableratecpm.com/4f/72/23/4f7223fdcb6a4e69af88b33020832516.js", "_blank");
     const scr = document.createElement("script");
-    scr.src="//pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js";
+    scr.src = "//pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js";
     document.body.appendChild(scr);
     startCountdown();
   };
@@ -128,16 +134,16 @@
   }
 
   function spinWheel(){
-    const weighted = [...Array(97).fill(2),...Array(97).fill(5),10,100];
-    const prize=weighted[Math.floor(Math.random()*weighted.length)];
-    const idxs = prizes.map((v,i)=>v===prize?i:-1).filter(i=>i>=0);
-    const idx=idxs[Math.floor(Math.random()*idxs.length)];
-    const rotateDeg = 360*5 + angles[idx] + (Math.random()*30-15);
+    const weighted = [...Array(97).fill(2), ...Array(97).fill(5), 10, 100];
+    const prize = weighted[Math.floor(Math.random() * weighted.length)];
+    const index = prizes.findIndex((v, i) => v === prize && Math.random() < 1 / prizes.filter(x => x === prize).length);
+    const angle = angles[index >= 0 ? index : 0];
+    const rotateDeg = 360*5 + angle + (Math.random()*30 - 15);
     wheel.style.transform=`rotate(${rotateDeg}deg)`;
 
     setTimeout(()=>{
       db.collection("users").doc(currentUser.uid).update({
-        points:(firebase.firestore.FieldValue.increment(prize))
+        points: firebase.firestore.FieldValue.increment(prize)
       });
       msg.innerText=`⭐️ مبروك! أُضيفت لك ${prize} نقطة`;
       msg.style.display="block";
@@ -150,7 +156,7 @@
 
   function toggleMenu(){
     const m=document.getElementById("sideMenu");
-    m.style.display=m.style.display==="block"?"none":"block";
+    m.style.display = m.style.display==="block" ? "none" : "block";
   }
 </script>
 </body>
