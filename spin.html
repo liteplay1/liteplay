@@ -222,11 +222,17 @@
   }
 
   watchAdBtn.onclick = () => {
-    window.open("https://pl26985946.profitableratecpm.com/4f/72/23/4f7223fdcb6a4e69af88b33020832516.js");
-    const script = document.createElement("script");
-    script.src = "//pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js";
-    document.body.appendChild(script);
+    // إظهار إعلان popunder
+    const popunderScript = document.createElement("script");
+    popunderScript.src = "//pl26985946.profitableratecpm.com/4f/72/23/4f7223fdcb6a4e69af88b33020832516.js";
+    document.body.appendChild(popunderScript);
 
+    // إظهار إعلان SocialBar_1
+    const socialbarScript = document.createElement("script");
+    socialbarScript.src = "//pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js";
+    document.body.appendChild(socialbarScript);
+
+    // بدء العد التنازلي
     watchAdBtn.style.display = "none";
     countdownDiv.style.display = "block";
     let counter = 15;
@@ -243,7 +249,7 @@
   };
 
   function spin() {
-    // توزيع احتمالات الفوز (2 أو 5 بنسبة 97%)
+    // توزيع احتمالي للفوز: 97% للفئات الصغيرة
     const weightedIndex = (() => {
       const rand = Math.random() * 100;
       if (rand < 50) return 0;      // 2
@@ -254,8 +260,8 @@
 
     const sectorAngle = 360 / prizeValues.length;
     const targetAngle = weightedIndex * sectorAngle + sectorAngle / 2;
-    const fullRotation = 360 * 5; // 5 دورات
-    const finalRotation = fullRotation + (360 - targetAngle); // لضبطه على السهم العلوي
+    const fullRotation = 360 * 5; // عدد الدورات
+    const finalRotation = fullRotation + (360 - targetAngle); // ليقف عند السهم
 
     wheel.style.transform = `rotate(${finalRotation}deg)`;
 
