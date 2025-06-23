@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>🎯 عجلة الحظ</title>
   <style>
@@ -97,9 +97,10 @@
       border-right: 20px solid transparent;
       border-bottom: 30px solid #ff6ec7;
       position: absolute;
-      top: -35px;
+      top: -30px;
       left: 50%;
       transform: translateX(-50%);
+      z-index: 10;
     }
 
     .spin-btn {
@@ -213,6 +214,8 @@
   const countdownDiv = document.getElementById("countdown");
   const msg = document.getElementById("message");
 
+  const prizeValues = [2, 2, 5, 5, 10, 10, 100, 100];
+
   function toggleMenu() {
     const menu = document.getElementById("sideMenu");
     menu.style.display = menu.style.display === "block" ? "none" : "block";
@@ -240,10 +243,23 @@
   };
 
   function spin() {
-    const prizes = [2, 2, 5, 5, 10, 10, 100, 100];
-    const prize = prizes[Math.floor(Math.random() * prizes.length)];
-    const rotation = 3600 + Math.floor(Math.random() * 360);
-    wheel.style.transform = `rotate(${rotation}deg)`;
+    // توزيع احتمالات الفوز (2 أو 5 بنسبة 97%)
+    const weightedIndex = (() => {
+      const rand = Math.random() * 100;
+      if (rand < 50) return 0;      // 2
+      if (rand < 80) return 2;      // 5
+      if (rand < 93) return 4;      // 10
+      return 6;                     // 100
+    })();
+
+    const sectorAngle = 360 / prizeValues.length;
+    const targetAngle = weightedIndex * sectorAngle + sectorAngle / 2;
+    const fullRotation = 360 * 5; // 5 دورات
+    const finalRotation = fullRotation + (360 - targetAngle); // لضبطه على السهم العلوي
+
+    wheel.style.transform = `rotate(${finalRotation}deg)`;
+
+    const prize = prizeValues[weightedIndex];
 
     setTimeout(() => {
       db.collection("users").doc(currentUser.uid).get().then(doc => {
