@@ -49,24 +49,40 @@
 
 <div class="desc">🎯 أكمل عرضًا واحدًا على الأقل لتحصل على نقاطك!</div>
 
-<div class="locker-box">
-  <!-- سكربت OGAds لعرض العروض -->
-  <script type="text/javascript" id="ogjs" src="https://locked2.com/cl/js/po8p1n"></script>
-  <script>
-    // تشغيل القفل تلقائيًا عند تحميل الصفحة
-    window.onload = function () {
-      if (typeof og_load === "function") {
-        og_load();
-      }
-    };
-  </script>
+<div class="locker-box" id="lockerContainer">
+  <!-- هنا سيتم إدخال السكربت لاحقًا -->
+  ⏳ جاري تحميل العروض...
 </div>
 
 <footer>📩 mhjobidina@gmail.com © 2025 LitePlay</footer>
 
-<!-- تحضير للربط مع Firebase -->
-<!-- لاحقًا نضيف كود Firebase هنا لتحديث النقاط عند إتمام العرض -->
-<!-- مثال: firebase.firestore().collection("users").doc(currentUser.uid).update({ points: ... }) -->
+<!-- Firebase Auth -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+<script>
+  // إعداد Firebase (تأكد إنها نفس البيانات الموجودة عندك)
+  const firebaseConfig = {
+    apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
+    authDomain: "litplay-b3177.firebaseapp.com",
+    projectId: "litplay-b3177"
+  };
+  firebase.initializeApp(firebaseConfig);
+
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      const uid = user.uid; // هذا هو subid
+      const script = document.createElement("script");
+      script.type = "text/javascript";
+      script.id = "ogjs";
+      script.src = `https://locked2.com/cl/js/po8p1n?subid=${uid}`;
+      document.getElementById("lockerContainer").innerHTML = "";
+      document.getElementById("lockerContainer").appendChild(script);
+    } else {
+      window.location.href = "index.html"; // إعادة التوجيه إذا ما فيه تسجيل دخول
+    }
+  });
+</script>
 
 </body>
 </html>
