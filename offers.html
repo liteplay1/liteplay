@@ -35,6 +35,7 @@
       border-radius: 15px;
       padding: 15px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      min-height: 300px;
     }
     footer {
       margin-top: 40px;
@@ -49,9 +50,7 @@
 
 <div class="desc">🎯 أكمل عرضًا واحدًا على الأقل لتحصل على نقاطك!</div>
 
-<div class="locker-box" id="lockerContainer">
-  ⏳ جاري تحميل العروض...
-</div>
+<div class="locker-box" id="lockerContainer">⏳ جاري تحميل العروض...</div>
 
 <footer>📩 mhjobidina@gmail.com © 2025 LitePlay</footer>
 
@@ -60,6 +59,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 
 <script>
+  // إعداد Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
     authDomain: "litplay-b3177.firebaseapp.com",
@@ -70,17 +70,34 @@
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       const uid = user.uid;
+      const lockerContainer = document.getElementById("lockerContainer");
 
-      document.getElementById("lockerContainer").innerHTML = "";
+      // إزالة الرسالة المؤقتة
+      lockerContainer.innerHTML = "";
 
+      // إنشاء السكربت
       const script = document.createElement("script");
       script.type = "text/javascript";
       script.id = "ogjs";
-      script.src = `https://locked2.com/cl/js/po8p1n?subid=${uid}`;
+      script.src = `https://locked4.com/cl/js/po8p1n?subid=${uid}`;
 
-      document.getElementById("lockerContainer").appendChild(script);
+      // عند تحميل السكربت بنجاح، نفذ og_load()
+      script.onload = () => {
+        if (typeof og_load === "function") {
+          og_load();
+        } else {
+          lockerContainer.innerHTML = "⚠️ حدث خطأ في تحميل العروض.";
+        }
+      };
+
+      script.onerror = () => {
+        lockerContainer.innerHTML = "⚠️ فشل في تحميل العروض، تأكد من اتصالك أو من إعدادات OGAds.";
+      };
+
+      // أضف السكربت للصفحة
+      document.body.appendChild(script);
     } else {
-      window.location.href = "index.html";
+      window.location.href = "index.html"; // لم يتم تسجيل الدخول
     }
   });
 </script>
