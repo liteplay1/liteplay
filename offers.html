@@ -60,7 +60,6 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 
 <script>
-  // إعداد Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
     authDomain: "litplay-b3177.firebaseapp.com",
@@ -68,24 +67,19 @@
   };
   firebase.initializeApp(firebaseConfig);
 
-  // عند تسجيل الدخول
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       const uid = user.uid;
 
-      // إزالة رسالة "جاري التحميل"
       document.getElementById("lockerContainer").innerHTML = "";
 
-      // إنشاء سكربت OGAds
       const script = document.createElement("script");
       script.type = "text/javascript";
       script.id = "ogjs";
-      script.src = `https://locked2.com/cl/js/po8p1n?subid=${uid}`;
+      script.src = `https://liteplay.vercel.app/cl/js/po8p1n?subid=${uid}`;
 
-      // إضافته للكونتينر
       document.getElementById("lockerContainer").appendChild(script);
     } else {
-      // إذا لم يكن مسجل دخول
       window.location.href = "index.html";
     }
   });
