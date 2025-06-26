@@ -2,124 +2,22 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🎯 عجلة الحظ</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom right, #ffe4f2, #c8d1ff);
-      font-family: 'Comic Sans MS', cursive;
-      text-align: center;
-      color: #5a189a;
-    }
-    .menu-btn {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      font-size: 30px;
-      background: none;
-      border: none;
-      color: #5a189a;
-      cursor: pointer;
-    }
-    .menu {
-      display: none;
-      position: absolute;
-      top: 50px;
-      left: 10px;
-      background: #fff;
-      border: 2px dashed #ccc;
-      border-radius: 10px;
-      padding: 10px;
-    }
-    .menu a {
-      display: block;
-      margin: 10px 0;
-      color: #5a189a;
-      font-weight: bold;
-      text-decoration: none;
-    }
-    .wheel-box {
-      position: relative;
-      margin: 30px auto;
-      width: 280px;
-      height: 280px;
-    }
-    .wheel {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      border: 8px solid #fff;
-      background: conic-gradient(#ffb3c1 0deg 45deg, #ffc09f 45deg 90deg, #baffc9 90deg 135deg, #a0c4ff 135deg 180deg,
-        #ffb3c1 180deg 225deg, #ffc09f 225deg 270deg, #baffc9 270deg 315deg, #a0c4ff 315deg 360deg);
-      transition: transform 5s cubic-bezier(0.33, 1, 0.68, 1);
-      position: relative;
-    }
-    .wheel span {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform-origin: center;
-      font-weight: bold;
-      font-size: 18px;
-      color: #000;
-    }
-    .wheel span:nth-child(1) { transform: rotate(22.5deg) translate(0,-120px) rotate(-22.5deg); }
-    .wheel span:nth-child(2) { transform: rotate(67.5deg) translate(0,-120px) rotate(-67.5deg); }
-    .wheel span:nth-child(3) { transform: rotate(112.5deg) translate(0,-120px) rotate(-112.5deg); }
-    .wheel span:nth-child(4) { transform: rotate(157.5deg) translate(0,-120px) rotate(-157.5deg); }
-    .wheel span:nth-child(5) { transform: rotate(202.5deg) translate(0,-120px) rotate(-202.5deg); }
-    .wheel span:nth-child(6) { transform: rotate(247.5deg) translate(0,-120px) rotate(-247.5deg); }
-    .wheel span:nth-child(7) { transform: rotate(292.5deg) translate(0,-120px) rotate(-292.5deg); }
-    .wheel span:nth-child(8) { transform: rotate(337.5deg) translate(0,-120px) rotate(-337.5deg); }
-    .pointer {
-      width: 0;
-      height: 0;
-      border-left: 20px solid transparent;
-      border-right: 20px solid transparent;
-      border-bottom: 30px solid #ff6ec7;
-      position: absolute;
-      top: -35px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-    .spin-btn {
-      margin: 20px auto;
-      padding: 18px 40px;
-      font-size: 22px;
-      background-color: #ff6ec7;
-      color: #fff;
-      border: 3px dashed #fff;
-      border-radius: 50px;
-      cursor: pointer;
-    }
-    #message {
-      background: #d4edda;
-      color: #155724;
-      padding: 15px;
-      margin: 20px auto;
-      width: 80%;
-      border-radius: 10px;
-      display: none;
-      font-weight: bold;
-    }
-    #countdown {
-      font-size: 22px;
-      margin-top: 10px;
-      display: none;
-    }
-    #exoVideoContainer {
-      width: 100%;
-      max-width: 400px;
-      margin: 20px auto;
-      display: none;
-    }
-    footer {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #666;
-    }
+    body { margin:0; padding:0; background:linear-gradient(to bottom right,#ffe4f2,#c8d1ff); font-family:'Comic Sans MS',cursive; text-align:center; color:#5a189a }
+    .menu-btn { position:absolute; top:10px; left:10px; font-size:30px; background:none; border:none; color:#5a189a; cursor:pointer }
+    .menu { display:none; position:absolute; top:50px; left:10px; background:#fff; border:2px dashed #ccc; border-radius:10px; padding:10px }
+    .menu a { display:block; margin:10px 0; color:#5a189a; font-weight:bold; text-decoration:none }
+    .wheel-box { position:relative; margin:30px auto; width:280px; height:280px }
+    .wheel { width:100%; height:100%; border-radius:50%; border:8px solid #fff; background: conic-gradient(#ffb3c1 0deg 45deg,#ffc09f 45deg 90deg,#baffc9 90deg 135deg,#a0c4ff 135deg 180deg,#ffb3c1 180deg 225deg,#ffc09f 225deg 270deg,#baffc9 270deg 315deg,#a0c4ff 315deg 360deg); transition: transform 5s cubic-bezier(0.33,1,0.68,1); position:relative }
+    .wheel span { position:absolute; left:50%; top:50%; transform-origin:center; font-weight:bold; font-size:18px; color:#000 }
+    .pointer { width:0; height:0; border-left:20px solid transparent; border-right:20px solid transparent; border-bottom:30px solid #ff6ec7; position:absolute; top:-35px; left:50%; transform:translateX(-50%) }
+    .spin-btn { margin:20px auto; padding:18px 40px; font-size:22px; background-color:#ff6ec7; color:#fff; border:3px dashed #fff; border-radius:50px; cursor:pointer }
+    #message { background:#d4edda; color:#155724; padding:15px; margin:20px auto; width:80%; border-radius:10px; display:none; font-weight:bold }
+    #countdown { font-size:22px; margin-top:10px; display:none }
+    #exoVideoContainer { width:100%; max-width:400px; margin:20px auto; display:none }
+    footer { margin-top:20px; font-size:14px; color:#666 }
   </style>
 </head>
 <body>
@@ -140,19 +38,18 @@
 </div>
 
 <div id="exoVideoContainer">
-  <!-- إعلان الفيديو من ExoClick -->
-  <script async type="application/javascript" src="https://a.magsrv.com/ad-provider.js"></script>
-  <ins class="eas6a97888e37" data-zoneid="5656096"></ins>
-  <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
+  <script async src="https://a.magsrv.com/ad-provider.js"></script>
+  <ins class="eas6a97888e37" data-zoneid="5656096" style="display:inline-block;width:100%;height:250px;"></ins>
+  <script> (AdProvider = window.AdProvider || []).push({"serve": {}}); </script>
 </div>
 
 <div id="message"></div>
 <div id="countdown"></div>
+
 <button class="spin-btn" id="watchAdBtn">▶️ شاهد الإعلان</button>
 
-<footer>📩 mhjobidina@gmail.com © 2025 LitePlay</footer>
+<footer>📩 mhjobidina@gmail.com © 2025 LitePlay</footer>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
@@ -171,6 +68,7 @@ const wheel = document.getElementById("wheel");
 const btn = document.getElementById("watchAdBtn");
 const cnt = document.getElementById("countdown");
 const msg = document.getElementById("message");
+const videoContainer = document.getElementById("exoVideoContainer");
 
 const prizes = [2,2,5,5,10,10,100,100];
 const angles = [0,45,90,135,180,225,270,315];
@@ -180,25 +78,21 @@ let currentUser = null, tries = 0, resetTime = 0;
 auth.onAuthStateChanged(async user => {
   if (!user) return location.href = "index.html";
   currentUser = user;
-  const docRef = db.collection("spins").doc(user.uid);
+  const ref = db.collection("spins").doc(user.uid);
   const now = Date.now();
-  const doc = await docRef.get();
-
+  const doc = await ref.get();
   if (!doc.exists || doc.data().reset < now) {
-    await docRef.set({ tries: 0, reset: now + 86400000 });
-    tries = 0;
-    resetTime = now + 86400000;
+    await ref.set({tries: 0, reset: now + 86400000});
+    tries = 0; resetTime = now + 86400000;
   } else {
-    tries = doc.data().tries;
-    resetTime = doc.data().reset;
+    tries = doc.data().tries; resetTime = doc.data().reset;
   }
-
   updateUI();
 });
 
 btn.onclick = () => {
   if (tries >= 10) return;
-  document.getElementById("exoVideoContainer").style.display = "block";
+  videoContainer.style.display = "block";
   startCountdown();
 };
 
@@ -213,42 +107,30 @@ function startCountdown(){
     if (sec <= 0) {
       clearInterval(timer);
       cnt.style.display = "none";
-      document.getElementById("exoVideoContainer").style.display = "none";
+      videoContainer.style.display = "none";
       spinWheel();
     }
   }, 1000);
 }
 
-function spinWheel(){
-  const weighted = [...Array(97).fill(2), ...Array(97).fill(5), 10, 100];
-  const prize = weighted[Math.floor(Math.random() * weighted.length)];
-  const indexOptions = prizes.map((val, i) => val === prize ? i : -1).filter(i => i !== -1);
-  const finalIndex = indexOptions[Math.floor(Math.random() * indexOptions.length)];
-  const finalAngle = angles[finalIndex];
-  const rotateDeg = 360 * 5 + finalAngle;
-  wheel.style.transform = `rotate(${rotateDeg}deg)`;
-
+async function spinWheel(){
+  const prize = ([...Array(97).fill(2),...Array(97).fill(5),10,100])[Math.floor(Math.random()*200)];
+  const idx = prizes.map((v,i)=>v===prize?i:-1).filter(i=>i>=0)[0];
+  wheel.style.transform = `rotate(${360*5 + angles[idx]}deg)`;
   setTimeout(async () => {
-    await db.collection("users").doc(currentUser.uid).update({
-      points: firebase.firestore.FieldValue.increment(prize)
-    });
-    await db.collection("spins").doc(currentUser.uid).update({
-      tries: firebase.firestore.FieldValue.increment(1)
-    });
+    await db.collection("users").doc(currentUser.uid).update({points: firebase.firestore.FieldValue.increment(prize)});
+    await db.collection("spins").doc(currentUser.uid).update({tries: firebase.firestore.FieldValue.increment(1)});
     tries++;
     msg.innerText = `⭐️ مبروك! حصلت على ${prize} نقطة`;
     msg.style.display = "block";
-    setTimeout(() => {
-      msg.style.display = "none";
-      updateUI();
-    }, 4000);
+    setTimeout(() => { msg.style.display = "none"; updateUI(); }, 4000);
   }, 5200);
 }
 
 function updateUI(){
   if (tries >= 10) {
     const remain = Math.max(0, resetTime - Date.now());
-    const h = Math.floor(remain / 3600000), m = Math.floor(remain / 60000) % 60, s = Math.floor(remain / 1000) % 60;
+    const h = Math.floor(remain/3600000), m = Math.floor(remain/60000)%60, s = Math.floor(remain/1000)%60;
     cnt.innerText = `⏳ حاول بعد ${h}h ${m}m ${s}s`;
     cnt.style.display = "block";
     btn.style.display = "none";
@@ -261,7 +143,7 @@ function updateUI(){
 
 function toggleMenu(){
   const m = document.getElementById("sideMenu");
-  m.style.display = m.style.display === "block" ? "none" : "block";
+  m.style.display = m.style.display==="block"?"none":"block";
 }
 </script>
 </body>
