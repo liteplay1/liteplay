@@ -5,33 +5,120 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>🎯 عجلة الحظ</title>
   <style>
-    body{margin:0;padding:0;background:linear-gradient(to bottom right,#ffe4f2,#c8d1ff);
-      font-family:'Comic Sans MS',cursive;text-align:center;color:#5a189a}
-    .menu-btn{position:absolute;top:10px;left:10px;font-size:30px;background:none;border:none;color:#5a189a;cursor:pointer}
-    .menu{display:none;position:absolute;top:50px;left:10px;background:#fff;border:2px dashed #ccc;border-radius:10px;padding:10px}
-    .menu a{display:block;margin:10px 0;color:#5a189a;font-weight:bold;text-decoration:none}
-    .wheel-box{position:relative;margin:30px auto;width:280px;height:280px}
-    .wheel{width:100%;height:100%;border-radius:50%;border:8px solid #fff;
-      background:conic-gradient(#ffb3c1 0deg 45deg, #ffc09f 45deg 90deg, #baffc9 90deg 135deg, #a0c4ff 135deg 180deg,
-      #ffb3c1 180deg 225deg, #ffc09f 225deg 270deg, #baffc9 270deg 315deg, #a0c4ff 315deg 360deg);
-      transition: transform 5s cubic-bezier(0.33,1,0.68,1);position:relative}
-    .wheel span{position:absolute;left:50%;top:50%;transform-origin:center;font-weight:bold;font-size:18px;color:#000}
-    .wheel span:nth-child(1){transform:rotate(22.5deg) translate(0,-120px) rotate(-22.5deg);}
-    .wheel span:nth-child(2){transform:rotate(67.5deg) translate(0,-120px) rotate(-67.5deg);}
-    .wheel span:nth-child(3){transform:rotate(112.5deg) translate(0,-120px) rotate(-112.5deg);}
-    .wheel span:nth-child(4){transform:rotate(157.5deg) translate(0,-120px) rotate(-157.5deg);}
-    .wheel span:nth-child(5){transform:rotate(202.5deg) translate(0,-120px) rotate(-202.5deg);}
-    .wheel span:nth-child(6){transform:rotate(247.5deg) translate(0,-120px) rotate(-247.5deg);}
-    .wheel span:nth-child(7){transform:rotate(292.5deg) translate(0,-120px) rotate(-292.5deg);}
-    .wheel span:nth-child(8){transform:rotate(337.5deg) translate(0,-120px) rotate(-337.5deg);}
-    .pointer{width:0;height:0;border-left:20px solid transparent;border-right:20px solid transparent;
-      border-bottom:30px solid #ff6ec7;position:absolute;top:-35px;left:50%;transform:translateX(-50%)}
-    .spin-btn{margin:20px auto;padding:18px 40px;font-size:22px;background-color:#ff6ec7;color:#fff;
-      border:3px dashed #fff;border-radius:50px;cursor:pointer}
-    #message{background:#d4edda;color:#155724;padding:15px;margin:20px auto;width:80%;border-radius:10px;
-      display:none;font-weight:bold}
-    #countdown{font-size:22px;margin-top:10px;display:none}
-    footer{margin-top:20px;font-size:14px;color:#666}
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom right, #ffe4f2, #c8d1ff);
+      font-family: 'Comic Sans MS', cursive;
+      text-align: center;
+      color: #5a189a;
+    }
+    .menu-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 30px;
+      background: none;
+      border: none;
+      color: #5a189a;
+      cursor: pointer;
+    }
+    .menu {
+      display: none;
+      position: absolute;
+      top: 50px;
+      left: 10px;
+      background: #fff;
+      border: 2px dashed #ccc;
+      border-radius: 10px;
+      padding: 10px;
+    }
+    .menu a {
+      display: block;
+      margin: 10px 0;
+      color: #5a189a;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .wheel-box {
+      position: relative;
+      margin: 30px auto;
+      width: 280px;
+      height: 280px;
+    }
+    .wheel {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 8px solid #fff;
+      background: conic-gradient(#ffb3c1 0deg 45deg, #ffc09f 45deg 90deg, #baffc9 90deg 135deg, #a0c4ff 135deg 180deg,
+        #ffb3c1 180deg 225deg, #ffc09f 225deg 270deg, #baffc9 270deg 315deg, #a0c4ff 315deg 360deg);
+      transition: transform 5s cubic-bezier(0.33, 1, 0.68, 1);
+      position: relative;
+    }
+    .wheel span {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform-origin: center;
+      font-weight: bold;
+      font-size: 18px;
+      color: #000;
+    }
+    .wheel span:nth-child(1) { transform: rotate(22.5deg) translate(0,-120px) rotate(-22.5deg); }
+    .wheel span:nth-child(2) { transform: rotate(67.5deg) translate(0,-120px) rotate(-67.5deg); }
+    .wheel span:nth-child(3) { transform: rotate(112.5deg) translate(0,-120px) rotate(-112.5deg); }
+    .wheel span:nth-child(4) { transform: rotate(157.5deg) translate(0,-120px) rotate(-157.5deg); }
+    .wheel span:nth-child(5) { transform: rotate(202.5deg) translate(0,-120px) rotate(-202.5deg); }
+    .wheel span:nth-child(6) { transform: rotate(247.5deg) translate(0,-120px) rotate(-247.5deg); }
+    .wheel span:nth-child(7) { transform: rotate(292.5deg) translate(0,-120px) rotate(-292.5deg); }
+    .wheel span:nth-child(8) { transform: rotate(337.5deg) translate(0,-120px) rotate(-337.5deg); }
+    .pointer {
+      width: 0;
+      height: 0;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 30px solid #ff6ec7;
+      position: absolute;
+      top: -35px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .spin-btn {
+      margin: 20px auto;
+      padding: 18px 40px;
+      font-size: 22px;
+      background-color: #ff6ec7;
+      color: #fff;
+      border: 3px dashed #fff;
+      border-radius: 50px;
+      cursor: pointer;
+    }
+    #message {
+      background: #d4edda;
+      color: #155724;
+      padding: 15px;
+      margin: 20px auto;
+      width: 80%;
+      border-radius: 10px;
+      display: none;
+      font-weight: bold;
+    }
+    #countdown {
+      font-size: 22px;
+      margin-top: 10px;
+      display: none;
+    }
+    #exoVideoContainer {
+      width: 100%;
+      max-width: 400px;
+      margin: 20px auto;
+    }
+    footer {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #666;
+    }
   </style>
 </head>
 <body>
@@ -51,11 +138,13 @@
   </div>
 </div>
 
+<div id="exoVideoContainer"></div>
+
 <div id="message"></div>
 <div id="countdown"></div>
 <button class="spin-btn" id="watchAdBtn">▶️ شاهد الإعلان</button>
 
-<!-- Banner -->
+<!-- إعلان بنري -->
 <div style="margin:20px auto;">
   <script>
     atOptions = {'key':'3ed243f3794f95d81e6b109db6a97221','format':'iframe','height':250,'width':300,'params':{}};
@@ -110,13 +199,19 @@ auth.onAuthStateChanged(async user => {
 });
 
 btn.onclick = () => {
-  if (tries >= 5) return;
-  // فتح الإعلانات
+  if (tries >= 10) return;
+
+  // إعلان الفيديو من ExoClick
+  document.getElementById("exoVideoContainer").style.display = "block";
+
+  // فتح إعلانات Popunder
   window.open("https://www.profitableratecpm.com/duvs3dumf?key=dce63c3a8855602cf54b7ba3c34dc55c", "_blank");
   window.open("https://pl26985946.profitableratecpm.com/4f/72/23/4f7223fdcb6a4e69af88b33020832516.js", "_blank");
   const scr = document.createElement("script");
   scr.src = "https://pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js";
   document.body.appendChild(scr);
+
+  // العد التنازلي حتى دوران العجلة
   startCountdown();
 };
 
@@ -131,6 +226,7 @@ function startCountdown(){
     if (sec <= 0) {
       clearInterval(timer);
       cnt.style.display = "none";
+      document.getElementById("exoVideoContainer").style.display = "none";
       spinWheel();
     }
   }, 1000);
@@ -163,7 +259,7 @@ function spinWheel(){
 }
 
 function updateUI(){
-  if (tries >= 5) {
+  if (tries >= 10) {
     const remain = Math.max(0, resetTime - Date.now());
     const h = Math.floor(remain / 3600000), m = Math.floor(remain / 60000) % 60, s = Math.floor(remain / 1000) % 60;
     cnt.innerText = `⏳ حاول بعد ${h}h ${m}m ${s}s`;
@@ -181,5 +277,11 @@ function toggleMenu(){
   m.style.display = m.style.display === "block" ? "none" : "block";
 }
 </script>
+
+<!-- كود إعلان ExoClick Video -->
+<script async type="application/javascript" src="https://a.magsrv.com/ad-provider.js"></script>
+<ins class="eas6a97888e37" data-zoneid="5656096" data-container="#exoVideoContainer"></ins>
+<script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
+
 </body>
 </html>
