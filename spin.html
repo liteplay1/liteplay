@@ -113,6 +113,7 @@
       width: 100%;
       max-width: 400px;
       margin: 20px auto;
+      display: none;
     }
     footer {
       margin-top: 20px;
@@ -138,19 +139,16 @@
   </div>
 </div>
 
-<div id="exoVideoContainer"></div>
+<div id="exoVideoContainer">
+  <!-- إعلان الفيديو من ExoClick -->
+  <script async type="application/javascript" src="https://a.magsrv.com/ad-provider.js"></script>
+  <ins class="eas6a97888e37" data-zoneid="5656096"></ins>
+  <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
+</div>
 
 <div id="message"></div>
 <div id="countdown"></div>
 <button class="spin-btn" id="watchAdBtn">▶️ شاهد الإعلان</button>
-
-<!-- إعلان بنري -->
-<div style="margin:20px auto;">
-  <script>
-    atOptions = {'key':'3ed243f3794f95d81e6b109db6a97221','format':'iframe','height':250,'width':300,'params':{}};
-  </script>
-  <script src="//www.highperformanceformat.com/3ed243f3794f95d81e6b109db6a97221/invoke.js"></script>
-</div>
 
 <footer>📩 mhjobidina@gmail.com © 2025 LitePlay</footer>
 
@@ -200,18 +198,7 @@ auth.onAuthStateChanged(async user => {
 
 btn.onclick = () => {
   if (tries >= 10) return;
-
-  // إعلان الفيديو من ExoClick
   document.getElementById("exoVideoContainer").style.display = "block";
-
-  // فتح إعلانات Popunder
-  window.open("https://www.profitableratecpm.com/duvs3dumf?key=dce63c3a8855602cf54b7ba3c34dc55c", "_blank");
-  window.open("https://pl26985946.profitableratecpm.com/4f/72/23/4f7223fdcb6a4e69af88b33020832516.js", "_blank");
-  const scr = document.createElement("script");
-  scr.src = "https://pl26985968.profitableratecpm.com/83/cd/dc/83cddcda91c345acde318f091b55cfff.js";
-  document.body.appendChild(scr);
-
-  // العد التنازلي حتى دوران العجلة
   startCountdown();
 };
 
@@ -277,11 +264,5 @@ function toggleMenu(){
   m.style.display = m.style.display === "block" ? "none" : "block";
 }
 </script>
-
-<!-- كود إعلان ExoClick Video -->
-<script async type="application/javascript" src="https://a.magsrv.com/ad-provider.js"></script>
-<ins class="eas6a97888e37" data-zoneid="5656096" data-container="#exoVideoContainer"></ins>
-<script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
-
 </body>
 </html>
