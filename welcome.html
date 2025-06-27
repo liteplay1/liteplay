@@ -159,7 +159,7 @@
 <button class="button" onclick="window.location.href='withdraw.html'">💰 تلقي أرباحك</button>
 <button class="button" onclick="window.location.href='skip.html'">⏭️ تخطي الروابط</button>
 <button class="button" onclick="window.location.href='spin.html'">🎯 Spin</button>
-<button class="button" onclick="window.location.href='offers.html'">🎁 عروض LitePlay</button> <!-- ✅ الزر الجديد -->
+<button class="button" onclick="window.location.href='offers.html'">🎁 عروض LitePlay</button>
 
 <div id="ad">
   <script type="text/javascript">
@@ -214,6 +214,51 @@
     menu.style.display = menu.style.display === "block" ? "none" : "block";
   }
 
+  async function fetchCompletedOffersAndAddPoints(user) {
+    const userRef = db.collection("users").doc(user.uid);
+    const userDoc = await userRef.get();
+    const userData = userDoc.exists ? userDoc.data() : { points: 0, completedOffers: [] };
+
+    const apiKey = "33028|D3c7Phd1QlEySggn3jtY8cgpITRDaq8l27zyUl6Hd509bdf8";
+    const endpoint = `https://unlockcontent.net/api/v2/conversions?subid=${user.uid}`;
+
+    try {
+      const response = await fetch(endpoint, {
+        headers: {
+          "Authorization": `Bearer ${apiKey}`
+        }
+      });
+
+      const result = await response.json();
+
+      if (!Array.isArray(result)) {
+        console.error("❌ تنسيق غير صحيح", result);
+        return;
+      }
+
+      let newPoints = 0;
+      let newCompleted = [];
+
+      for (const offer of result) {
+        if (!userData.completedOffers?.includes(offer.conversion_id)) {
+          newPoints += parseFloat(offer.payout);
+          newCompleted.push(offer.conversion_id);
+        }
+      }
+
+      if (newPoints > 0) {
+        await userRef.update({
+          points: firebase.firestore.FieldValue.increment(newPoints),
+          completedOffers: firebase.firestore.FieldValue.arrayUnion(...newCompleted)
+        });
+        console.log(`✅ تمت إضافة ${newPoints} نقاط`);
+      }
+
+    } catch (error) {
+      console.error("❌ فشل في جلب البيانات:", error);
+    }
+  }
+
   auth.onAuthStateChanged(async (user) => {
     if (!user) {
       window.location.href = "index.html";
@@ -258,6 +303,9 @@
           }
         }
       });
+
+      // ✅ إضافة النقاط تلقائيًا عند العودة من العروض
+      await fetchCompletedOffersAndAddPoints(user);
 
     } catch (error) {
       console.error("فشل في جلب النقاط:", error);
