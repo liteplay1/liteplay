@@ -37,6 +37,11 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       min-height: 300px;
     }
+    #errorMsg {
+      color: red;
+      font-weight: bold;
+      margin-top: 20px;
+    }
     footer {
       margin-top: 40px;
       font-size: 14px;
@@ -50,16 +55,18 @@
 
 <div class="desc">🎯 أكمل عرضًا واحدًا على الأقل لتحصل على نقاطك!</div>
 
-<div class="locker-box" id="lockerContainer">⏳ جاري تحميل العروض...</div>
+<div class="locker-box" id="lockerContainer">
+  ⏳ جاري تحميل العروض...
+</div>
+<div id="errorMsg"></div>
 
 <footer>📩 mhjobidina@gmail.com © 2025 LitePlay</footer>
 
-<!-- Firebase Auth -->
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 
 <script>
-  // إعداد Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
     authDomain: "litplay-b3177.firebaseapp.com",
@@ -68,36 +75,39 @@
   firebase.initializeApp(firebaseConfig);
 
   firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-      const uid = user.uid;
-      const lockerContainer = document.getElementById("lockerContainer");
+    if (!user) {
+      window.location.href = "index.html";
+      return;
+    }
 
-      // إزالة الرسالة المؤقتة
-      lockerContainer.innerHTML = "";
+    const uid = user.uid;
+    const container = document.getElementById("lockerContainer");
+    const errorMsg = document.getElementById("errorMsg");
 
-      // إنشاء السكربت
+    // حذف المحتوى المؤقت
+    container.innerHTML = "";
+
+    // لا تكرر تحميل السكربت إذا تم تحميله سابقًا
+    if (!document.getElementById("ogjs")) {
       const script = document.createElement("script");
-      script.type = "text/javascript";
       script.id = "ogjs";
+      script.type = "text/javascript";
       script.src = `https://locked4.com/cl/js/po8p1n?subid=${uid}`;
 
-      // عند تحميل السكربت بنجاح، نفذ og_load()
       script.onload = () => {
         if (typeof og_load === "function") {
           og_load();
         } else {
-          lockerContainer.innerHTML = "⚠️ حدث خطأ في تحميل العروض.";
+          container.innerHTML = "⚠️ تعذر تحميل العروض.";
         }
       };
 
       script.onerror = () => {
-        lockerContainer.innerHTML = "⚠️ فشل في تحميل العروض، تأكد من اتصالك أو من إعدادات OGAds.";
+        container.innerHTML = "";
+        errorMsg.textContent = "⚠️ فشل في تحميل العروض، تحقق من اتصالك أو إعدادات OGAds.";
       };
 
-      // أضف السكربت للصفحة
       document.body.appendChild(script);
-    } else {
-      window.location.href = "index.html"; // لم يتم تسجيل الدخول
     }
   });
 </script>
