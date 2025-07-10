@@ -4,6 +4,6 @@
   "description": "LitePlay Project",
   "main": "index.js",
   "dependencies": {
-    "firebase-admin": "^12.0.0"
+    "firebase-admin": "^11.10.1"
   }
 }
