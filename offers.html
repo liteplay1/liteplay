@@ -71,11 +71,11 @@
 
 <header>🌟 LitePlay</header>
 
-<div class="desc">🎯 اختر شركة العروض ثم أكمل عرضًا واحدًا للحصول على النقاط!</div>
+<div class="desc">🎯 اختر شركة العروض ثم أكمل عرضًا للحصول على النقاط!</div>
 
 <div class="buttons">
   <button onclick="showOgads()">🔒 عروض OGAds</button>
-  <button onclick="showCpagrip()">🎮 عروض CPAGrip</button>
+  <button onclick="openCpagrip()">🎮 عروض CPAGrip</button>
 </div>
 
 <div class="locker-box" id="lockerContainer">
@@ -138,30 +138,8 @@
     document.body.appendChild(script);
   }
 
-  function showCpagrip() {
-    const container = document.getElementById("lockerContainer");
-    const errorMsg = document.getElementById("errorMsg");
-    container.innerHTML = "⏳ جاري تحميل عروض CPAGrip...";
-    errorMsg.textContent = "";
-
-    const existing = document.getElementById("cpagripjs");
-    if (existing) existing.remove();
-
-    const script = document.createElement("script");
-    script.id = "cpagripjs";
-    script.type = "text/javascript";
-    script.src = "https://playabledownloads.com/script_include.php?id=1825641";
-
-    script.onload = () => {
-      // سكربت CPAGrip يعمل تلقائياً بعد التحميل
-    };
-
-    script.onerror = () => {
-      container.innerHTML = "";
-      errorMsg.textContent = "⚠️ فشل في تحميل عروض CPAGrip.";
-    };
-
-    document.body.appendChild(script);
+  function openCpagrip() {
+    window.open("https://www.cpagrip.com/show.php?wallid=1825641", "_blank");
   }
 </script>
 
