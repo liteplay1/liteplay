@@ -27,9 +27,27 @@
       font-weight: bold;
       color: #6a1b9a;
     }
+    .buttons {
+      margin: 20px auto;
+    }
+    .buttons button {
+      font-family: 'Comic Sans MS', cursive;
+      background-color: #ffb3e6;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-size: 18px;
+      margin: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .buttons button:hover {
+      background-color: #f06292;
+      color: white;
+    }
     .locker-box {
       margin: 30px auto;
-      max-width: 350px;
+      max-width: 400px;
       background: white;
       border: 3px dashed #ff6ec7;
       border-radius: 15px;
@@ -53,10 +71,15 @@
 
 <header>🌟 LitePlay</header>
 
-<div class="desc">🎯 أكمل عرضًا واحدًا على الأقل لتحصل على نقاطك!</div>
+<div class="desc">🎯 اختر شركة العروض ثم أكمل عرضًا واحدًا للحصول على النقاط!</div>
+
+<div class="buttons">
+  <button onclick="showOgads()">🔒 عروض OGAds</button>
+  <button onclick="showCpagrip()">🎮 عروض CPAGrip</button>
+</div>
 
 <div class="locker-box" id="lockerContainer">
-  ⏳ جاري تحميل العروض...
+  ⏳ الرجاء اختيار شركة لعرض العروض...
 </div>
 <div id="errorMsg"></div>
 
@@ -84,11 +107,13 @@
     const container = document.getElementById("lockerContainer");
     const errorMsg = document.getElementById("errorMsg");
 
-    // حذف المحتوى المؤقت
-    container.innerHTML = "";
+    window.showOgads = function () {
+      container.innerHTML = "⏳ جاري تحميل عروض OGAds...";
+      errorMsg.textContent = "";
 
-    // لا تكرر تحميل السكربت إذا تم تحميله سابقًا
-    if (!document.getElementById("ogjs")) {
+      const existing = document.getElementById("ogjs");
+      if (existing) existing.remove();
+
       const script = document.createElement("script");
       script.id = "ogjs";
       script.type = "text/javascript";
@@ -98,17 +123,38 @@
         if (typeof og_load === "function") {
           og_load();
         } else {
-          container.innerHTML = "⚠️ تعذر تحميل العروض.";
+          container.innerHTML = "⚠️ تعذر تحميل عروض OGAds.";
         }
       };
 
       script.onerror = () => {
         container.innerHTML = "";
-        errorMsg.textContent = "⚠️ فشل في تحميل العروض، تحقق من اتصالك أو إعدادات OGAds.";
+        errorMsg.textContent = "⚠️ فشل في تحميل عروض OGAds، تحقق من اتصالك.";
       };
 
       document.body.appendChild(script);
-    }
+    };
+
+    window.showCpagrip = function () {
+      container.innerHTML = "⏳ جاري تحميل عروض CPAGrip...";
+      errorMsg.textContent = "";
+
+      const existing = document.getElementById("cpaScript");
+      if (existing) existing.remove();
+
+      const script = document.createElement("script");
+      script.id = "cpaScript";
+      script.type = "text/javascript";
+      script.src = "https://playabledownloads.com/script_include.php?id=1825641";
+
+      script.onerror = () => {
+        container.innerHTML = "";
+        errorMsg.textContent = "⚠️ فشل في تحميل عروض CPAGrip، تحقق من اتصالك.";
+      };
+
+      container.innerHTML = ""; // تفريغ قبل الإضافة
+      document.getElementById("lockerContainer").appendChild(script);
+    };
   });
 </script>
 
