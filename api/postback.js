@@ -1,41 +1,32 @@
-import { initializeApp, applicationDefault, cert } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
+const admin = require('firebase-admin');
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
 
-const firebaseAdminConfig = JSON.parse(process.env.FIREBASE_KEY_JSON);
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+}
 
-const app = initializeApp({
-  credential: cert(firebaseAdminConfig)
-});
+const db = admin.firestore();
 
-const db = getFirestore(app);
+module.exports = async (req, res) => {
+  const uid = req.query.uid;
+  const offerCash = parseFloat(req.query.points); // بالدولار
 
-export default async function handler(req, res) {
-  const { uid, payout } = req.query;
-
-  if (!uid || !payout) {
-    return res.status(400).send('Missing uid or payout');
+  if (!uid || isNaN(offerCash)) {
+    return res.status(400).json({ error: 'Invalid request' });
   }
+
+  // تحويل الدولار إلى نقاط: 1 دولار = 500 نقطة
+  const earnedPoints = Math.floor(offerCash * 500);
 
   try {
     const userRef = db.collection('users').doc(uid);
-    const userDoc = await userRef.get();
+    await userRef.set({ points: admin.firestore.FieldValue.increment(earnedPoints) }, { merge: true });
 
-    if (!userDoc.exists) {
-      return res.status(404).send('User not found');
-    }
-
-    const userData = userDoc.data();
-    const currentPoints = userData.points || 0;
-    const newPoints = currentPoints + parseFloat(payout);
-
-    await userRef.update({
-      points: newPoints
-    });
-
-    console.log(`✅ Added ${payout} points to user: ${uid}`);
-    res.status(200).send('Points updated successfully');
+    res.status(200).json({ message: 'Points updated successfully', added: earnedPoints });
   } catch (error) {
-    console.error('❌ Error updating points:', error);
-    res.status(500).send('Internal Server Error');
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
   }
-}
+};
