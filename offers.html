@@ -97,65 +97,72 @@
   };
   firebase.initializeApp(firebaseConfig);
 
+  let uid = null;
+
   firebase.auth().onAuthStateChanged(user => {
     if (!user) {
       window.location.href = "index.html";
       return;
     }
 
-    const uid = user.uid;
+    uid = user.uid;
+  });
+
+  function showOgads() {
     const container = document.getElementById("lockerContainer");
     const errorMsg = document.getElementById("errorMsg");
+    container.innerHTML = "⏳ جاري تحميل عروض OGAds...";
+    errorMsg.textContent = "";
 
-    window.showOgads = function () {
-      container.innerHTML = "⏳ جاري تحميل عروض OGAds...";
-      errorMsg.textContent = "";
+    const existing = document.getElementById("ogjs");
+    if (existing) existing.remove();
 
-      const existing = document.getElementById("ogjs");
-      if (existing) existing.remove();
+    const script = document.createElement("script");
+    script.id = "ogjs";
+    script.type = "text/javascript";
+    script.src = `https://locked4.com/cl/js/po8p1n?subid=${uid}`;
 
-      const script = document.createElement("script");
-      script.id = "ogjs";
-      script.type = "text/javascript";
-      script.src = `https://locked4.com/cl/js/po8p1n?subid=${uid}`;
-
-      script.onload = () => {
-        if (typeof og_load === "function") {
-          og_load();
-        } else {
-          container.innerHTML = "⚠️ تعذر تحميل عروض OGAds.";
-        }
-      };
-
-      script.onerror = () => {
-        container.innerHTML = "";
-        errorMsg.textContent = "⚠️ فشل في تحميل عروض OGAds، تحقق من اتصالك.";
-      };
-
-      document.body.appendChild(script);
+    script.onload = () => {
+      if (typeof og_load === "function") {
+        og_load();
+      } else {
+        container.innerHTML = "⚠️ تعذر تحميل عروض OGAds.";
+      }
     };
 
-    window.showCpagrip = function () {
-      container.innerHTML = "⏳ جاري تحميل عروض CPAGrip...";
-      errorMsg.textContent = "";
-
-      const existing = document.getElementById("cpaScript");
-      if (existing) existing.remove();
-
-      const script = document.createElement("script");
-      script.id = "cpaScript";
-      script.type = "text/javascript";
-      script.src = "https://playabledownloads.com/script_include.php?id=1825641";
-
-      script.onerror = () => {
-        container.innerHTML = "";
-        errorMsg.textContent = "⚠️ فشل في تحميل عروض CPAGrip، تحقق من اتصالك.";
-      };
-
-      container.innerHTML = ""; // تفريغ قبل الإضافة
-      document.getElementById("lockerContainer").appendChild(script);
+    script.onerror = () => {
+      container.innerHTML = "";
+      errorMsg.textContent = "⚠️ فشل في تحميل عروض OGAds.";
     };
-  });
+
+    document.body.appendChild(script);
+  }
+
+  function showCpagrip() {
+    const container = document.getElementById("lockerContainer");
+    const errorMsg = document.getElementById("errorMsg");
+    container.innerHTML = "⏳ جاري تحميل عروض CPAGrip...";
+    errorMsg.textContent = "";
+
+    const existing = document.getElementById("cpagripjs");
+    if (existing) existing.remove();
+
+    const script = document.createElement("script");
+    script.id = "cpagripjs";
+    script.type = "text/javascript";
+    script.src = "https://playabledownloads.com/script_include.php?id=1825641";
+
+    script.onload = () => {
+      // سكربت CPAGrip يعمل تلقائياً بعد التحميل
+    };
+
+    script.onerror = () => {
+      container.innerHTML = "";
+      errorMsg.textContent = "⚠️ فشل في تحميل عروض CPAGrip.";
+    };
+
+    document.body.appendChild(script);
+  }
 </script>
 
 </body>
