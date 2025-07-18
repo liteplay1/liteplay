@@ -6,6 +6,7 @@
   <title>LitePlay 🎮 | اربح العملات والعروض والألعاب</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
+    /* ========== RESET & GLOBAL ========== */
     * { margin:0; padding:0; box-sizing:border-box; }
     html { scroll-behavior: smooth; }
     body { font-family:'Cairo', sans-serif; background:#f5f0ff; color:#333; line-height:1.6; }
@@ -13,27 +14,28 @@
     a { color: inherit; text-decoration:none; }
     img { max-width:100%; display:block; }
 
+    /* ========== HEADER ========== */
     header {
       position:fixed; top:0; width:100%; background:rgba(255,255,255,0.9);
       display:flex; justify-content:space-between; align-items:center;
       padding:10px 20px; backdrop-filter:blur(10px); z-index:1000;
     }
     .logo { font-size:26px; font-weight:800; color:#7b3fe4; }
-
     nav a { margin:0 10px; font-weight:600; }
     .cta-btn { background:#7b3fe4; color:#fff; padding:8px 16px; border-radius:20px;
       transition:transform 0.3s; cursor:pointer;
     }
     .cta-btn:hover { transform:scale(1.05); }
 
+    /* ========== MODAL - FORM ========== */
     .modal { position:fixed; top:0; left:0; width:100%; height:100%;
       background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center;
-      opacity:0; visibility:hidden; transition:0.3s; z-index:2000;
+      opacity:0; visibility:hidden; transition:0.3s;
     }
     .modal.show { opacity:1; visibility:visible; }
     .modal .card {
       background:rgba(255,255,255,0.15); backdrop-filter:blur(15px);
-      border-radius:16px; padding:20px; width:90%; max-width:400px; text-align:center;
+      border-radius:16px; padding:20px; width:90%; max-width:360px; text-align:center;
       animation:fadeInScale 0.4s;
     }
     @keyframes fadeInScale {
@@ -50,8 +52,8 @@
     }
     .modal button:hover { transform: scale(1.02); }
     .modal .notes { font-size:12px; color:#eee; margin-top:8px; }
-    .modal .close-link { color:#ff6fcf; cursor:pointer; display:block; margin-top:12px;}
 
+    /* ========== HERO ========== */
     .hero {
       display:flex; flex-direction:column; align-items:center; justify-content:center;
       height:100vh; background:linear-gradient(135deg,#d6c0ff,#f0e5ff);
@@ -65,31 +67,17 @@
       animation:spin 100s linear infinite;
     }
     @keyframes spin { from{transform:rotate(0);} to{transform:rotate(360deg);} }
-
-    .hero .star {
-      position:absolute; top:-10%; width:20px; height:20px;
-      background:gold; border-radius:50%; opacity:0.8;
-      box-shadow:0 0 8px gold;
-      animation:fall linear infinite;
-    }
-    @keyframes fall {
-      0% { opacity:0; transform: translateY(-20px) scale(0.5); }
-      10% { opacity:1; }
-      100% { opacity:0; transform: translateY(120vh) scale(1.2); }
-    }
-
     .hero h1 { font-size:2.4rem; color:#4b0082; margin-bottom:16px; }
     .hero .btn { background:#ff6fcf; color:#fff; padding:14px 28px;
       font-size:1.1rem; border-radius:30px; cursor:pointer;
       animation:float 3s ease-in-out infinite;
-      position:relative; z-index:2;
     }
-
     @keyframes float {
       0%,100% { transform:translateY(0); }
       50% { transform:translateY(-10px); }
     }
 
+    /* ========== HOW IT WORKS ========== */
     .steps {
       display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
       gap:24px; padding:40px 20px; background:#fff;
@@ -100,22 +88,14 @@
     .step img { width:60px; margin-bottom:12px; }
     .step h3 { margin-bottom:8px; color:#7b3fe4; }
 
+    /* ========== COUNTERS & TESTIMONIALS ========== */
     .counter-section {
       padding:40px 20px; background:#f5f0ff; display:flex;
       flex-wrap:wrap; justify-content:center; gap:30px;
     }
-    .counter { text-align:center; position:relative; }
+    .counter { text-align:center; }
     .counter h2 { font-size:2rem; color:#ff6fcf; }
-    .active-dot {
-      width:12px; height:12px; background:limegreen;
-      border-radius:50%; position:absolute; top:8px; right:calc(50% - 6px);
-      animation:blink 1.5s infinite;
-    }
-    @keyframes blink {
-      0%,50%,100% { opacity:1;}
-      25%,75% { opacity:0.2;}
-    }
-
+    .counter p { color:#555; }
     .testimonials { padding:40px 20px; background:#fff; }
     .testimonials h2 { text-align:center; margin-bottom:24px; color:#4b0082; }
     .test-cards {
@@ -130,6 +110,7 @@
     .test-card img { width:60px; border-radius:50%; display:block; margin:0 auto 10px; }
     .test-card p { font-size:0.9rem; color:#333; }
 
+    /* ========== FAQ & PAYOUTS ========== */
     .faq { padding:40px 20px; background:#f5f0ff; }
     .faq h2 { text-align:center; color:#4b0082; margin-bottom:24px; }
     .faq-item {
@@ -140,32 +121,27 @@
     .faq-item h3 { margin-bottom:8px; color:#7b3fe4; }
     .faq-item p { display:none; color:#333; }
     .faq-item.open p { display:block; }
+    .payouts {
+      display:flex; justify-content:center; align-items:center;
+      gap:40px; padding:20px 0;
+    }
+    .payouts img { width:60px; }
 
-    footer { background:#4b0082; color:#eee; padding:40px 20px; text-align:center; }
-    .footer-logo {
-      font-size:28px; font-weight:800; color:#ff6fcf;
-      margin-bottom:16px; position:relative;
-    }
-    .footer-logo::after {
-      content:"liteplay"; position:absolute; top:0; left:50%;
-      transform:translateX(-50%) translateY(30px);
-      font-size:48px; color:rgba(255,111,207,0.2); z-index:-1;
-      animation:shine 4s ease-in-out infinite;
-    }
-    @keyframes shine {
-      0%,100% { opacity:0.2; }
-      50% { opacity:0.8; }
-    }
+    /* ========== FOOTER ========== */
+    footer { background:#4b0082; color:#eee; padding:40px 20px; }
     .footer-links, .social { display:flex; flex-wrap:wrap; justify-content:center; gap:20px; margin-bottom:20px; }
     .footer-links a, .social a { color:#fff; font-weight:500; }
     .social img { width:30px; }
+
     @media (max-width:600px){
       .hero h1 { font-size:1.8rem; }
+      .payouts { flex-direction:column; gap:16px; }
     }
   </style>
 </head>
 <body>
 
+  <!-- ========== HEADER ========== -->
   <header>
     <div class="logo">liteplay</div>
     <nav>
@@ -177,35 +153,23 @@
     <div class="cta-btn" id="openModal2">ابدأ الآن</div>
   </header>
 
+  <!-- ========== HERO ========== -->
   <section class="hero">
     <h1>اربح المال مجانًا من الألعاب والعروض واختصار الروابط!</h1>
     <button class="btn" id="openModal3">سجل مجانًا</button>
-    <!-- نجوم 🌟 -->
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const hero = document.querySelector('.hero');
-        for(let i=0;i<20;i++){
-          const star = document.createElement('div');
-          star.classList.add('star');
-          star.style.left = Math.random()*100 + '%';
-          star.style.animationDuration = 3 + Math.random()*5 + 's';
-          star.style.width = star.style.height = 10+Math.random()*20+'px';
-          hero.appendChild(star);
-        }
-      });
-    </script>
   </section>
 
+  <!-- ========== HOW IT WORKS ========== -->
   <section id="how" class="steps">
     <div class="step">
       <img src="https://img.icons8.com/fluency/96/000000/registration.png"/>
       <h3>سجّل حسابك</h3>
-      <p><img src="https://img.icons8.com/fluency/48/000000/check--v1.png"/> ابدأ بخطوة التسجيل السهلة.</p>
+      <p>ابدأ بخطوة التسجيل السهلة.</p>
     </div>
     <div class="step">
       <img src="https://img.icons8.com/fluency/96/000000/game-controller.png"/>
       <h3>ابدأ اللعب والعروض</h3>
-      <p><img src="https://img.icons8.com/fluency/48/000000/trophy.png"/> شارك في تحديات واربح نقاط.</p>
+      <p>شارك في تحديات واربح نقاط.</p>
     </div>
     <div class="step">
       <img src="https://img.icons8.com/fluency/96/000000/money-bag.png"/>
@@ -214,6 +178,7 @@
     </div>
   </section>
 
+  <!-- ========== COUNTERS ========== -->
   <section class="counter-section">
     <div class="counter">
       <h2 class="count" data-target="700">0</h2>
@@ -224,96 +189,123 @@
       <p>دولار دفع</p>
     </div>
     <div class="counter">
-      <div class="active-dot"></div>
       <h2 class="count" data-target="45">0</h2>
       <p>نشط الآن</p>
     </div>
   </section>
 
+  <!-- ========== TESTIMONIALS ========== -->
   <section class="testimonials">
     <h2>ماذا يقول المستخدمون</h2>
     <div class="test-cards">
-      <!-- نفس المحتوى القديم -->
+      <div class="test-card">
+        <img src="https://i.pravatar.cc/60?img=3"/>
+        <p>“بدّلت النقاط بربح أول، فخور بهذه التجربة!”</p>
+      </div>
+      <div class="test-card">
+        <img src="https://i.pravatar.cc/60?img=6"/>
+        <p>“LitePlay سهل وموثوق، أنصح به!”</p>
+      </div>
+      <div class="test-card">
+        <img src="https://i.pravatar.cc/60?img=11"/>
+        <p>“جمعت 50$ ببساطة من عروض الألعاب!”</p>
+      </div>
     </div>
   </section>
 
+  <!-- ========== FAQ ========== -->
   <section id="faq" class="faq">
     <h2>الأسئلة الشائعة</h2>
-    <!-- نفس الفقرات القديمة -->
+    <div class="faq-item">
+      <h3>كيف أبدأ؟</h3>
+      <p>سجّل حساب، ثم شارك الروابط أو العب واستبدل النقاط!</p>
+    </div>
+    <div class="faq-item">
+      <h3>هل الموقع مجاني؟</h3>
+      <p>نعم، التسجيل والمشاركة مجاني تمامًا، ورصيدك من العروض مجاني.</p>
+    </div>
+    <div class="faq-item">
+      <h3>كيف أسحب الأرباح؟</h3>
+      <p>اختر طريقة السحب (Litecoin أو Payeer)، أدخل الحساب واستلم نقاطك 💸.</p>
+    </div>
+    <div class="payouts">
+      <img src="https://cryptologos.cc/logos/litecoin-ltc-logo.png?v=018" alt="Litecoin">
+      <img src="https://seeklogo.com/images/P/payeer-logo-4A4E98548D-seeklogo.com.png" alt="Payeer">
+    </div>
   </section>
 
+  <!-- ========== CONTACT + FOOTER ========== -->
   <footer id="contact">
-    <div class="footer-logo">liteplay</div>
     <div class="footer-links">
-      <a href="#" id="privacyLink">سياسة الخصوصية</a>
+      <a href="#">سياسة الخصوصية</a>
       <a href="#">من نحن</a>
       <a href="mailto:liteplayteam@gmail.com">تواصل معنا</a>
-      <a href="#" id="termsLink">شروط الاستخدام</a>
+      <a href="#">شروط الاستخدام</a>
     </div>
     <div class="social">
-      <!-- نفس أيقونات السوشيال -->
+      <a href="https://t.me/liteplay1"><img src="https://img.icons8.com/fluency/48/000000/telegram-app.png"/></a>
+      <a href="https://www.tiktok.com/@liteplay"><img src="https://img.icons8.com/fluency/48/000000/tiktok.png"/></a>
+      <a href="https://www.instagram.com/lite.play"><img src="https://img.icons8.com/fluency/48/000000/instagram-new.png"/></a>
     </div>
-    <p style="font-size:14px; color:#ddd;">
-      حقوق النشر © 2025 LitePlay — منصة موثوقة ومصداقية لا مثيل لها
+    <p style="text-align:center; font-size:14px; color:#ddd;">
+‎      حقوق النشر © 2025 LitePlay — منصة موثوقة ومصداقية لا مثيل لها
     </p>
   </footer>
 
+  <!-- ========== MODAL FORM ========== -->
   <div class="modal" id="modal">
     <div class="card">
       <h2>أنشئ حسابك الآن</h2>
       <input type="email" id="email" placeholder="📧 بريدك الإلكتروني">
       <input type="password" id="password" placeholder="🔒 كلمة المرور">
-      <label><input type="checkbox" id="invite"> رمز دعوة (اختياري)</label>
       <button id="signup-btn">سجّل واحصل على 10 نقاط 🎁</button>
-      <p class="notes">
-        بالتسجيل، أنت توافق على 
-        <a href="#" id="openPrivacy">سياسة الخصوصية</a> و
-        <a href="#" id="openTerms">شروط الاستخدام</a>.
-      </p>
-      <button class="close-link" id="closeModal">إغلاق</button>
+      <p class="notes">بالتسجيل، أنت توافق على <a href="#">شروط الاستخدام</a> و<a href="#">سياسة الخصوصية</a>.</p>
+      <button id="closeModal" style="background:#ccc;color:#333;">إغلاق</button>
       <div id="error-msg" style="color:#f00;font-size:14px;"></div>
     </div>
   </div>
 
-  <div class="modal" id="privacyModal">
-    <div class="card">
-      <h3>سياسة الخصوصية</h3>
-      <p>نحتفظ ببريدك الإلكتروني وآملاكك من النقاط بأمان تام، نستخدم بياناتك لتحسين تجربتك ونرسل لك عروضًا خاصة فقط عند الموافقة. لا نشارك بياناتك مع أطراف ثالثة بدون إذنك. عند حذف حسابك، يتم مسح كل بياناتك نهائيًا.</p>
-      <button class="close-link" data-close="privacyModal">إغلاق</button>
-    </div>
-  </div>
-
-  <div class="modal" id="termsModal">
-    <div class="card">
-      <h3>شروط الاستخدام</h3>
-      <p>باستخدام LitePlay، توافق على الامتثال للقوانين، سلم ودي للعروض، عدم التلاعب بالنظام. لا تسمح باستخدام طرق احتيالية للحصول على النقاط. نحتفظ بحق تعليق أو حذف الحسابات المخالفة. حقوقنا محفوظة لتعديل الشروط وتنبيهك بأي تغييرات من خلال بريدك الإلكتروني.</p>
-      <button class="close-link" data-close="termsModal">إغلاق</button>
-    </div>
-  </div>
+  <!-- ========== SCRIPTS ========== -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
   <script>
-    const showModal = id => document.getElementById(id).classList.add('show');
-    const hideModal = id => document.getElementById(id).classList.remove('show');
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "...",
+      authDomain: "...",
+      projectId: "...",
+      storageBucket: "...",
+      messagingSenderId: "...",
+      appId: "..."
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-    document.querySelectorAll('#openModal,#openModal2,#openModal3').forEach(el =>
-      el.addEventListener('click',()=>showModal('modal'))
-    );
-    document.getElementById('closeModal').addEventListener('click',()=>hideModal('modal'));
+    // Modal handlers
+    const modal = document.getElementById("modal");
+    document.querySelectorAll('#openModal, #openModal2, #openModal3').forEach(el => el.addEventListener("click",()=>modal.classList.add("show")));
+    document.getElementById("closeModal").addEventListener("click",()=>modal.classList.remove("show"));
 
-    document.getElementById('openPrivacy').addEventListener('click',e =>{
-      e.preventDefault(); showModal('privacyModal');
-    });
-    document.getElementById('openTerms').addEventListener('click',e =>{
-      e.preventDefault(); showModal('termsModal');
-    });
-    document.querySelectorAll('[data-close]').forEach(el =>
-      el.addEventListener('click',()=>hideModal(el.getAttribute('data-close')))
-    );
-
+    // Signup
     document.getElementById("signup-btn").addEventListener("click", async ()=>{
-      // معالج التسجيل القديم
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const err = document.getElementById("error-msg"); err.textContent="";
+      if(!email||!password){ err.textContent="يرجى ملء جميع الحقول."; return; }
+      try {
+        const cred = await auth.createUserWithEmailAndPassword(email,password);
+        await db.collection("users").doc(cred.user.uid).set({ email, points:10, created:Date.now() });
+        modal.classList.remove("show");
+        window.location.href="welcome.html";
+      } catch(e) {
+        err.textContent=e.message;
+      }
     });
 
+    // Animated counters
     document.addEventListener("DOMContentLoaded", ()=>{
       document.querySelectorAll('.count').forEach(el=>{
         const target = +el.getAttribute('data-target');
@@ -323,9 +315,6 @@
           count += step;
           if(count < target){
             el.textContent = Math.ceil(count);
-            if(el.getAttribute('data-target') == "45") {
-              if(Math.random()<0.02) el.setAttribute('data-target',Math.floor(Math.random()*90+10));
-            }
             requestAnimationFrame(inc);
           } else {
             el.textContent = target;
@@ -335,10 +324,10 @@
       });
     });
 
+    // FAQ toggle
     document.querySelectorAll('.faq-item').forEach(item=>{
       item.addEventListener('click', ()=> item.classList.toggle('open'));
     });
   </script>
-
 </body>
 </html>
