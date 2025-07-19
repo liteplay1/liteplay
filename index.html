@@ -18,38 +18,101 @@
     header {
       position:fixed; top:0; width:100%; background:rgba(255,255,255,0.9);
       display:flex; justify-content:space-between; align-items:center;
-      padding:10px 20px; backdrop-filter:blur(10px); z-index:1000;
+      padding:12px 20px; backdrop-filter:blur(10px); z-index:1000;
     }
-    .logo { font-size:26px; font-weight:800; color:#7b3fe4; }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-img {
+      width: 40px;
+      height: 40px;
+    }
+    .logo-text {
+      font-size:26px; 
+      font-weight:800; 
+      color:#7b3fe4;
+      background: linear-gradient(45deg, #7b3fe4, #a45deb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 4px rgba(123, 63, 228, 0.2);
+    }
+    nav {
+      display: flex;
+      gap: 15px;
+    }
     nav a { 
-      margin:0 10px; 
       font-weight:600;
       padding: 8px 16px;
       border-radius: 20px;
       transition: all 0.3s ease;
-      background: #ff6fcf;
-      color: white;
-      box-shadow: 0 2px 8px rgba(255, 111, 207, 0.3);
+      background: #f0e5ff;
+      color: #7b3fe4;
+      box-shadow: 0 2px 4px rgba(123, 63, 228, 0.1);
+      font-size: 15px;
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 0;
+      height: 2px;
+      background: #7b3fe4;
+      transition: width 0.3s ease;
     }
     nav a:hover {
-      background: #ff4db8;
+      background: #e2d4ff;
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(255, 111, 207, 0.4);
+      box-shadow: 0 4px 8px rgba(123, 63, 228, 0.2);
+    }
+    nav a:hover::after {
+      width: 100%;
+      right: auto;
+      left: 0;
     }
     .cta-btn { 
-      background:#ff6fcf; 
+      background: linear-gradient(135deg, #7b3fe4, #a45deb); 
       color:#fff; 
-      padding:8px 20px; 
+      padding:8px 20px 8px 16px;
       border-radius:20px;
       transition: all 0.3s ease;
       cursor:pointer;
-      box-shadow: 0 2px 8px rgba(255, 111, 207, 0.3);
+      box-shadow: 0 4px 8px rgba(123, 63, 228, 0.3);
       font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-btn::before {
+      content: '💰';
+      position: absolute;
+      top: -15px;
+      right: 10px;
+      font-size: 20px;
+      opacity: 0;
+      transition: all 0.4s ease;
     }
     .cta-btn:hover { 
-      background: #ff4db8;
       transform:scale(1.05); 
-      box-shadow: 0 4px 12px rgba(255, 111, 207, 0.4);
+      box-shadow: 0 6px 12px rgba(123, 63, 228, 0.4);
+    }
+    .cta-btn:hover::before {
+      opacity: 1;
+      top: -5px;
+      animation: coinBounce 0.8s ease-in-out;
+    }
+    @keyframes coinBounce {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-15deg); }
+      50% { transform: rotate(0deg); }
+      75% { transform: rotate(15deg); }
     }
 
     /* ========== MODAL - FORM ========== */
@@ -240,16 +303,49 @@
     .footer-links a, .social a { color:#fff; font-weight:500; }
     .social img { width:30px; }
 
-    @media (max-width:600px){
-      .hero h1 { font-size:1.8rem; }
-      .payouts { flex-direction:column; gap:16px; }
-      nav a { 
-        margin: 0 5px;
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        padding: 10px;
+      }
+      .logo-container {
+        margin-bottom: 10px;
+      }
+      nav {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      nav a {
         padding: 6px 12px;
         font-size: 14px;
       }
       .cta-btn {
-        padding: 6px 12px;
+        margin: 0 auto;
+      }
+      .hero h1 {
+        font-size: 1.8rem;
+        padding: 0 15px;
+      }
+      .steps {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      nav a {
+        padding: 5px 10px;
+        font-size: 12px;
+      }
+      .hero h1 {
+        font-size: 1.5rem;
+      }
+      .payouts {
+        flex-direction: column;
+        gap: 15px;
       }
     }
   </style>
@@ -258,14 +354,17 @@
 
   <!-- ========== HEADER ========== -->
   <header>
-    <div class="logo">liteplay</div>
+    <div class="logo-container">
+      <img src="https://i.imgur.com/JQZ1h0P.png" alt="LitePlay Logo" class="logo-img">
+      <div class="logo-text">liteplay</div>
+    </div>
     <nav>
       <a href="#how">من نحن</a>
       <a href="#faq">الأسئلة الشائعة</a>
       <a href="#contact">تواصل معنا</a>
       <a href="#" id="openModal">سجل الآن</a>
     </nav>
-    <div class="cta-btn" id="openModal2">ابدأ الآن</div>
+    <div class="cta-btn" id="openModal2">💰 ابدأ الآن</div>
   </header>
 
   <!-- ========== HERO ========== -->
