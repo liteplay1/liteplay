@@ -16,103 +16,122 @@
 
     /* ========== HEADER ========== */
     header {
-      position:fixed; top:0; width:100%; background:rgba(255,255,255,0.9);
+      position:fixed; top:0; width:100%; background:rgba(255,255,255,0.95);
       display:flex; justify-content:space-between; align-items:center;
-      padding:12px 20px; backdrop-filter:blur(10px); z-index:1000;
+      padding:12px 5%; backdrop-filter:blur(10px); z-index:1000;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      border-bottom: 1px solid rgba(123, 63, 228, 0.1);
     }
+    
+    /* تصميم الشعار الجديد */
     .logo-container {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      transition: transform 0.3s ease;
+    }
+    .logo-container:hover {
+      transform: scale(1.05);
     }
     .logo-img {
-      width: 40px;
-      height: 40px;
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      transition: transform 0.5s ease;
+    }
+    .logo-img:hover {
+      transform: rotate(15deg);
     }
     .logo-text {
-      font-size:26px; 
-      font-weight:800; 
-      color:#7b3fe4;
-      background: linear-gradient(45deg, #7b3fe4, #a45deb);
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #7b3fe4 0%, #a45deb 50%, #ff6fcf 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 2px 4px rgba(123, 63, 228, 0.2);
+      text-shadow: 0 2px 10px rgba(123, 63, 228, 0.2);
+      letter-spacing: -1px;
     }
+
+    /* تصميم القائمة العلوية الجديد */
     nav {
       display: flex;
-      gap: 15px;
+      align-items: center;
+      gap: 5px;
     }
-    nav a { 
-      font-weight:600;
-      padding: 8px 16px;
-      border-radius: 20px;
-      transition: all 0.3s ease;
-      background: #f0e5ff;
-      color: #7b3fe4;
-      box-shadow: 0 2px 4px rgba(123, 63, 228, 0.1);
+    nav a {
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 30px;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       font-size: 15px;
-      white-space: nowrap;
       position: relative;
       overflow: hidden;
+      color: #555;
     }
-    nav a::after {
+    nav a::before {
       content: '';
       position: absolute;
-      bottom: 0;
+      top: 0;
       right: 0;
       width: 0;
-      height: 2px;
-      background: #7b3fe4;
-      transition: width 0.3s ease;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(123, 63, 228, 0.1) 0%, rgba(164, 93, 235, 0.1) 100%);
+      transition: width 0.4s ease;
+      z-index: -1;
     }
     nav a:hover {
-      background: #e2d4ff;
+      color: #7b3fe4;
       transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(123, 63, 228, 0.2);
     }
-    nav a:hover::after {
+    nav a:hover::before {
       width: 100%;
       right: auto;
       left: 0;
     }
-    .cta-btn { 
-      background: linear-gradient(135deg, #7b3fe4, #a45deb); 
-      color:#fff; 
-      padding:8px 20px 8px 16px;
-      border-radius:20px;
-      transition: all 0.3s ease;
-      cursor:pointer;
-      box-shadow: 0 4px 8px rgba(123, 63, 228, 0.3);
-      font-weight: 600;
+    nav a.active {
+      color: #7b3fe4;
+      font-weight: 700;
+    }
+
+    /* زر ابدأ الآن المعدل */
+    .cta-btn {
+      background: linear-gradient(135deg, #7b3fe4 0%, #a45deb 100%);
+      color: white;
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 15px;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(123, 63, 228, 0.3);
+      border: none;
+      cursor: pointer;
       position: relative;
       overflow: hidden;
     }
     .cta-btn::before {
       content: '💰';
       position: absolute;
-      top: -15px;
-      right: 10px;
-      font-size: 20px;
+      right: -20px;
       opacity: 0;
       transition: all 0.4s ease;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
     }
-    .cta-btn:hover { 
-      transform:scale(1.05); 
-      box-shadow: 0 6px 12px rgba(123, 63, 228, 0.4);
+    .cta-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(123, 63, 228, 0.4);
     }
     .cta-btn:hover::before {
+      right: 15px;
       opacity: 1;
-      top: -5px;
-      animation: coinBounce 0.8s ease-in-out;
+      animation: coinSpin 0.8s ease;
     }
-    @keyframes coinBounce {
-      0%, 100% { transform: rotate(0deg); }
-      25% { transform: rotate(-15deg); }
-      50% { transform: rotate(0deg); }
-      75% { transform: rotate(15deg); }
+    @keyframes coinSpin {
+      0% { transform: rotate(0deg) scale(0.5); }
+      50% { transform: rotate(180deg) scale(1.2); }
+      100% { transform: rotate(360deg) scale(1); }
     }
 
     /* ========== MODAL - FORM ========== */
@@ -355,16 +374,21 @@
   <!-- ========== HEADER ========== -->
   <header>
     <div class="logo-container">
-      <img src="https://i.imgur.com/JQZ1h0P.png" alt="LitePlay Logo" class="logo-img">
-      <div class="logo-text">liteplay</div>
+      <img src="https://i.ibb.co/JwygKXcH/FFDDBDB1-9880-4-F71-9-C69-9-FA7160-EB7-DA.png" 
+           alt="LitePlay Logo" 
+           class="logo-img"
+           onerror="this.onerror=null; this.src='https://i.imgur.com/JQZ1h0P.png'">
+      <div class="logo-text">LitePlay</div>
     </div>
     <nav>
-      <a href="#how">من نحن</a>
+      <a href="#how" class="active">من نحن</a>
       <a href="#faq">الأسئلة الشائعة</a>
       <a href="#contact">تواصل معنا</a>
       <a href="#" id="openModal">سجل الآن</a>
     </nav>
-    <div class="cta-btn" id="openModal2">💰 ابدأ الآن</div>
+    <button class="cta-btn" id="openModal2">
+      ابدأ الآن
+    </button>
   </header>
 
   <!-- ========== HERO ========== -->
