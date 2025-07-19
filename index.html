@@ -18,48 +18,38 @@
     header {
       position:fixed; top:0; width:100%; background:rgba(255,255,255,0.9);
       display:flex; justify-content:space-between; align-items:center;
-      padding:12px 20px; backdrop-filter:blur(10px); z-index:1000;
-      flex-wrap: wrap;
+      padding:10px 20px; backdrop-filter:blur(10px); z-index:1000;
     }
-    .logo { font-size:26px; font-weight:800; color:#7b3fe4; margin-left: 15px; }
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      margin: 8px 0;
-    }
+    .logo { font-size:26px; font-weight:800; color:#7b3fe4; }
     nav a { 
+      margin:0 10px; 
       font-weight:600;
       padding: 8px 16px;
       border-radius: 20px;
       transition: all 0.3s ease;
-      background: #f0e5ff;
-      box-shadow: 0 2px 4px rgba(123, 63, 228, 0.1);
-      font-size: 14px;
-      white-space: nowrap;
+      background: #ff6fcf;
+      color: white;
+      box-shadow: 0 2px 8px rgba(255, 111, 207, 0.3);
     }
     nav a:hover {
-      background: #7b3fe4;
-      color: #fff;
+      background: #ff4db8;
       transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(123, 63, 228, 0.2);
+      box-shadow: 0 4px 12px rgba(255, 111, 207, 0.4);
     }
     .cta-btn { 
-      background:#7b3fe4; 
+      background:#ff6fcf; 
       color:#fff; 
       padding:8px 20px; 
       border-radius:20px;
-      transition: all 0.3s ease; 
+      transition: all 0.3s ease;
       cursor:pointer;
-      box-shadow: 0 2px 4px rgba(123, 63, 228, 0.3);
+      box-shadow: 0 2px 8px rgba(255, 111, 207, 0.3);
       font-weight: 600;
-      font-size: 14px;
-      margin-right: auto;
     }
     .cta-btn:hover { 
+      background: #ff4db8;
       transform:scale(1.05); 
-      box-shadow: 0 4px 8px rgba(123, 63, 228, 0.4);
+      box-shadow: 0 4px 12px rgba(255, 111, 207, 0.4);
     }
 
     /* ========== MODAL - FORM ========== */
@@ -128,9 +118,26 @@
       padding:40px 20px; background:#f5f0ff; display:flex;
       flex-wrap:wrap; justify-content:center; gap:30px;
     }
-    .counter { text-align:center; }
+    .counter { 
+      text-align:center;
+      position: relative;
+    }
     .counter h2 { font-size:2rem; color:#ff6fcf; }
     .counter p { color:#555; }
+    .online-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background-color: #4CAF50;
+      border-radius: 50%;
+      margin-right: 5px;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.7; }
+      50% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.7; }
+    }
     .testimonials { padding:40px 20px; background:#fff; }
     .testimonials h2 { text-align:center; margin-bottom:24px; color:#4b0082; }
     .test-cards {
@@ -162,57 +169,87 @@
     }
     .payouts img { width:60px; }
 
+    /* ========== POLICY MODAL ========== */
+    .policy-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.3s;
+    }
+    .policy-modal.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .policy-content {
+      background: white;
+      width: 90%;
+      max-width: 800px;
+      max-height: 80vh;
+      border-radius: 15px;
+      padding: 25px;
+      overflow-y: auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      animation: fadeInScale 0.4s;
+    }
+    .policy-content h2 {
+      color: #7b3fe4;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+    .policy-content h3 {
+      color: #ff6fcf;
+      margin: 15px 0 10px;
+    }
+    .policy-content p, .policy-content li {
+      color: #333;
+      line-height: 1.7;
+    }
+    .policy-content ul {
+      padding-right: 20px;
+    }
+    .close-policy {
+      background: #ff6fcf;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      margin-top: 20px;
+      cursor: pointer;
+      display: block;
+      margin: 20px auto 0;
+      transition: 0.3s;
+    }
+    .close-policy:hover {
+      background: #ff4db8;
+      transform: scale(1.05);
+    }
+
     /* ========== FOOTER ========== */
     footer { background:#4b0082; color:#eee; padding:40px 20px; }
     .footer-links, .social { display:flex; flex-wrap:wrap; justify-content:center; gap:20px; margin-bottom:20px; }
     .footer-links a, .social a { color:#fff; font-weight:500; }
     .social img { width:30px; }
 
-    @media (max-width: 768px) {
-      header {
-        flex-direction: column;
-        padding: 10px;
-      }
-      .logo {
-        margin: 0 auto 10px;
-        order: -1;
-      }
-      nav {
-        width: 100%;
-        gap: 6px;
-        margin: 6px 0;
-      }
-      nav a {
+    @media (max-width:600px){
+      .hero h1 { font-size:1.8rem; }
+      .payouts { flex-direction:column; gap:16px; }
+      nav a { 
+        margin: 0 5px;
         padding: 6px 12px;
-        font-size: 13px;
+        font-size: 14px;
       }
       .cta-btn {
-        margin: 10px auto 0;
-        width: 100%;
-        text-align: center;
-        order: 1;
-      }
-      .hero h1 {
-        font-size: 1.8rem;
-        padding: 0 15px;
-      }
-      .steps {
-        grid-template-columns: 1fr;
-        gap: 15px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      nav a {
-        padding: 5px 10px;
-        font-size: 12px;
-      }
-      .hero h1 {
-        font-size: 1.5rem;
-      }
-      .payouts {
-        flex-direction: column;
-        gap: 15px;
+        padding: 6px 12px;
       }
     }
   </style>
@@ -268,7 +305,7 @@
     </div>
     <div class="counter">
       <h2 class="count" data-target="45">0</h2>
-      <p>نشط الآن</p>
+      <p><span class="online-dot"></span>نشط الآن</p>
     </div>
   </section>
 
@@ -315,10 +352,10 @@
   <!-- ========== CONTACT + FOOTER ========== -->
   <footer id="contact">
     <div class="footer-links">
-      <a href="#">سياسة الخصوصية</a>
-      <a href="#">من نحن</a>
+      <a href="#" id="showPrivacy">سياسة الخصوصية</a>
+      <a href="#how">من نحن</a>
       <a href="mailto:liteplayteam@gmail.com">تواصل معنا</a>
-      <a href="#">شروط الاستخدام</a>
+      <a href="#" id="showTerms">شروط الاستخدام</a>
     </div>
     <div class="social">
       <a href="https://t.me/liteplay1"><img src="https://img.icons8.com/fluency/48/000000/telegram-app.png"/></a>
@@ -337,9 +374,70 @@
       <input type="email" id="email" placeholder="📧 بريدك الإلكتروني">
       <input type="password" id="password" placeholder="🔒 كلمة المرور">
       <button id="signup-btn">سجّل واحصل على 10 نقاط 🎁</button>
-      <p class="notes">بالتسجيل، أنت توافق على <a href="#">شروط الاستخدام</a> و<a href="#">سياسة الخصوصية</a>.</p>
+      <p class="notes">بالتسجيل، أنت توافق على <a href="#" id="showTerms2">شروط الاستخدام</a> و<a href="#" id="showPrivacy2">سياسة الخصوصية</a>.</p>
       <button id="closeModal" style="background:#ccc;color:#333;">إغلاق</button>
       <div id="error-msg" style="color:#f00;font-size:14px;"></div>
+    </div>
+  </div>
+
+  <!-- ========== POLICY MODALS ========== -->
+  <div class="policy-modal" id="privacyModal">
+    <div class="policy-content">
+      <h2>سياسة الخصوصية لموقع LitePlay</h2>
+      <p><strong>آخر تحديث: <span id="currentDate"></span></strong></p>
+      
+      <p>في LitePlay، نحترم خصوصيتك ونسعى لحماية بياناتك الشخصية. توضح هذه السياسة كيف نجمع ونستخدم ونحمي المعلومات التي تقدمها لنا عند استخدامك لموقعنا وخدماتنا.</p>
+      
+      <h3>1. المعلومات التي نجمعها</h3>
+      <p>عند استخدامك موقع LitePlay، قد نقوم بجمع الأنواع التالية من البيانات:</p>
+      <ul>
+        <li>بيانات التسجيل: مثل البريد الإلكتروني، اسم المستخدم.</li>
+        <li>البيانات التلقائية: مثل عنوان IP، نوع الجهاز، نظام التشغيل، نوع المتصفح، الصفحات التي تزورها، مدة الاستخدام.</li>
+        <li>بيانات الاستخدام: مثل النقاط التي تجمعها، العروض أو الألعاب التي تكملها، الروابط المختصرة التي تزورها.</li>
+      </ul>
+      
+      <h3>2. كيف نستخدم المعلومات</h3>
+      <p>نستخدم البيانات لأغراض متعددة تشمل:</p>
+      <ul>
+        <li>تشغيل وتحسين أداء موقع LitePlay.</li>
+        <li>تخصيص تجربتك داخل الموقع.</li>
+        <li>التحقق من الأنشطة لمنع الاحتيال أو إساءة الاستخدام.</li>
+        <li>إرسال إشعارات أو تحديثات متعلقة بالخدمة.</li>
+        <li>التعاون مع شركائنا (مثل شركات الإعلانات والعروض) لتحسين تجربتك.</li>
+      </ul>
+      
+      <button class="close-policy" id="closePrivacy">إغلاق</button>
+    </div>
+  </div>
+
+  <div class="policy-modal" id="termsModal">
+    <div class="policy-content">
+      <h2>شروط الاستخدام لموقع LitePlay</h2>
+      <p><strong>آخر تحديث: <span id="currentDate2"></span></strong></p>
+      
+      <p>مرحبًا بك في موقع LitePlay، باستخدامك للموقع فإنك توافق على الالتزام بالشروط التالية:</p>
+      
+      <h3>1. استخدام الموقع</h3>
+      <ul>
+        <li>يجب أن يكون عمرك 13 سنة أو أكثر لاستخدام خدمات LitePlay.</li>
+        <li>أنت توافق على استخدام الموقع فقط للأغراض المشروعة وعدم استخدامه بأي شكل يضر بالموقع أو المستخدمين الآخرين.</li>
+      </ul>
+      
+      <h3>2. إنشاء الحساب</h3>
+      <ul>
+        <li>أنت مسؤول عن الحفاظ على سرية بيانات الدخول لحسابك.</li>
+        <li>لا يسمح بإنشاء أكثر من حساب لنفس الشخص.</li>
+        <li>سيتم إيقاف الحسابات التي يتم فيها استخدام برامج أو طرق غير شرعية لجمع النقاط أو استغلال الأنظمة.</li>
+      </ul>
+      
+      <h3>3. النقاط والمكافآت</h3>
+      <ul>
+        <li>النقاط يتم جمعها من خلال استكمال العروض، مشاهدة الإعلانات، أو استخدام الخدمات الأخرى.</li>
+        <li>تحتفظ LitePlay بالحق في تعديل أو إلغاء النقاط أو المكافآت في أي وقت دون إشعار مسبق، خاصة في حالات الغش أو النشاط المشبوه.</li>
+        <li>يتم استبدال النقاط بالهدايا أو العملات الرقمية كما هو موضح في قسم المكافآت.</li>
+      </ul>
+      
+      <button class="close-policy" id="closeTerms">إغلاق</button>
     </div>
   </div>
 
@@ -362,10 +460,39 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
+    // Set current date
+    const today = new Date();
+    const dateStr = today.toLocaleDateString('ar-EG');
+    document.getElementById('currentDate').textContent = dateStr;
+    document.getElementById('currentDate2').textContent = dateStr;
+
     // Modal handlers
     const modal = document.getElementById("modal");
     document.querySelectorAll('#openModal, #openModal2, #openModal3').forEach(el => el.addEventListener("click",()=>modal.classList.add("show")));
     document.getElementById("closeModal").addEventListener("click",()=>modal.classList.remove("show"));
+
+    // Policy modals
+    const privacyModal = document.getElementById("privacyModal");
+    const termsModal = document.getElementById("termsModal");
+    
+    document.getElementById("showPrivacy").addEventListener("click", (e) => {
+      e.preventDefault();
+      privacyModal.classList.add("show");
+    });
+    document.getElementById("showPrivacy2").addEventListener("click", (e) => {
+      e.preventDefault();
+      privacyModal.classList.add("show");
+    });
+    document.getElementById("showTerms").addEventListener("click", (e) => {
+      e.preventDefault();
+      termsModal.classList.add("show");
+    });
+    document.getElementById("showTerms2").addEventListener("click", (e) => {
+      e.preventDefault();
+      termsModal.classList.add("show");
+    });
+    document.getElementById("closePrivacy").addEventListener("click",()=>privacyModal.classList.remove("show"));
+    document.getElementById("closeTerms").addEventListener("click",()=>termsModal.classList.remove("show"));
 
     // Signup
     document.getElementById("signup-btn").addEventListener("click", async ()=>{
@@ -383,8 +510,9 @@
       }
     });
 
-    // Animated counters
+    // Animated counters with random updates
     document.addEventListener("DOMContentLoaded", ()=>{
+      // Initial animation
       document.querySelectorAll('.count').forEach(el=>{
         const target = +el.getAttribute('data-target');
         let count = 0;
@@ -400,6 +528,15 @@
         };
         inc();
       });
+
+      // Random updates for active users
+      setInterval(() => {
+        const activeCounter = document.querySelector('.counter:last-child .count');
+        const current = parseInt(activeCounter.textContent);
+        const change = Math.floor(Math.random() * 10) - 4; // Random between -4 and +5
+        const newValue = Math.max(10, current + change); // Don't go below 10
+        activeCounter.textContent = newValue;
+      }, 5000); // Update every 5 seconds
     });
 
     // FAQ toggle
