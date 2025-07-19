@@ -21,28 +21,34 @@
       padding:10px 20px; backdrop-filter:blur(10px); z-index:1000;
     }
     .logo { font-size:26px; font-weight:800; color:#7b3fe4; }
-
-    nav a {
-      margin: 0 8px;
-      font-weight: 600;
-      padding: 8px 14px;
-      background-color: #eee;
-      color: #4b0082;
-      border-radius: 18px;
-      box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    nav a { 
+      margin:0 10px; 
+      font-weight:600;
+      padding: 8px 16px;
+      border-radius: 20px;
       transition: all 0.3s ease;
-      border: 1px solid #ddd;
+      background: #f0e5ff;
+      box-shadow: 0 4px 6px rgba(123, 63, 228, 0.1);
     }
     nav a:hover {
-      background-color: #7b3fe4;
+      background: #7b3fe4;
       color: #fff;
-      transform: scale(1.05);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(123, 63, 228, 0.2);
     }
-
-    .cta-btn { background:#7b3fe4; color:#fff; padding:8px 16px; border-radius:20px;
-      transition:transform 0.3s; cursor:pointer;
+    .cta-btn { 
+      background:#7b3fe4; 
+      color:#fff; 
+      padding:8px 16px; 
+      border-radius:20px;
+      transition:transform 0.3s; 
+      cursor:pointer;
+      box-shadow: 0 4px 8px rgba(123, 63, 228, 0.3);
     }
-    .cta-btn:hover { transform:scale(1.05); }
+    .cta-btn:hover { 
+      transform:scale(1.05); 
+      box-shadow: 0 6px 12px rgba(123, 63, 228, 0.4);
+    }
 
     /* ========== MODAL - FORM ========== */
     .modal { position:fixed; top:0; left:0; width:100%; height:100%;
@@ -153,6 +159,7 @@
     @media (max-width:600px){
       .hero h1 { font-size:1.8rem; }
       .payouts { flex-direction:column; gap:16px; }
+      nav a { margin: 0 5px; padding: 6px 12px; font-size: 14px; }
     }
   </style>
 </head>
@@ -179,17 +186,17 @@
   <!-- ========== HOW IT WORKS ========== -->
   <section id="how" class="steps">
     <div class="step">
-      <img src="https://img.icons8.com/fluency/48/000000/check--v1.png" alt="سجّل حسابك"/>
+      <img src="https://img.icons8.com/fluency/48/000000/check--v1.png"/>
       <h3>سجّل حسابك</h3>
       <p>ابدأ بخطوة التسجيل السهلة.</p>
     </div>
     <div class="step">
-      <img src="https://img.icons8.com/fluency/48/000000/trophy.png" alt="ابدأ اللعب والعروض"/>
+      <img src="https://img.icons8.com/fluency/48/000000/trophy.png"/>
       <h3>ابدأ اللعب والعروض</h3>
       <p>شارك في تحديات واربح نقاط.</p>
     </div>
     <div class="step">
-      <img src="https://img.icons8.com/fluency/96/000000/money-bag.png" alt="اجمع النقاط"/>
+      <img src="https://img.icons8.com/fluency/96/000000/money-bag.png"/>
       <h3>اجمع النقاط واستبدلها</h3>
       <p>حوّل النقاط إلى أرباح حقيقية.</p>
     </div>
