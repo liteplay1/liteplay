@@ -8,113 +8,79 @@
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     html { scroll-behavior: smooth; }
-    body {
-      font-family:'Cairo', sans-serif;
-      background:#f5f0ff;
-      color:#333;
-      line-height:1.6;
-    }
-
+    body { font-family:'Cairo', sans-serif; background:#f5f0ff; color:#333; line-height:1.6; }
     a { color: inherit; text-decoration:none; }
     img { max-width:100%; display:block; }
 
     header {
-      position:fixed;
-      top:0;
-      width:100%;
-      background:rgba(255,255,255,0.9);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      flex-wrap: wrap;
-      padding:10px 20px;
-      backdrop-filter:blur(10px);
-      z-index:1000;
+      position:fixed; top:0; width:100%; background:rgba(255,255,255,0.9);
+      display:flex; justify-content:space-between; align-items:center;
+      padding:10px 20px; backdrop-filter:blur(10px); z-index:1000;
     }
-
-    .logo {
-      font-size:26px;
-      font-weight:800;
-      color:#ff4fcf; /* وردي لامع */
-    }
-
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      align-items: center;
-    }
+    .logo { font-size:26px; font-weight:800; color:#7b3fe4; }
 
     nav a {
-      font-weight: 600;
-      background: #ffb3e6;
-      padding: 8px 14px;
-      border-radius: 25px;
-      transition: all 0.3s ease;
-      box-shadow: 0 3px 8px rgba(255, 105, 180, 0.4);
-      font-size: 14px;
-      color: #4b004b;
+      margin:0 8px;
+      font-weight:600;
+      padding:8px 16px;
+      background:#f3e6ff;
+      border-radius:18px;
+      transition: background 0.3s, transform 0.2s;
     }
-
     nav a:hover {
-      background: #ff66cc;
-      color: white;
-      transform: scale(1.08);
+      background:#e0ccff;
+      transform:scale(1.05);
     }
 
     .cta-btn {
-      background:#ff4fcf;
-      color:#fff;
-      padding:10px 20px;
-      border-radius:30px;
-      font-weight:600;
-      box-shadow: 0 3px 10px rgba(255, 105, 180, 0.4);
-      cursor:pointer;
-      transition:all 0.3s ease;
+      background:#7b3fe4; color:#fff; padding:8px 16px; border-radius:20px;
+      transition:transform 0.3s; cursor:pointer;
     }
-    .cta-btn:hover {
-      background:#ff1ab3;
-      transform: scale(1.05);
-    }
+    .cta-btn:hover { transform:scale(1.05); }
 
-    /* تعديل الزر داخل hero */
-    .hero .btn {
-      background:#ff4fcf;
-      color:#fff;
-      padding:14px 28px;
-      font-size:1.1rem;
-      border-radius:30px;
-      cursor:pointer;
-      box-shadow: 0 4px 12px rgba(255, 105, 180, 0.5);
+    .hero {
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      height:100vh; background:linear-gradient(135deg,#d6c0ff,#f0e5ff);
+      padding-top:80px; text-align:center; position:relative;
+      overflow:hidden;
+    }
+    .hero::before {
+      content:""; position:absolute; top:0; left:0; width:200%; height:200%;
+      background:url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
+      opacity:0.2;
+      animation:spin 100s linear infinite;
+    }
+    @keyframes spin { from{transform:rotate(0);} to{transform:rotate(360deg);} }
+    .hero h1 { font-size:2.4rem; color:#4b0082; margin-bottom:16px; }
+    .hero .btn { background:#ff6fcf; color:#fff; padding:14px 28px;
+      font-size:1.1rem; border-radius:30px; cursor:pointer;
       animation:float 3s ease-in-out infinite;
-      transition: all 0.3s ease;
     }
-    .hero .btn:hover {
-      background: #ff1ab3;
-      transform: scale(1.05);
-    }
-
     @keyframes float {
       0%,100% { transform:translateY(0); }
       50% { transform:translateY(-10px); }
     }
 
-    /* باقي التنسيقات كما هي بدون تغيير... */
+    .steps {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:24px; padding:40px 20px; background:#fff;
+    }
+    .step {
+      background:#f0e5ff; padding:20px; border-radius:12px;
+      text-align:center; transition:transform .3s;
+    }
+    .step:hover { transform:scale(1.05); }
+    .step img { width:60px; margin-bottom:12px; }
+    .step h3 { margin-bottom:8px; color:#7b3fe4; }
 
-    @media (max-width: 600px) {
-      header {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-      }
-      nav {
-        justify-content: center;
-      }
+    @media (max-width:600px){
+      .hero h1 { font-size:1.8rem; }
     }
   </style>
 </head>
 <body>
+
+  <!-- ========== HEADER ========== -->
   <header>
     <div class="logo">liteplay</div>
     <nav>
@@ -126,31 +92,32 @@
     <div class="cta-btn" id="openModal2">ابدأ الآن</div>
   </header>
 
-  <!-- باقي المحتوى يظل كما هو، ولا يحتاج تعديل -->
-
+  <!-- ========== HERO ========== -->
   <section class="hero">
     <h1>اربح المال مجانًا من الألعاب والعروض واختصار الروابط!</h1>
     <button class="btn" id="openModal3">سجل مجانًا</button>
   </section>
 
+  <!-- ========== HOW IT WORKS ========== -->
   <section id="how" class="steps">
     <div class="step">
-      <img src="https://img.icons8.com/fluency/48/000000/check--v1.png"/>
+      <img src="https://img.icons8.com/fluency/96/registration.png" alt="تسجيل">
       <h3>سجّل حسابك</h3>
       <p>ابدأ بخطوة التسجيل السهلة.</p>
     </div>
     <div class="step">
-      <img src="https://img.icons8.com/fluency/48/000000/trophy.png"/>
+      <img src="https://img.icons8.com/fluency/96/game-controller.png" alt="ألعاب">
       <h3>ابدأ اللعب والعروض</h3>
       <p>شارك في تحديات واربح نقاط.</p>
     </div>
     <div class="step">
-      <img src="https://img.icons8.com/fluency/96/000000/money-bag.png"/>
+      <img src="https://img.icons8.com/fluency/96/money-bag.png" alt="ارباح">
       <h3>اجمع النقاط واستبدلها</h3>
       <p>حوّل النقاط إلى أرباح حقيقية.</p>
     </div>
   </section>
 
+  <!-- ========== COUNTERS ========== -->
   <section class="counter-section">
     <div class="counter">
       <h2 class="count" data-target="700">0</h2>
@@ -166,6 +133,7 @@
     </div>
   </section>
 
+  <!-- ========== TESTIMONIALS ========== -->
   <section class="testimonials">
     <h2>ماذا يقول المستخدمون</h2>
     <div class="test-cards">
@@ -184,6 +152,7 @@
     </div>
   </section>
 
+  <!-- ========== FAQ ========== -->
   <section id="faq" class="faq">
     <h2>الأسئلة الشائعة</h2>
     <div class="faq-item">
@@ -204,6 +173,7 @@
     </div>
   </section>
 
+  <!-- ========== CONTACT + FOOTER ========== -->
   <footer id="contact">
     <div class="footer-links">
       <a href="#">سياسة الخصوصية</a>
@@ -221,6 +191,7 @@
     </p>
   </footer>
 
+  <!-- ========== MODAL FORM ========== -->
   <div class="modal" id="modal">
     <div class="card">
       <h2>أنشئ حسابك الآن</h2>
@@ -233,10 +204,13 @@
     </div>
   </div>
 
+  <!-- ========== SCRIPTS ========== -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
   <script>
+    // Firebase config
     const firebaseConfig = {
       apiKey: "...",
       authDomain: "...",
@@ -249,10 +223,12 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
+    // Modal handlers
     const modal = document.getElementById("modal");
     document.querySelectorAll('#openModal, #openModal2, #openModal3').forEach(el => el.addEventListener("click",()=>modal.classList.add("show")));
     document.getElementById("closeModal").addEventListener("click",()=>modal.classList.remove("show"));
 
+    // Signup
     document.getElementById("signup-btn").addEventListener("click", async ()=>{
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
@@ -268,6 +244,7 @@
       }
     });
 
+    // Animated counters
     document.addEventListener("DOMContentLoaded", ()=>{
       document.querySelectorAll('.count').forEach(el=>{
         const target = +el.getAttribute('data-target');
@@ -286,6 +263,7 @@
       });
     });
 
+    // FAQ toggle
     document.querySelectorAll('.faq-item').forEach(item=>{
       item.addEventListener('click', ()=> item.classList.toggle('open'));
     });
