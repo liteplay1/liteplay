@@ -6,6 +6,7 @@
   <title>LitePlay 🎮 | اربح العملات والعروض والألعاب</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@700&display=swap" rel="stylesheet">
   <style>
     /* ========== RESET & GLOBAL ========== */
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -44,16 +45,16 @@
       font-size: 24px;
     }
     
-    header.scrolled .logo-img {
-      width: 42px;
-      height: 42px;
+    header.scrolled .logo-img-container {
+      width: 36px;
+      height: 36px;
     }
     
     /* تصميم الشعار الجديد */
     .logo-container {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
       transition: all 0.4s ease;
       position: relative;
       animation: logoEntrance 0.6s ease;
@@ -65,20 +66,21 @@
     }
     
     .logo-img-container {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(5px);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-left: -8px;
+      margin-left: 8px;
       box-shadow: 0 4px 15px rgba(123, 63, 228, 0.3), 
                   0 0 0 1px rgba(255, 255, 255, 0.1);
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
+      border: 1px solid rgba(138, 43, 226, 0.3);
     }
     
     .logo-img-container::before {
@@ -88,21 +90,21 @@
       left: -2px;
       right: -2px;
       bottom: -2px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #7b3fe4, #ff6fcf);
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(123, 63, 228, 0.5), rgba(138, 43, 226, 0.5));
       z-index: -1;
-      opacity: 0.7;
+      opacity: 0.5;
       animation: glow 2s infinite alternate;
     }
     
     @keyframes glow {
-      0% { opacity: 0.5; }
-      100% { opacity: 0.8; }
+      0% { opacity: 0.5; box-shadow: 0 0 5px rgba(123, 63, 228, 0.5); }
+      100% { opacity: 0.8; box-shadow: 0 0 15px rgba(123, 63, 228, 0.8); }
     }
     
     .logo-img-container:hover {
       transform: scale(1.1);
-      box-shadow: 0 0 15px rgba(255, 110, 207, 0.7);
+      box-shadow: 0 0 15px rgba(138, 43, 226, 0.7);
     }
     
     .logo-img-container:hover::before {
@@ -110,20 +112,20 @@
     }
     
     @keyframes glowHover {
-      0% { opacity: 0.7; }
+      0% { opacity: 0.5; }
       100% { opacity: 1; }
     }
     
     .logo-img {
-      width: 50px;
-      height: 50px;
+      width: 30px;
+      height: 30px;
       object-fit: contain;
       transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
     }
     
     .logo-img:hover {
-      transform: rotate(15deg);
+      transform: rotate(15deg) scale(1.1);
     }
     
     .logo-text {
@@ -218,7 +220,7 @@
     nav a.active {
       color: #fff;
       font-weight: 700;
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255,255,255,0.15);
       backdrop-filter: blur(5px);
     }
 
@@ -423,56 +425,174 @@
       visibility: visible;
     }
 
-    /* ========== MODAL - FORM ========== */
-    .modal { position:fixed; top:0; left:0; width:100%; height:100%;
-      background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center;
-      opacity:0; visibility:hidden; transition:0.3s;
-    }
-    .modal.show { opacity:1; visibility:visible; }
-    .modal .card {
-      background:rgba(255,255,255,0.15); backdrop-filter:blur(15px);
-      border-radius:16px; padding:20px; width:90%; max-width:360px; text-align:center;
-      animation:fadeInScale 0.4s;
-    }
-    @keyframes fadeInScale {
-      from { opacity:0; transform: scale(0.85); }
-      to { opacity:1; transform: scale(1); }
-    }
-    .modal input {
-      width:100%; padding:12px; margin:8px 0; border:none; border-radius:8px;
-    }
-    .modal button {
-      width:100%; padding:12px; margin:8px 0; border:none; border-radius:20px;
-      background:#7b3fe4; color:#fff; font-weight:600; cursor:pointer;
-      transition:transform 0.3s;
-    }
-    .modal button:hover { transform: scale(1.02); }
-    .modal .notes { font-size:12px; color:#eee; margin-top:8px; }
-
-    /* ========== HERO ========== */
+    /* ========== HERO SECTION - REDESIGNED ========== */
     .hero {
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      height:100vh; background:linear-gradient(135deg,#d6c0ff,#f0e5ff);
-      padding-top:80px; text-align:center; position:relative;
-      overflow:hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 120px 20px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #8a2be2 0%, #ff6fcf 50%, #00bfff 100%);
     }
-    .hero::before {
-      content:""; position:absolute; top:0; left:0; width:200%; height:200%;
-      background:url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
-      opacity:0.2;
-      animation:spin 100s linear infinite;
+    
+    /* Floating particles background */
+    .particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
     }
-    @keyframes spin { from{transform:rotate(0);} to{transform:rotate(360deg);} }
-    .hero h1 { font-size:2.4rem; color:#4b0082; margin-bottom:16px; }
-    .hero .btn { background:#ff6fcf; color:#fff; padding:14px 28px;
-      font-size:1.1rem; border-radius:30px; cursor:pointer;
-      animation:float 3s ease-in-out infinite;
+    
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      filter: blur(1px);
+      animation: floatParticle linear infinite;
     }
-    @keyframes float {
-      0%,100% { transform:translateY(0); }
-      50% { transform:translateY(-10px); }
+    
+    @keyframes floatParticle {
+      0% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(20vw);
+        opacity: 0;
+      }
     }
-
+    
+    /* Game icons floating */
+    .game-icon {
+      position: absolute;
+      font-size: 24px;
+      opacity: 0;
+      animation: floatIcon linear infinite;
+      z-index: 1;
+    }
+    
+    @keyframes floatIcon {
+      0% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.7;
+      }
+      80% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-80vh) translateX(30vw);
+        opacity: 0;
+      }
+    }
+    
+    /* Main headline */
+    .hero h1 {
+      font-family: 'Baloo Bhaijaan 2', 'Cairo', sans-serif;
+      font-size: 3rem;
+      color: white;
+      margin-bottom: 30px;
+      position: relative;
+      z-index: 2;
+      text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2),
+                  -1px -1px 0 rgba(255, 255, 255, 0.1);
+      background: linear-gradient(to right, #4b0082, #8a2be2, #00bfff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      padding: 0 20px;
+      line-height: 1.3;
+    }
+    
+    /* Main CTA Button */
+    .hero-btn {
+      background: linear-gradient(135deg, #ff6fcf 0%, #ff4db8 100%);
+      color: white;
+      padding: 18px 36px;
+      font-size: 1.3rem;
+      border-radius: 50px;
+      cursor: pointer;
+      animation: pulseGlow 2s infinite ease-in-out;
+      border: none;
+      font-weight: 700;
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(255, 110, 207, 0.5),
+                  inset 0 2px 2px rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+      font-family: 'Baloo Bhaijaan 2', 'Cairo', sans-serif;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+    
+    @keyframes pulseGlow {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 5px 20px rgba(255, 110, 207, 0.5),
+                    inset 0 2px 2px rgba(255, 255, 255, 0.3);
+      }
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 8px 30px rgba(255, 110, 207, 0.7),
+                    inset 0 2px 2px rgba(255, 255, 255, 0.4);
+      }
+    }
+    
+    .hero-btn:hover {
+      background: linear-gradient(135deg, #ff4db8 0%, #ff2a9d 100%);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(255, 110, 207, 0.8),
+                  inset 0 2px 2px rgba(255, 255, 255, 0.4);
+      animation: none;
+    }
+    
+    .hero-btn::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0) 45%,
+        rgba(255, 255, 255, 0.8) 50%,
+        rgba(255, 255, 255, 0) 55%
+      );
+      transform: rotate(30deg);
+      transition: all 0.5s ease;
+      opacity: 0;
+    }
+    
+    .hero-btn:hover::before {
+      opacity: 1;
+      animation: sparkle 1.5s ease;
+    }
+    
+    @keyframes sparkle {
+      0% {
+        transform: translateX(-100%) rotate(30deg);
+      }
+      100% {
+        transform: translateX(100%) rotate(30deg);
+      }
+    }
+    
     /* ========== HOW IT WORKS ========== */
     .steps {
       display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
@@ -621,6 +741,10 @@
         padding: 10px 18px;
         font-size: 14px;
       }
+      
+      .hero h1 {
+        font-size: 2.5rem;
+      }
     }
 
     @media (max-width: 768px) {
@@ -643,8 +767,7 @@
       }
       
       .hero h1 {
-        font-size: 1.8rem;
-        padding: 0 15px;
+        font-size: 2rem;
       }
       
       .steps {
@@ -655,7 +778,12 @@
 
     @media (max-width: 480px) {
       .hero h1 {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
+      }
+      
+      .hero-btn {
+        padding: 14px 28px;
+        font-size: 1.1rem;
       }
       
       .payouts {
@@ -672,8 +800,8 @@
       }
       
       .logo-img {
-        width: 40px;
-        height: 40px;
+        width: 25px;
+        height: 25px;
       }
       
       header.scrolled .logo-text {
@@ -727,8 +855,9 @@
 
   <!-- ========== HERO ========== -->
   <section class="hero">
+    <div class="particles" id="particles"></div>
     <h1>اربح المال مجانًا من الألعاب والعروض واختصار الروابط!</h1>
-    <button class="btn" id="openModal3">سجل مجانًا</button>
+    <button class="hero-btn" id="openModal3">سجّل مجانًا</button>
   </section>
 
   <!-- ========== HOW IT WORKS ========== -->
@@ -967,6 +1096,62 @@
       }
     });
 
+    // Create particles and floating icons
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 30;
+      const iconCount = 8;
+      const icons = ['💰', '🎮', '🏆', '⚡', '🎯', '💎', '🕹️', '💸'];
+      
+      // Create particles
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        // Random size between 2px and 5px
+        const size = Math.random() * 3 + 2;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Random position
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100 + 100}%`;
+        
+        // Random animation duration between 10s and 20s
+        const duration = Math.random() * 10 + 10;
+        particle.style.animationDuration = `${duration}s`;
+        
+        // Random delay
+        particle.style.animationDelay = `${Math.random() * 5}s`;
+        
+        particlesContainer.appendChild(particle);
+      }
+      
+      // Create floating icons
+      for (let i = 0; i < iconCount; i++) {
+        const icon = document.createElement('div');
+        icon.className = 'game-icon';
+        icon.textContent = icons[i];
+        
+        // Random position
+        icon.style.left = `${Math.random() * 100}%`;
+        icon.style.top = `${Math.random() * 100 + 100}%`;
+        
+        // Random animation duration between 15s and 25s
+        const duration = Math.random() * 10 + 15;
+        icon.style.animationDuration = `${duration}s`;
+        
+        // Random delay
+        icon.style.animationDelay = `${Math.random() * 10}s`;
+        
+        // Random size
+        const size = Math.random() * 10 + 20;
+        icon.style.fontSize = `${size}px`;
+        
+        particlesContainer.appendChild(icon);
+      }
+    }
+
     // Animated counters with random updates
     document.addEventListener("DOMContentLoaded", ()=>{
       // Create stars around logo
@@ -979,6 +1164,9 @@
         star.style.animationDelay = `${Math.random() * 3}s`;
         logoContainer.appendChild(star);
       }
+      
+      // Create particles and floating icons
+      createParticles();
       
       // Initial animation
       document.querySelectorAll('.count').forEach(el=>{
