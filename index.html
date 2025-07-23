@@ -540,6 +540,9 @@
     
     .hero h1 span {
       position: relative;
+      display: inline-block;
+      margin: 0 5px;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.3);
     }
     
     .hero h1 span:nth-child(1) { /* كلمة "اربح" */
@@ -717,6 +720,8 @@
     }
     .modal input {
       width:100%; padding:12px; margin:8px 0; border:none; border-radius:8px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(0,0,0,0.1);
     }
     .modal button {
       width:100%; padding:12px; margin:8px 0; border:none; border-radius:20px;
@@ -725,6 +730,18 @@
     }
     .modal button:hover { transform: scale(1.02); }
     .modal .notes { font-size:12px; color:#eee; margin-top:8px; }
+    .modal .auth-switch {
+      background: #ff6fcf;
+      margin-top: 10px;
+    }
+    .modal .auth-switch:hover {
+      background: #ff4db8;
+    }
+    .modal .form-title {
+      color: white;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
 
     /* ========== POLICY MODAL ========== */
     .policy-modal {
@@ -922,7 +939,10 @@
   <!-- ========== HERO ========== -->
   <section class="hero">
     <div class="particles" id="particles"></div>
-    <h1><span>اربح</span> <span>المال</span> <span>مجانًا</span> <span>من</span> <span>الألعاب</span> <span>والعروض</span> <span>واختصار</span> <span>الروابط</span>!</h1>
+    <h1>
+      <span>اربح</span> <span>المال</span> <span>مجانًا</span> <span>من</span> 
+      <span>الألعاب</span> <span>والعروض</span> <span>واختصار</span> <span>الروابط</span>!
+    </h1>
     <button class="hero-btn" id="openModal3">سجّل مجانًا</button>
   </section>
 
@@ -1022,13 +1042,14 @@
   <!-- ========== MODAL FORM ========== -->
   <div class="modal" id="modal">
     <div class="card">
-      <h2>أنشئ حسابك الآن</h2>
+      <h2 class="form-title" id="formTitle">أنشئ حسابك الآن</h2>
       <input type="email" id="email" placeholder="📧 بريدك الإلكتروني">
       <input type="password" id="password" placeholder="🔒 كلمة المرور">
-      <button id="signup-btn">سجّل واحصل على 10 نقاط 🎁</button>
+      <button id="auth-btn">سجّل واحصل على 10 نقاط 🎁</button>
+      <button id="auth-switch-btn" class="auth-switch">لديك حساب؟ تسجيل الدخول</button>
       <p class="notes">بالتسجيل، أنت توافق على <a href="#" id="showTerms2">شروط الاستخدام</a> و<a href="#" id="showPrivacy2">سياسة الخصوصية</a>.</p>
       <button id="closeModal" style="background:#ccc;color:#333;">إغلاق</button>
-      <div id="error-msg" style="color:#f00;font-size:14px;"></div>
+      <div id="error-msg" style="color:#f00;font-size:14px;margin-top:10px;"></div>
     </div>
   </div>
 
@@ -1101,16 +1122,27 @@
   <script>
     // Firebase config
     const firebaseConfig = {
-      apiKey: "...",
-      authDomain: "...",
-      projectId: "...",
-      storageBucket: "...",
-      messagingSenderId: "...",
-      appId: "..."
+      apiKey: "AIzaSyCx91hDU6vBwpzCt2q1jXDJZV5txrZNafE",
+      authDomain: "litplay-b3177.firebaseapp.com",
+      projectId: "litplay-b3177",
+      storageBucket: "litplay-b3177.appspot.com",
+      messagingSenderId: "201526393824",
+      appId: "1:201526393824:web:c8ab6afa0bcca902be4985",
+      measurementId: "G-C8XX64EKXY"
     };
+    
+    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
+    
+    // Track auth state changes
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        // User is signed in
+        window.location.href = "welcome.html";
+      }
+    });
 
     // Set current date
     const today = new Date();
@@ -1120,12 +1152,41 @@
 
     // Modal handlers
     const modal = document.getElementById("modal");
+    const formTitle = document.getElementById("formTitle");
+    const authBtn = document.getElementById("auth-btn");
+    const authSwitchBtn = document.getElementById("auth-switch-btn");
+    let isLoginMode = false;
+    
+    // Toggle between login and signup
+    authSwitchBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      isLoginMode = !isLoginMode;
+      if (isLoginMode) {
+        formTitle.textContent = "تسجيل الدخول";
+        authBtn.textContent = "تسجيل الدخول";
+        authSwitchBtn.textContent = "لا تملك حسابًا؟ سجل الآن";
+      } else {
+        formTitle.textContent = "أنشئ حسابك الآن";
+        authBtn.textContent = "سجّل واحصل على 10 نقاط 🎁";
+        authSwitchBtn.textContent = "لديك حساب؟ تسجيل الدخول";
+      }
+    });
+    
+    // Open modal from all buttons
     document.querySelectorAll('#openModal, #openModal2, #openModal3, #openModalMobile, #openModalMobile2').forEach(el => {
       el.addEventListener("click", (e) => {
         e.preventDefault();
+        isLoginMode = false;
+        formTitle.textContent = "أنشئ حسابك الآن";
+        authBtn.textContent = "سجّل واحصل على 10 نقاط 🎁";
+        authSwitchBtn.textContent = "لديك حساب؟ تسجيل الدخول";
+        document.getElementById("error-msg").textContent = "";
+        document.getElementById("email").value = "";
+        document.getElementById("password").value = "";
         modal.classList.add("show");
       });
     });
+    
     document.getElementById("closeModal").addEventListener("click",()=>modal.classList.remove("show"));
 
     // Policy modals
@@ -1151,19 +1212,66 @@
     document.getElementById("closePrivacy").addEventListener("click",()=>privacyModal.classList.remove("show"));
     document.getElementById("closeTerms").addEventListener("click",()=>termsModal.classList.remove("show"));
 
-    // Signup
-    document.getElementById("signup-btn").addEventListener("click", async ()=>{
+    // Authentication
+    authBtn.addEventListener("click", async () => {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
-      const err = document.getElementById("error-msg"); err.textContent="";
-      if(!email||!password){ err.textContent="يرجى ملء جميع الحقول."; return; }
+      const err = document.getElementById("error-msg"); 
+      err.textContent = "";
+      
+      // Validate inputs
+      if (!email || !password) {
+        err.textContent = "يرجى ملء جميع الحقول.";
+        return;
+      }
+      
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        err.textContent = "البريد الإلكتروني غير صالح.";
+        return;
+      }
+      
+      if (password.length < 6) {
+        err.textContent = "كلمة المرور يجب أن تكون 6 أحرف على الأقل.";
+        return;
+      }
+      
       try {
-        const cred = await auth.createUserWithEmailAndPassword(email,password);
-        await db.collection("users").doc(cred.user.uid).set({ email, points:10, created:Date.now() });
+        if (isLoginMode) {
+          // Login
+          await auth.signInWithEmailAndPassword(email, password);
+        } else {
+          // Signup
+          const cred = await auth.createUserWithEmailAndPassword(email, password);
+          await db.collection("users").doc(cred.user.uid).set({ 
+            email, 
+            points: 10, 
+            created: firebase.firestore.FieldValue.serverTimestamp(),
+            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
         modal.classList.remove("show");
-        window.location.href="welcome.html";
-      } catch(e) {
-        err.textContent=e.message;
+      } catch (e) {
+        // Translate Firebase errors to user-friendly messages
+        switch (e.code) {
+          case 'auth/email-already-in-use':
+            err.textContent = "البريد الإلكتروني مستخدم بالفعل.";
+            break;
+          case 'auth/invalid-email':
+            err.textContent = "البريد الإلكتروني غير صالح.";
+            break;
+          case 'auth/weak-password':
+            err.textContent = "كلمة المرور ضعيفة، يجب أن تكون 6 أحرف على الأقل.";
+            break;
+          case 'auth/user-not-found':
+            err.textContent = "لا يوجد حساب مرتبط بهذا البريد الإلكتروني.";
+            break;
+          case 'auth/wrong-password':
+            err.textContent = "كلمة المرور غير صحيحة.";
+            break;
+          default:
+            err.textContent = "حدث خطأ، يرجى المحاولة مرة أخرى لاحقًا.";
+            console.error(e);
+        }
       }
     });
 
